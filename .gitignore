@@ -25,3 +25,6 @@ npm-debug.log*
 
 # Vercel
 .vercel
+
+# Local preview launch config (machine-specific absolute paths)
+.claude/launch.json

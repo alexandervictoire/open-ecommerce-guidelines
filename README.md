@@ -26,6 +26,20 @@ npm run generate     # static build → .output/public
 npm run preview      # preview the static build
 ```
 
+## Deploy (Vercel)
+
+The site builds to fully static output (`nuxt generate` → `.output/public`) and
+is deployable on the Vercel free tier. [`vercel.json`](vercel.json) pins the
+build command and output directory, so importing the repo on Vercel needs no
+extra configuration. Every pull request gets an automatic preview deployment.
+
+Before the first production deploy, update two placeholders:
+
+- `GITHUB_REPO` in [`utils/site.ts`](utils/site.ts) — drives "Edit this page"
+  and "Contribute" links (currently `OWNER/ecom-guidelines`).
+- `SITE_URL` in the same file — canonical URLs, sitemap, and robots
+  (currently the expected `*.vercel.app` URL).
+
 ## Contributing
 
 New guidelines and improvements are welcome. Read

@@ -28,6 +28,14 @@ status: published              # enum: draft | published | deprecated
 > content also uses `machine` (machine-readability is a first-class concern for
 > this project). The valid set is therefore `[human, agent, machine]`.
 
+> **Reserved `id` gotcha:** Nuxt Content v3 reserves the `id` field internally
+> (it stores the file key there), so a guideline's own `id:` frontmatter is
+> **not queryable** — `doc.id` returns the internal path. Keep `id:` in the
+> frontmatter anyway (it is the human-facing, immutable identifier and the
+> converter validates it), but the site derives the display id from the
+> filename via `deriveGuidelineId(stem)` in `utils/labels.ts`. This works
+> because the filename is the lowercased id by contract.
+
 ### Body sections — exact headings, exact order
 
 ```markdown

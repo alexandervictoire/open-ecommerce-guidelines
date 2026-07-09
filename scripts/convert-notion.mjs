@@ -107,6 +107,14 @@ function toTargets(s) {
   return uniq.sort((a, b) => TARGET_ORDER.indexOf(a) - TARGET_ORDER.indexOf(b))
 }
 
+// Literal HTML-tag mentions in prose (e.g. "<h1>") must not render as real
+// elements. Wrap them as inline code so they display as text. Safe here: the
+// only angle-bracket tokens in the source are element names (verified), and
+// bare "<" as a less-than sign does not occur.
+function escapeTags(s) {
+  return s.replace(/<\/?[a-zA-Z][a-zA-Z0-9]*[^>]*>/g, (m) => `\`${m}\``)
+}
+
 function toBulletList(s) {
   const lines = s.split(/\r?\n/).map((l) => l.trim()).filter(Boolean)
   return lines.map((l) => `- ${l.replace(/^[-*]\s*/, '')}`).join('\n')
@@ -134,11 +142,11 @@ function buildGuideline(rec) {
     targets: toTargets(rec['Target'] || ''),
     status: 'published',
     sections: {
-      whatIsChecked: (rec['What is being checked?'] || '').trim(),
-      whyItMatters: (rec['Operational Impact'] || '').trim(),
-      failureSignals: toBulletList(rec['Failure Signals'] || ''),
-      howToVerify: toNumberedList(rec['How to verify?'] || ''),
-      recommendedFix: (rec['Default Fix'] || '').trim()
+      whatIsChecked: escapeTags((rec['What is being checked?'] || '').trim()),
+      whyItMatters: escapeTags((rec['Operational Impact'] || '').trim()),
+      failureSignals: escapeTags(toBulletList(rec['Failure Signals'] || '')),
+      howToVerify: escapeTags(toNumberedList(rec['How to verify?'] || '')),
+      recommendedFix: escapeTags((rec['Default Fix'] || '').trim())
     }
   }
   return g
