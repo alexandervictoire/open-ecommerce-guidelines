@@ -8,7 +8,7 @@ export const SITE_DESCRIPTION =
   'An open, community-maintained collection of UX and technical e-commerce guidelines — including machine-readability and agentic-commerce readiness.'
 
 // GitHub "owner/repo" slug and default branch.
-export const GITHUB_REPO = 'OWNER/ecom-guidelines'
+export const GITHUB_REPO = 'alexandervictoire/open-ecommerce-guidelines'
 export const GITHUB_BRANCH = 'main'
 
 // Public site origin used for canonical URLs / sitemap. Update this to the real
