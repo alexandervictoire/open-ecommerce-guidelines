@@ -1,0 +1,467 @@
+﻿Criterion Name,Audit Type,Criterion ID,Default Fix,Dimension,Failure Signals,How to verify?,Max Score,Operational Impact,Severity,Target,What is being checked?
+Single semantic H1 on PDP,PDP,PDP-ME-H1-01,Ensure that the primary product title is rendered as a single semantic <h1> element and that no additional <h1> elements are used on the PDP.,Machine Extractability,"- Multiple <h1> elements are present on the page
+- No <h1> element exists on the PDP
+- The <h1> contains marketing copy instead of the product name
+- The product name is rendered using a non-heading element",Inspect the DOM structure of the PDP and count the number of <h1> elements. Verify that exactly one <h1> is present and that it contains the product name.,10,"Without a single semantic product title, machines cannot reliably identify the product and agents may misinterpret the page context, reducing comparability and retrieval accuracy.",Medium,"Agent, Machine",Checks whether the PDP contains exactly one semantic <h1> element that represents the primary product title.
+Price visible without interaction,PDP,PDP-DC-PRICE-01,"Ensure that the base product price is rendered as visible text on initial page load, independent of variant or size selection.",Decision Clarity,"- Price is only shown after selecting a size or variant
+- Price is hidden behind disabled states or placeholders
+- Price is injected only after user interaction
+- Price is rendered as an image or non-text element","Load the PDP in a clean session. Verify whether a numeric price value is rendered in the DOM and visible to the user without interacting with variant selectors, dropdowns, or buttons.",10,"If the price is not immediately visible, users cannot evaluate affordability and agents cannot perform purchase validation. This introduces decision friction and increases abandonment risk.",High,"Agent, Human","Checks whether the product price is visible on the PDP without requiring any prior user interaction such as variant, size, or quantity selection."
+Availability status rendered as text in DOM,PDP,PDP-SR-AVAIL-01,Render product availability status as explicit text in the DOM that can be parsed independently of visual styling or client-side logic.,System Robustness,"- Availability is only indicated via icons or color states
+- Availability text is injected dynamically without a static fallback
+- Availability is encoded only in aria labels or tooltips
+- No textual availability information exists in the DOM","Inspect the PDP DOM and verify that availability information (e.g. in stock, out of stock) is present as visible or hidden text nodes and not solely conveyed via icons, colors, or images.",10,"If availability is not rendered as readable text, automated systems cannot determine purchase feasibility, preventing agents from executing or recommending transactions.",High,"Agent, Machine","Checks whether the product availability status is rendered as readable text in the DOM and is accessible without relying on images, icons, or client-side interpretation."
+Primary CTA state is always explainable,PDP,PDP-DC-CTA-02,Ensure that any disabled or unavailable primary CTA state is paired with a visible textual explanation describing the blocking condition.,Decision Clarity,"- CTA is disabled without explanation
+- CTA state changes without visible reason
+- User must guess which condition is missing
+- Explanation is only provided via tooltip or hover","Observe the primary CTA across all product states (e.g. unavailable, out of stock, variant not selected). Verify that any disabled or inactive state is accompanied by an explicit textual explanation.",10,"Unexplained CTA states block purchase progression by obscuring required conditions, leading to user confusion and preventing agents from resolving transaction blockers.",High,"Agent, Human",Checks whether the primary call-to-action on the PDP always communicates a clear and explicit reason when it is disabled or unavailable.
+Core product attributes are presented as structured text,PDP,PDP-ME-ATTR-01,Render core product attributes as clearly labeled text elements using a consistent and structured format.,Machine Extractability,"- Attributes are only shown in images or icons
+- Attributes are buried in long paragraph text
+- Attribute labels are missing or ambiguous
+- Attribute values change without label updates",Inspect the PDP content and DOM to confirm that key product attributes are present as distinct text nodes or list items and can be programmatically extracted without interpretation.,10,"Unstructured attributes limit machine readability and degrade filtering, matching, and recommendation quality for both search systems and agents.",High,"Agent, Machine","Checks whether core product attributes (e.g. material, dimensions, weight, color) are rendered as structured, readable text rather than embedded in images or unstructured prose."
+Variant selection does not redefine product identity,PDP,PDP-SI-VAR-01,Ensure that variant selection only modifies defined attributes and does not alter the core semantic identity of the product.,Semantic Integrity,"- Product title changes to a different product concept
+- Variant selection introduces conflicting descriptions
+- Core attributes are reinterpreted per variant
+- Variant behaves like a separate product without clarification","Switch between variants and observe changes to product title, description, and core attributes. Verify that variants adjust properties without changing the underlying product identity.",10,"If variant selection alters product identity, systems cannot reliably group or compare products, leading to semantic instability and flawed recommendations.",High,"Agent, Machine",Checks whether selecting a product variant modifies attributes without redefining the core product identity or semantic meaning.
+Delivery time is explicit and state-specific,PDP,PDP-DC-DELIVERY-01,Display a concrete delivery time or delivery window on the PDP that updates according to product state and availability.,Decision Clarity,"- Delivery time is missing or vague (e.g. ""soon"", ""fast shipping"")
+- Delivery information does not change with availability or variant state
+- Delivery details are hidden behind interactions or links
+- Delivery time is only communicated during checkout",Review the PDP and verify that delivery information is visible as text and reflects the current availability or variant state. Change variants or quantities and observe whether delivery information updates accordingly.,10,Missing or vague delivery information increases perceived purchase risk and prevents agents from optimizing for fulfillment constraints.,High,"Agent, Human",Checks whether a concrete delivery time or delivery window is explicitly communicated on the PDP and reflects the current product state.
+Return conditions are visible before purchase,PDP,PDP-DC-RETURNS-01,Provide clear and consistent return information on the PDP that is accessible before purchase commitment.,Decision Clarity,"- No return information on the PDP
+- Return conditions are hidden deep in legal pages
+- Return messaging is ambiguous or contradictory
+- Return conditions differ between PDP and checkout","Inspect the PDP and confirm that return conditions (e.g. return period, exclusions) are visible or directly accessible without entering checkout.",10,Absent return information elevates commitment risk and reduces purchase confidence while limiting agents' ability to evaluate transactional safety.,High,"Agent, Human",Checks whether return conditions are clearly communicated on the PDP before the user commits to a purchase.
+Product claims are supported by concrete evidence,PDP,PDP-SI-CLAIMS-01,"Ensure that all significant product claims are supported by explicit, verifiable evidence presented near the claim.",Semantic Integrity,"- Claims without explanation or proof
+- Vague or generic marketing statements
+- Evidence exists but is disconnected from the claim
+- Claims contradict structured product data",Identify product claims on the PDP and verify whether each claim is accompanied by supporting information or evidence that can be independently evaluated.,10,"Unsupported claims reduce trustworthiness and introduce verification uncertainty, weakening both human confidence and agent-based evaluation.",Medium,"Agent, Human","Checks whether key product claims are supported by concrete evidence such as specifications, certifications, or verifiable references."
+Total price is determinable before checkout,PDP,PDP-DC-TOTAL-01,Provide a clear cost structure on the PDP that allows estimation of the total payable amount before checkout.,Decision Clarity,"- Shipping cost only revealed in checkout
+- Mandatory fees appear late
+- Pricing structure is unclear
+- Cost ranges are excessively broad",Review the PDP and confirm whether all unavoidable costs can be understood prior to checkout without requiring account creation or address submission.,10,"If the total payable price cannot be estimated before checkout, users and agents cannot validate affordability, increasing purchase uncertainty and abandonment probability.",High,"Agent, Human","Checks whether the user can determine the total payable price before entering checkout, including mandatory costs such as shipping or required fees."
+Product imagery matches selected variant,PDP,PDP-SI-IMAGE-01,Ensure that variant selection triggers accurate and synchronized imagery updates.,Semantic Integrity,"- Image does not change when variant changes
+- Incorrect variant imagery displayed
+- Default imagery persists across selections
+- Visual mismatch with selected attributes",Switch between variants and confirm that the primary product imagery updates accordingly and does not display conflicting representations.,8,"If product imagery does not reflect the selected variant, users may misinterpret the product configuration, increasing error risk, returns, and trust erosion.",Medium,"Agent, Human",Checks whether the product imagery dynamically reflects the currently selected variant.
+Primary product information is visible above initial viewport,PDP,PDP-DC-VIEWPORT-01,Prioritize core product information within the initial viewport to support immediate decision evaluation.,Decision Clarity,"- Oversized hero sections push product data below the fold
+- Critical decision data requires scrolling
+- Promotional content displaces product information","Load the PDP on a standard laptop viewport and confirm that core decision elements such as product name, price, and primary CTA are immediately visible. Then do the same for mobile.",7,"If essential product information is not immediately visible, decision latency increases and users must invest additional effort before evaluating the product.",Medium,Human,Checks whether essential product information is visible within the initial viewport without requiring scroll.
+Variant selection is required before purchase when applicable,PDP,PDP-DC-VAR-REQ-01,Require mandatory variant selection before enabling purchase actions and provide immediate guidance.,Decision Clarity,"- User can trigger errors after clicking CTA
+- Missing variant feedback
+- Silent failure",Attempt to add the product to cart without selecting mandatory variants and observe whether the interface prevents progression with clear guidance.,9,"If mandatory selections are not enforced early, users encounter preventable errors that interrupt purchase flow and increase abandonment risk.",High,"Agent, Human",Checks whether required variant selections are enforced before enabling purchase actions.
+Stock status reflects real purchasability,PDP,PDP-SR-STOCK-01,Synchronize stock indicators with real-time purchase logic.,System Robustness,"- In stock but cannot purchase
+- Out of stock but purchasable
+- Stock updates too late",Attempt checkout with the displayed stock state and confirm consistency.,10,"When stock information is unreliable, transactions fail and system credibility is severely damaged.",CRITICAL ‼️,"Agent, Human, Machine",Checks whether displayed stock status accurately reflects actual purchase capability.
+Product description communicates functional understanding,PDP,PDP-DC-DESC-01,Provide a clear functional description that enables immediate comprehension.,Decision Clarity,"- Pure marketing language
+- Missing use context
+- Ambiguous function",Review the description and determine whether a first-time visitor can understand the product's purpose without inference.,9,"If the product’s function is unclear, decision confidence collapses and evaluation time increases.",High,"Agent, Human",Checks whether the product description explains what the product does and who it is for.
+No contradictory product information across the PDP,PDP,PDP-SI-CONSIST-01,Ensure a single authoritative product data source.,Semantic Integrity,"- Conflicting dimensions
+- Different materials listed
+- Variant mismatch",Cross-check key attributes across sections.,10,Contradictory information destroys trust and prevents reliable machine interpretation.,CRITICAL ‼️,"Agent, Human, Machine","Checks whether product data remains internally consistent across titles, attributes, descriptions, and structured elements."
+Primary CTA is visually dominant,PDP,PDP-DC-CTA-VIS-01,"Increase the visual prominence of the primary CTA through contrast, size, or placement while reducing competition from secondary elements.",Decision Clarity,"- Primary CTA visually blends with secondary actions
+- Competing buttons have similar color or weight
+- Promotional elements overpower the purchase action
+- CTA appears visually muted or low-contrast
+- Multiple elements compete for primary attention","Load the PDP and observe the initial viewport. Determine whether the primary CTA is immediately distinguishable through contrast, size, or spatial prominence without requiring visual search.",7,"If the primary action lacks visual priority, decision friction increases and interaction hesitation emerges.",Medium,Human,Checks whether the primary purchase action is visually distinguishable from secondary actions.
+PDP loads core decision data without delay,PDP,PDP-SR-LOAD-01,"Ensure that essential decision data (price, availability, primary CTA state) is rendered reliably on initial load with stable placeholders and without blocking states or late client-side injection.",System Robustness,"- Price loads late
+- CTA appears delayed
+- Layout shifts","Load the PDP on a standard desktop connection and observe whether price, availability, and CTA state appear immediately without intermediate loading states.",9,Delayed decision data interrupts evaluation flow and increases bounce probability.,High,"Agent, Human",Checks whether essential product data loads reliably without blocking states.
+Purchase restrictions are disclosed upfront,PDP,PDP-C-RESTRICT-01,"Disclose all transaction-blocking restrictions on the PDP near the primary purchase action, using explicit, readable text that matches the actual enforcement logic across cart and checkout.",Decision Clarity,"- Restrictions are only revealed in cart or checkout
+- Restrictions are hidden in legal/FAQ pages without PDP visibility
+- Restriction messaging is vague or incomplete (e.g., ""restrictions may apply"")
+- Restrictions contradict other PDP information (e.g., ""ships worldwide"" but checkout blocks regions)
+- User can click the primary CTA and only then learns the restriction","Review the PDP for explicit restriction messaging near the purchase area (price/CTA). Then attempt a purchase scenario that triggers restrictions (e.g., increase quantity, choose a restricted delivery region if possible, or proceed until the restriction would appear). Confirm the restriction was disclosed on the PDP before the user committed to checkout.",9,"If purchase restrictions are not disclosed upfront, users and agents encounter late-stage blockers that trigger frustration, increase abandonment, and erode transactional trust.",High,"Agent, Human",Checks whether any purchase restrictions that can block or limit the transaction are clearly disclosed on the PDP before the user attempts to buy.
+Structured product data aligns with visible content,PDP,PDP-ME-ALIGN-01,Ensure that structured product data is dynamically synchronized with the visible PDP content and updated whenever product attributes change.,Machine Extractability,"- Structured price differs from displayed price
+- Availability markup contradicts visible stock status
+- Product marked as ""InStock"" but cannot be purchased
+- Variant data missing or inconsistent
+- Structured brand or product name differs from visible content
+- Outdated structured data persists after product updates","Extract the structured product data using a schema validation tool or browser inspection and compare key attributes (product name, price, availability, brand, variant data) against the visible PDP content. Confirm that both representations match without contradiction.",10,"When structured data diverges from visible content, automated systems ingest incorrect product information, leading to indexing errors, flawed recommendations, failed agent decisions, and loss of platform trust.",CRITICAL ‼️,"Agent, Machine","Checks whether structured product data (e.g., http://schema.org/ markup, JSON-LD, microdata) accurately reflects the product information visible to users on the PDP."
+Fulfillment expectations are clearly communicated and structurally supported,PDP,PDP-TD-FUL-01,"Introduce explicit delivery expectations on the PDP (e.g., “Delivered in 1–3 business days”) and ensure fulfillment signals are consistent across UI and structured data where applicable.
+
+Avoid deferring shipping visibility entirely to checkout.",Trust & Decision Enablement,"- No delivery estimate is visible prior to checkout
+- Shipping cost clarity is deferred entirely to checkout
+- Only store pickup is communicated while shipping expectations remain undefined
+- Generic messaging such as “Shipping calculated at checkout” without timeframe
+- Structured data lacks shipping
+- Details despite complex fulfillment setup
+- Visible fulfillment messaging contradicts structured data","Check whether the PDP communicates at least one fulfillment expectation:
+• Delivery timeframe
+• Handling time
+• Shipping speed
+• Free shipping thresholds
+• Geographic limitations
+• Pickup conditions vs shipping clarity
+If users must enter checkout to understand when they will receive the product → flag.",10,"Unclear fulfillment expectations introduce purchase hesitation, slow decision velocity, and can materially reduce conversion rates.
+
+Clear delivery messaging is consistently associated with increased purchase confidence and faster buying decisions.",High,"Human, Machine","Whether fulfillment expectations are transparently communicated on the PDP and supported by structured data where possible, ensuring alignment between operational reality, user perception, and machine-readable signals."
+Related product variants are clearly discoverable and cross-linked,PDP,PDP-MERCH-VARIANT-01,"Ensure that related product variants (e.g., colors, materials, configurations) are visibly interconnected on the PDP through intuitive navigation elements such as swatches, variant selectors, or “available in other options” modules.
+
+When variants are separated into individual product pages, implement bidirectional cross-linking to allow frictionless exploration between alternatives.
+
+Prioritize visual navigation over text-based discovery.",Decision Clarity,"- No visible path to alternative variants
+- Users must rely on search or category navigation to find other versions
+- Related variants exist but are not cross-linked
+- Variant discovery requires multiple navigation steps
+- Only one version is presented despite additional available options
+- Text-only references without visual affordances
+- Cross-links exist but lack prominenceVariant relationships are not immediately recognizable","Review the PDP and determine whether users can immediately recognize and access alternative variants without leaving the product context.
+Check for:
+• Color swatches
+• Variant selectors
+• “Available in other colors/materials”
+• Visual navigation modules
+• Grouped product families
+If discovering another variant requires returning to listing pages → fail.",9,"High commercial impact.
+
+If alternative variants are not easily discoverable, customers may incorrectly assume limited availability and abandon the purchase despite viable options existing.
+
+Improving variant visibility preserves demand, increases product exposure, and materially strengthens conversion probability.",High,Human,"Checks whether related product variants are structurally interconnected and immediately discoverable, ensuring customers can frictionlessly navigate to preferred alternatives without disrupting the purchase journey."
+Price is rendered as authoritative text in DOM,PDP,PDP-SR-PRICE-01,"Render the final purchasable price as static, machine-readable text in the DOM that does not rely solely on client-side rendering.",System Robustness,"- Price missing in DOM
+- Price injected only via JavaScript
+- Structured data price differs from visible price
+- Price changes at checkout
+- Currency mismatch
+- Hidden mandatory fees",Inspect the PDP and confirm the final price is visible as machine-readable text in the DOM (not JavaScript-only). Disable JavaScript to verify a server-rendered fallback exists. Cross-check structured data for price consistency. Add the product to cart and confirm the price does not change or reveal hidden mandatory fees.,10,"If price cannot be reliably parsed, automated systems cannot evaluate affordability, rank products, or execute transactions.",CRITICAL ‼️,"Agent, Human, Machine","Checks whether the final purchasable price is rendered as static, machine-readable text in the DOM, consistent with structured data, and does not change unexpectedly during checkout."
+Above-the-fold decision completeness,PDP,PDP-DC-ATF-01,"Restructure above-the-fold section so that purchase decision can be made without scrolling: show final price, clear primary CTA, variant state, delivery expectations, and at least one trust signal within the initial viewport (desktop + mobile).",Decision Clarity,"- Primary CTA not visible without scroll
+- Final price not visible within initial viewport
+- Variant selection state unclear or hidden
+- Delivery information only visible after scrolling
+- No visible trust reinforcement element above-the-fold","
+1. Load PDP in clean browser session.
+2. Test on standard desktop resolution (1440px width) and common mobile viewport (390px width).
+3. Do not scroll.
+4. Check whether the following elements are immediately visible:
+    ◦ Product title
+    ◦ Final price
+    ◦ Selected variant
+    ◦ Primary CTA
+    ◦ Delivery information
+    ◦ At least one trust element
+5. Document missing elements per device type.",9,"Incomplete above-the-fold structures increase hesitation, reduce impulse purchasing behavior, and negatively impact paid traffic efficiency and bounce rate.",High,Human,Whether the PDP above-the-fold area contains all critical purchase decision elements required for a confident buying action.
+Primary value proposition clarity,PDP,PDP-DC-PVP-01,Rewrite and restructure the primary product messaging so that the core benefit and differentiation of the product are immediately understandable in one concise statement above-the-fold.,Decision Clarity,"- Product title describes only category or model without benefit context
+- No clear articulation of the product’s primary outcome or use-case
+- Value proposition requires scrolling to understand
+- Messaging focuses on features without communicating user-relevant benefit
+- Headline and subheadline do not clarify why this product should be chosen over alternatives","1. Open PDP in clean browser session.
+2. Focus on the headline and immediate supporting text above-the-fold.
+3. Ask: Can the product’s primary benefit be understood within 5 seconds?
+4. Remove brand familiarity assumption. Evaluate from first-time visitor perspective.
+5. Document whether the product communicates outcome, differentiation, or only technical description.",9,"Unclear value propositions reduce conversion by increasing hesitation and forcing users to interpret product relevance themselves. Clear primary value articulation increases confidence, reduces cognitive effort, and accelerates add-to-cart behavior.",High,"Agent, Human",Whether the PDP communicates the product’s core benefit and differentiation clearly and immediately within the primary headline and supporting above-the-fold messaging.
+Social proof density & placement,PDP,PDP-DC-SP-01,"Ensure that social proof elements (rating, review count, qualitative testimonials, or usage indicators) are visibly integrated within decision-critical PDP areas, especially above-the-fold and near primary CTAs.",Decision Clarity,"- Star rating not visible above-the-fold
+- Review count missing or visually minimized
+- Social proof only visible after extensive scrolling
+- No qualitative review excerpts or credibility reinforcement present
+- Reviews exist but are visually disconnected from purchase decision area","Open PDP in clean browser session.Check above-the-fold area for visible star rating and review count.Scroll through PDP and identify placement of review block.Evaluate whether social proof is positioned near decision points (price, CTA, variant selection).Confirm whether at least one qualitative reinforcement (short excerpt, testimonial, usage indicator) supports credibility.",9,"Insufficient or poorly placed social proof increases hesitation and reduces perceived trustworthiness, directly lowering conversion probability. Proper placement near decision elements reinforces confidence and accelerates purchase intent.",High,"Agent, Human",Whether social proof is sufficiently visible and strategically placed within decision-critical areas of the PDP to reinforce purchase confidence.
+Variant friction index,PDP,PDP-DC-VAR-01,"Simplify and clarify variant selection by reducing interaction steps, making selected states immediately visible, and ensuring that users can complete required selections without confusion or unnecessary effort.",Decision Clarity,"• User must interact (click/open dropdown) to understand available variants
+• Selected variant state is visually unclear
+• CTA remains disabled without clear explanation
+• Error messages appear only after failed add-to-cart attempt
+• Variant labels are ambiguous (e.g., unclear sizing, color names without visual support)
+• Excessive number of clicks required before CTA becomes active
+",Open PDP in clean session.Identify whether variant selection is required before purchase.Attempt to understand available options without interacting.Select variants and count required interaction steps before CTA activation.Attempt add-to-cart without selecting variant to test error clarity.Evaluate visual clarity of selected state and variant differentiation.,9,"High variant friction increases abandonment before add-to-cart, especially in multi-option products (e.g., size, color, configuration). Reducing interaction complexity directly improves add-to-cart rate and overall conversion.",High,"Agent, Human","Whether variant selection is intuitive, clearly communicated, and requires minimal cognitive and interaction effort before enabling purchase."
+Cognitive load per section,PDP,PDP-DC-CL-01,"Restructure PDP sections to reduce cognitive overload by improving scannability, prioritizing essential information, and eliminating redundant or visually competing elements.",Decision Clarity,"- Large unstructured text blocks without visual hierarchy
+- Excessive repetition of similar information across sections
+- Overuse of icons, badges, or micro-labels creating visual noise
+- Multiple competing visual focal points within a single section
+- Lack of clear information grouping (benefits, specifications, delivery, returns)
+- Important information buried within dense paragraphs","1. Scroll through PDP and evaluate each section independently.
+2. Identify presence of long paragraphs without sub-structure.
+3. Check for repeated value statements across sections.
+4. Assess whether visual elements (icons, labels, badges) compete for attention.
+5. Confirm whether information is grouped logically and supports scanning behavior.
+6. Evaluate whether a first-time visitor can extract key benefits within seconds per section.",9,"High cognitive load increases decision fatigue, slows evaluation, and reduces add-to-cart likelihood. Clear information hierarchy and reduced visual noise accelerate understanding and improve conversion efficiency.",High,"Agent, Human","Whether each PDP section minimizes mental effort by presenting information in a structured, scannable, and decision-supporting manner."
+Visual proof of value,PDP,PDP-DC-VPV-01,"Enhance product media to visually demonstrate use-case, quality, scale, and outcome relevance instead of relying solely on isolated product imagery.",Decision Clarity,"- Product images show only isolated object without contextual usage
+- No image demonstrates product in real-life scenario
+- No visual detail highlighting material, craftsmanship, or key feature
+- Variant differences not visually distinguishable
+- Media does not communicate size, scale, or functional outcome
+- Video (if present) adds no additional value explanation","1. Review entire product media gallery.
+2. Identify whether at least one image shows real-life usage context.
+3. Check whether product details (material, texture, mechanism) are visually demonstrated.
+4. Evaluate whether image order supports understanding progression.
+5. Confirm whether visual content communicates outcome, not just object.
+6. Compare variants visually to assess clarity of differentiation.",9,"Lack of visual proof increases uncertainty and reduces purchase confidence, particularly for first-time visitors. Strong contextual imagery reduces perceived risk, improves perceived quality, and increases add-to-cart likelihood.",High,"Agent, Human","Whether the PDP media gallery actively demonstrates product value, use-case relevance, and quality through context-rich visual content."
+Urgency & momentum signals,PDP,PDP-DC-UMS-01,"Integrate legitimate urgency and momentum signals near decision-critical areas (price and CTA) to communicate availability, delivery timing, or product demand transparently.",Decision Clarity,"• No visible stock availability information
+• No delivery timing information near purchase area
+• No indicators of demand or popularity (if applicable)
+• Urgency signals placed far below primary decision area
+• Use of artificial countdown timers without factual basis
+• Generic urgency messaging not tied to real conditions","1. Inspect area near price and primary CTA.
+2. Confirm visibility of stock level or availability status.
+3. Verify presence of realistic delivery timeframe messaging.
+4. Check for popularity indicators (e.g., bestseller label, review volume, demand signals).
+5. Evaluate whether urgency messaging is factual and not artificially inflated.
+6. Assess whether signals reinforce decision timing rather than distract.",9,"Absence of momentum signals reduces purchase immediacy and increases postponement behavior. Clear, factual urgency indicators support faster decision-making and reduce delayed abandonment.",High,"Agent, Human","Whether the PDP communicates real-time availability, delivery timing, or demand signals that encourage timely purchase decisions without misleading tactics."
+Price anchoring presence,PDP,PDP-DC-PAP-01,"Introduce transparent price comparison or value framing elements (e.g., reference pricing, savings display, bundle advantage, tiered pricing) to contextualize the product price and strengthen perceived value.",Decision Clarity,"• Single standalone price shown without contextual comparison
+• No indication of savings, discount, or reference value (if applicable)
+• No bundle, multi-buy, or tiered pricing visibility (where relevant)
+• Discount percentage shown without clear original reference price
+• Pricing advantages hidden below primary decision area
+• Reference pricing appears misleading or legally unclear","1. Review pricing area near primary CTA.
+2. Identify whether price is contextualized through comparison (e.g., original price, competitor reference, bundle savings).
+3. Confirm clarity and transparency of any discount or savings statement.
+4. Check whether pricing framing is visible without scrolling excessively.
+5. Evaluate whether pricing structure supports value perception rather than ambiguity.",9,"Isolated pricing reduces perceived value and increases price sensitivity. Effective price anchoring increases perceived fairness, supports justification of purchase, and improves conversion probability.",High,"Agent, Human",Whether the PDP contextualizes the product price through transparent value framing mechanisms that strengthen perceived affordability or advantage.
+Object handling block,PDP,PDP-DC-OHB-01,"Introduce a clearly structured objection-handling section that proactively addresses common purchase concerns (e.g., suitability, compatibility, quality, returns, sizing, material, usage conditions).",Decision Clarity,"• No dedicated section addressing common customer concerns
+• FAQs exist but are generic and not purchase-relevant
+• Objection-reducing information scattered without structure
+• Critical concerns (returns, sizing, compatibility, care) difficult to locate
+• Objection content placed far below primary decision journey
+• Answers focus on policy language rather than decision reassurance","1. Review PDP for a clearly identifiable objection-handling or FAQ block.
+2. Identify whether content addresses real purchase hesitations (e.g., “Is this right for me?”).
+3. Evaluate clarity and specificity of answers.
+4. Confirm whether key objections are grouped logically and easy to scan.
+5. Assess placement relative to decision flow (not hidden at extreme bottom).
+6. Determine whether content reduces uncertainty rather than repeating product specs.",9,"Unaddressed objections increase hesitation and external research behavior, reducing conversion probability. Proactive objection handling lowers uncertainty, increases trust, and supports faster add-to-cart decisions.",High,"Agent, Human","Whether the PDP proactively identifies and addresses common purchase objections in a structured, easily scannable format that supports confident buying decisions."
+Scroll-to-CTA Reinforcement,PDP,PDP-DC-CTA-01,Ensure that the primary add-to-cart action is consistently accessible throughout the decision journey via strategic CTA repetition or sticky behavior without creating visual clutter.,Decision Clarity,"• Primary CTA only visible above-the-fold
+• No sticky add-to-cart functionality on mobile
+• Long scroll sections without CTA reinforcement
+• Secondary CTAs visually compete with primary action
+• CTA reappears but lacks price or variant context
+• CTA placement inconsistent across devices","1. Scroll entire PDP on desktop and mobile.
+2. Identify whether the primary CTA remains accessible after scrolling.
+3. Confirm presence of sticky CTA on mobile (if long-form PDP).
+4. Evaluate whether repeated CTAs maintain clarity and hierarchy.
+5. Check whether price and selected variant remain visible near reinforced CTA.
+6. Assess whether CTA reinforcement improves continuity without clutter.
+",9,"Lack of CTA reinforcement increases decision drop-off after content consumption. Persistent, well-placed CTAs reduce friction and directly increase add-to-cart rate.",High,"Agent, Human",Whether the primary purchase action remains consistently accessible and contextually reinforced throughout the PDP scroll journey.
+Canonical Product & Offer Identity,PDP,PDP-MI-ID-01,"  • Add missing brand and model information to the PDP title or header
+  • Ensure variant selection updates all identity-relevant fields
+  • Align JSON-LD / structured data with visible product data
+  • Introduce or expose stable identifiers (SKU, GTIN, etc.)",Semantic Integrity,"  • Product name is generic or ambiguous (e.g. “Premium Hoodie”)
+  • No brand or model reference visible
+  • Multiple variants share the same unclear identity
+  • Variant selection changes visuals but not identity (title/SKU unclear)
+  • Structured data contains different product information than the visible PDP
+  • Missing or inconsistent identifiers (SKU changes, not exposed, or mismatched)
+  • Agent cannot determine if two PDPs represent the same product or not","
+• Change variants and check:
+    ◦ Does the identity update clearly and consistently?
+
+• Compare:
+    ◦ visible product name vs structured data
+
+• Inspect:
+    ◦ Is there a stable identifier (SKU / variant ID)?
+
+• Ask:
+    ◦ Could a third party reliably identify this exact product without guessing?
+",10,"Users cannot confidently verify what exact product or configuration they are purchasing.
+This increases hesitation and reduces trust, especially for higher-value items.
+For machines and agents, the product cannot be reliably identified, compared, or matched with other offers.
+This limits discoverability, automation, and future agent-based commerce interactions.",CRITICAL ‼️,"Agent, Human, Machine","Whether the product and the specific offer shown on the PDP are clearly and unambiguously identifiable, both for humans and machines.
+This includes:
+• the product identity (what the item actually is)
+• the offer identity (what exactly is being sold in this state)
+
+The PDP must expose a stable, consistent identity layer that does not change depending on layout, interaction, or interpretation."
+Active Variant State Synchronization,PDP,PDP-SR-VAR-01,,System Robustness,"  • Variant selection changes images but not price
+  • Price updates, but delivery time does not
+  • Availability does not match selected variant
+  • CTA remains active for out-of-stock variants
+  • SKU or variant identifier does not change with selection
+  • Structured data does not reflect the active variant
+  • Selected variant is not clearly reflected in title or context
+  • Different parts of the page show conflicting states
+  • User must reload or interact multiple times to see correct state","  • Change variants repeatedly and observe:
+      ◦ price
+      ◦ availability
+      ◦ delivery
+      ◦ images
+      ◦ CTA state
+  • Check if all elements update instantly and consistently
+  • Inspect structured data for alignment with selected variant
+  • Try edge cases (out-of-stock variants, different configurations)
+  • Verify no conflicting information remains visible",10,"Users receive conflicting or outdated information about the selected product variant.
+This leads to:
+  • hesitation and reduced trust
+  • incorrect expectations (price, delivery, availability)
+  • increased drop-off before purchase
+For machines and agents, the product state becomes unreliable and cannot be processed or executed correctly.",CRITICAL ‼️,"Agent, Human, Machine","Whether all decision-relevant elements on the PDP update consistently and synchronously when the user changes the active variant or configuration.
+This includes all signals that influence the purchase decision and must always reflect the currently selected state."
+Default PDP State Is Valid,PDP,PDP-SR-DEF-01,"Ensure that the PDP always loads with a clearly defined and purchasable state. If variants exist, either preselect a valid default or provide an explicit and immediately understandable selection requirement.
+
+All core decision signals such as price, availability, and delivery must be visible and correct without requiring interaction. The initial state should represent a realistic and relevant version of the product.",System Robustness,"The page loads without a selected variant and does not clearly explain why.
+The default state shows a configuration that is not purchasable, such as an out-of-stock variant.
+Price, availability, or delivery information are missing or only appear after interaction.
+The initial state creates confusion about what exactly is being offered.
+The user must interact with the page before being able to understand or purchase the product.","Load the PDP in a clean session and observe the initial state without interacting.
+Check whether a valid variant is selected or whether the absence of selection is clearly explained.
+Confirm that price, availability, and delivery information are visible and consistent.
+Assess whether a user can understand what is being offered and proceed toward purchase immediately.",10,"Users are forced to resolve uncertainty before they can even start evaluating the product. This creates friction at the very beginning of the decision process and leads to unnecessary drop-offs.
+
+If the default state is misleading or non-purchasable, users may assume the product is unavailable or not relevant to them and leave prematurely.
+
+For machines and agents, an undefined or invalid default state prevents reliable interpretation and execution, as there is no clear baseline offer.",CRITICAL ‼️,"Agent, Human, Machine","Whether the PDP loads in a valid, representative, and immediately actionable default state without requiring user interaction.
+The initial state must reflect a real, purchasable configuration and must not mislead or block the user before they engage with the page."
+Product suitability should be clearly self-evident on the PDP,PDP,PDP-DC-FIT-01,"Provide clear, decision-relevant guidance that allows users to validate suitability directly on the PDP.
+
+This can include structured size guidance, compatibility information, usage scenarios, and explicit clarification of who the product is intended for and who it is not suitable for.
+
+Where multiple variants exist, differences should be explained in terms of real-world impact, not just technical attributes.",Decision Clarity,"The PDP describes the product but does not clarify who it is for or not for.
+Users must guess whether the product fits their situation, size, device, or context.
+Important compatibility or usage constraints are missing, hidden, or only revealed after purchase.
+Variant differences exist but are not explained in terms of real-world use.
+Users are forced to leave the PDP to find basic suitability information.","Review the PDP from the perspective of a first-time user with a specific use case.
+Check whether the page clearly answers the question: “Is this the right product for me?”
+Look for missing constraints, unclear applicability, or gaps in explanation.
+Confirm whether a user can make a confident decision without leaving the page.",10,"Users hesitate because they cannot confidently determine whether the product will work for them. This increases perceived risk and leads to delayed or abandoned decisions.
+Even if interest is high, uncertainty around fit or compatibility often prevents conversion entirely.
+For machines and agents, missing fit logic makes it impossible to reliably match products to user needs or constraints.",CRITICAL ‼️,"Agent, Human, Machine","Whether the PDP enables users to confidently determine if the product is suitable for their specific use case, without needing external research or guesswork.
+The page must provide enough context, guidance, and constraints so that the user can validate fit, compatibility, or appropriateness directly within the decision flow."
+Payment options and financing conditions should be clearly visible before checkout,PDP,PDP-DC-PAY-01,"Expose all relevant payment methods directly on the PDP in close proximity to the purchase decision.
+
+If financing or installment options are available, clearly communicate the conditions, including indicative monthly cost where applicable.
+
+Ensure that users can fully understand how they can pay without entering the checkout flow.",Decision Clarity,"Payment methods are not visible on the PDP.
+Financing or installment options exist but are only shown in checkout.
+Additional costs or payment constraints are revealed late in the process.
+Users must click through multiple steps to understand how they can pay.
+The PDP creates uncertainty about whether preferred payment methods are supported.","Open the PDP and check whether payment methods are visible without interaction.
+Verify whether financing options, if available, are clearly explained.
+Confirm that no critical payment information is only revealed in checkout.
+Assess whether a user can decide if the purchase is financially feasible directly on the PDP.",10,"Users delay or abandon decisions because they cannot confirm whether the purchase is feasible for them.
+
+This is especially critical for higher-priced products, where payment flexibility directly affects conversion.
+
+For machines and agents, missing payment context limits the ability to evaluate whether a transaction is executable.",High,"Agent, Human, Machine","Whether the PDP clearly communicates how the product can be paid for, including available payment methods and any relevant financing or installment options, without requiring the user to proceed to checkout.
+The user must understand the actual payment reality before committing to the purchase flow."
+Users should clearly understand what is included in the purchase,PDP,PDP-DC-OFF-01,"Clearly define the full scope of the offer directly on the PDP.
+
+Explicitly list what is included and, where relevant, what is not included.
+Ensure that product imagery does not contradict the actual contents of the offer.
+If the product is part of a system or requires additional components, make this clear before purchase.",Decision Clarity,"The PDP does not clearly state what is included in the purchase.
+Product images suggest items that are not part of the offer.
+Bundles or sets are shown without clearly defining their contents.
+Accessories or required components are not mentioned or are hidden.
+Users must infer what they will receive instead of being explicitly told.","Review the PDP and ask: “Do I know exactly what I will receive?”
+Check whether all included items are explicitly stated.
+Compare visuals with the described offer to detect inconsistencies.
+Assess whether any assumptions are required to understand the offer.",10,"Users experience uncertainty about what they are actually buying, which reduces trust and increases hesitation.
+
+If expectations are not aligned with reality, this leads to returns, complaints, and negative perception of the brand.
+
+For machines and agents, unclear offer scope prevents accurate interpretation of the product and makes automated purchasing unreliable.",CRITICAL ‼️,"Agent, Human, Machine","Whether the PDP makes it unambiguously clear what exactly is included in the purchase and what is not.
+The user must be able to understand the full scope of the offer without assumptions, including included components, exclusions, and conditions."
+The total cost and unit-based pricing of the product should be clearly understandable before purchase,PDP,PDP-DC-PRC-01,"Ensure that the full cost of the product is transparent before checkout, including any relevant additional charges or conditions.
+
+Where applicable, clearly display unit-based pricing and make differences between quantities or bundles directly comparable.
+
+The user should be able to understand the real economic value of the offer at a glance.",Decision Clarity,"The PDP shows a base price but does not clarify the total payable cost.
+Additional costs such as shipping, taxes, or fees are unclear or only revealed later.
+Unit-based pricing (e.g. per kg, per liter, per month) is missing where relevant.
+Different quantities or bundle sizes are shown without a clear economic comparison.
+Users must calculate or estimate the real cost themselves.","Review the PDP and check whether the full cost is visible without progressing to checkout.
+Assess whether any additional costs are unclear or hidden.
+Verify whether unit pricing is displayed where relevant.
+Check whether different quantities or bundles can be compared without calculation.",10,"Users cannot confidently assess whether the product represents good value, which increases hesitation and slows down decision-making.
+
+In categories where quantity or recurring usage matters, missing unit pricing prevents meaningful comparison and reduces conversion.
+
+For machines and agents, incomplete pricing logic limits the ability to compare offers or optimize decisions.",High,"Agent, Human, Machine","Whether the PDP enables users to clearly understand the true economic value of the product, including the total payable cost and, where relevant, the price per unit.
+The user must be able to evaluate the offer without needing to calculate, estimate, or infer hidden cost structures."
+Product reviews should provide meaningful information that helps users make a confident purchase decision,PDP,PDP-TD-REV-01,"Ensure that reviews contain concrete, experience-based information that helps users understand how the product performs in real-world scenarios.
+
+Encourage structured or guided reviews that highlight relevant aspects such as use case, fit, pros and cons, and specific outcomes.
+
+Where possible, surface the most informative and decision-relevant reviews rather than only displaying average ratings.",Trust & Decision Enablement,"Reviews consist mostly of generic statements without useful detail.
+There is a high rating score but no explanation of why the product is good or bad.
+Reviews do not reflect different use cases, variants, or contexts.
+Users cannot extract practical insights from the reviews.
+Reviews are present but do not answer common questions or objections.","Read multiple reviews and assess whether they provide actionable insights.
+Check whether reviews answer typical user questions or reduce uncertainty.
+Look for variety in use cases, contexts, and experiences.
+Evaluate whether a user could rely on reviews to support a purchase decision without external research.",10,"Users may initially trust the rating but still hesitate because they cannot validate whether the product will work for their specific situation.
+
+This leads to stalled decisions, increased drop-off, or unnecessary external research.
+
+For machines and agents, low-quality review content provides little to no usable signal for evaluating product suitability or quality.",High,"Agent, Human, Machine","Whether the reviews on the PDP actually help users reduce uncertainty and make a confident decision, rather than just signaling general popularity or satisfaction.
+The focus is on decision-relevant content, not just the presence of ratings or volume of reviews."
+Cart quantity persists across checkout navigation,Cart,CART-SR-QTY-01,"Persist cart line-item quantity as a stable session or server-backed cart attribute and rehydrate that state consistently whenever the cart drawer, cart page, or checkout-return path is reopened.
+
+Ensure cart rendering uses the authoritative stored quantity rather than a hardcoded UI default. If inventory or business rules force a quantity change, keep the adjusted value visible and show a clear inline reason for the change.",System Robustness,"- Quantity increases in cart, but returns to 1 after navigating to checkout and back
+
+- Returning to cart shows a different quantity than the one last selected by the user
+
+- The reset occurs across multiple products, not just one SKU
+
+- The reset is reproducible across repeated cart-to-checkout navigation
+
+- No message explains why the quantity changed
+
+- Line item subtotal or total no longer matches the quantity the user selected before navigation","1. Add a product to the cart.
+
+2. Increase quantity to a non-default value such as 3, 5, or 10.
+
+3. Proceed to checkout.
+
+4. Navigate back to the cart or shop/cart flow.
+
+5. Confirm whether the same quantity is still shown for the same line item.
+
+6. Repeat with multiple products.
+
+7. Repeat the flow more than once to confirm whether the reset is reproducible.
+
+8. Check whether subtotal and total remain aligned with the preserved quantity.",10,"Users lose a decision-critical part of their purchase state after progressing in the buying flow. This breaks continuity, creates rework, and weakens trust in cart and checkout reliability.
+
+For decision-making, users can no longer trust that the order they configured is the order being preserved. This increases hesitation, correction effort, and abandonment risk.
+
+For machines and agents, the commerce state becomes unstable across navigation steps, which makes validation, execution, and recovery unreliable.",CRITICAL ‼️,"Agent, Human","Whether the user’s selected cart quantity remains unchanged and preserved in the last confirmed quantity state for each line item unless the user explicitly changes it, when e.g. moving from cart to checkout and then returning to the cart or shop flow.
+
+The cart must preserve the last confirmed quantity state for each line item unless the user explicitly changes it or the system clearly communicates a validated reason why the quantity was adjusted."
+Cart quantity value remains fully readable at all supported quantities,Cart,CART-DC-QTY-01,"Redesign the quantity control so the value container supports all allowed quantity lengths. Use responsive width, padding, font sizing, and overflow rules that keep the full number visible.
+
+If the control only allows button-based quantity changes, the displayed value must remain centered, fully rendered, and visually stable at every supported step. Do not rely on a fixed-width container that was only sized for single-digit values.",Decision Clarity,"- Quantity text is clipped once it reaches two digits
+
+- Values above 10 are partially hidden inside the control
+
+- Higher values such as 20 are unreadable or only partly visible
+
+- The quantity container does not resize or adapt as the number grows
+
+- Users can continue increasing quantity with buttons, but cannot clearly read the resulting value
+
+- The displayed quantity is visually ambiguous because digits are cut off or crowded","Add a product to the cart.
+
+Increase quantity using the plus control until the value exceeds 10.
+
+Continue to higher values such as 20 if the interface allows it.
+
+Observe whether every digit remains fully visible inside the cart quantity control.
+
+Confirm there is no clipping, truncation, overlap, or hidden text.
+
+Repeat on desktop and mobile viewport sizes if both are supported.
+
+Confirm the visible quantity can be read without guessing.",9,"Users cannot reliably confirm how many units they are about to purchase. This directly weakens purchase confidence and increases the risk of unintended order quantities.
+
+For decision-making, unclear quantity display prevents accurate validation of cart contents and raises the chance of hesitation, correction loops, or abandonment.
+
+For machines and agents, the visible cart state becomes harder to interpret or validate from the interface because a core order value is not presented clearly.",High,"Agent, Human","Whether the cart UI displays the selected quantity as fully visible, legible, and unambiguous at every quantity level the interface allows the user to reach.
+
+The quantity display must scale or adapt so that multi-digit values remain completely readable without clipping, truncation, overlap, or hidden characters."
+Selected offer state persists unchanged from PDP to Cart,Cart,CART-SR-PERSIST-01,"Pass the selected offer to cart using a stable offer or variant identifier and render cart state from the same authoritative commerce object used at add-to-cart. Do not reconstruct the cart item from loosely matched product data. Lock price, variant, and purchasability state to the selected offer snapshot unless a clearly explained system update occurs.",System Robustness,"Cart price differs from the price shown on the PDP for the selected offer
+
+Selected variant is reset, replaced, or incompletely transferred in cart
+
+Product name or identifying offer details change in cart in a way that makes the selected item unclear
+
+Cart shows a purchasability state that contradicts the selected PDP state without explicit explanation
+
+Cart resolves the added item to a different configuration than the one the user selected
+
+Item is added successfully, but cart state forces the user to re-decide core offer attributes","Select a specific variant or configuration on the PDP and note the visible product name, variant, price, and purchasability state. Add the item to cart. Compare the cart line item against the selected PDP state. Confirm that no core offer attribute changed silently. Repeat with multiple variants, including edge cases such as low-stock, discounted, or restricted configurations.",10,"When the selected offer changes between PDP and cart, users cannot trust that the system preserved their decision. This creates immediate purchase hesitation, increases abandonment, and makes the cart feel unreliable or broken. For machines and agents, the transition becomes non-deterministic: the selected offer cannot be safely executed, verified, or re-used as a stable transaction state.",High,Agent,"Checks whether the exact decision-relevant offer state selected on the PDP remains unchanged after the product is added to cart. The cart must preserve the same selected variant, product identity, price, and purchasability state that were shown at the moment of add-to-cart."
+Cart reinforces the user’s selected product decision with clear visual and attribute confirmation,Cart,CART-TE-REINFORCE-01,"Render each cart item as a clear product block including a recognizable image, explicit variant attributes, and unambiguous product naming. Ensure that all decision-relevant attributes are visible without interaction. Prioritize recognition over recall by making the selected configuration immediately identifiable.",Trust & Decision Enablement,"Product image is missing, too small, or not recognizable
+
+Key attributes (e.g. size, color, configuration) are missing or unclear
+
+Product representation is too generic to distinguish between variants
+
+Price is not clearly associated with the displayed product
+
+User must rely on memory to confirm what was added
+
+Multiple items appear visually ambiguous or indistinguishable","Add a product with a specific variant (e.g. size and color) to the cart. Without referring back to the PDP, check whether the cart alone makes it immediately clear what exact product and configuration was selected. Repeat with similar variants to confirm that items remain distinguishable and unambiguous.",10,"If the cart does not clearly reinforce the selected product, users cannot confidently confirm their decision and begin to doubt whether the correct item was added. This increases hesitation, slows progression to checkout, and raises abandonment risk. Trust decreases as users feel forced to re-verify their choice. For agents, weak product representation increases ambiguity in interpreting line items and reduces reliability of the cart as a confirmation state.",High,Human,Checks whether the cart clearly confirms the user’s previously selected product by displaying sufficient visual and textual information to enable immediate recognition without requiring recall. The cart must make it obvious what exact product and configuration was added.
+,,,,,,,,,,,
