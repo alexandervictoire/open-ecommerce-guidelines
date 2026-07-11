@@ -11,9 +11,10 @@ export const SITE_DESCRIPTION =
 export const GITHUB_REPO = 'alexandervictoire/open-ecommerce-guidelines'
 export const GITHUB_BRANCH = 'main'
 
-// Public site origin used for canonical URLs / sitemap. Update this to the real
-// production domain once known (currently the expected Vercel project URL).
-export const SITE_URL = 'https://ecom-guidelines.vercel.app'
+// Public site origin used for canonical URLs / sitemap.
+// No trailing slash. If Vercel's primary domain is the apex, change to
+// https://ecommerce-guidelines.org.
+export const SITE_URL = 'https://www.ecommerce-guidelines.org'
 
 export function githubBlobUrl(pathInRepo: string): string {
   return `https://github.com/${GITHUB_REPO}/blob/${GITHUB_BRANCH}/${pathInRepo}`

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ecom-guidelines.vercel.app/sitemap.xml
+Sitemap: https://www.ecommerce-guidelines.org/sitemap.xml
