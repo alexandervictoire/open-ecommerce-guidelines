@@ -53,12 +53,12 @@ is deployable on the Vercel free tier. [`vercel.json`](vercel.json) pins the
 build command and output directory, so importing the repo on Vercel needs no
 extra configuration. Every pull request gets an automatic preview deployment.
 
-Before the first production deploy, update two placeholders:
+Site configuration lives in [`utils/site.ts`](utils/site.ts):
 
-- `GITHUB_REPO` in [`utils/site.ts`](utils/site.ts) — drives "Edit this page"
-  and "Contribute" links (currently `OWNER/ecom-guidelines`).
-- `SITE_URL` in the same file — canonical URLs, sitemap, and robots
-  (currently the expected `*.vercel.app` URL).
+- `GITHUB_REPO` (`alexandervictoire/open-ecommerce-guidelines`) — drives
+  "Edit this page" and "Contribute" links.
+- `SITE_URL` (`https://www.ecommerce-guidelines.org`) — canonical URLs,
+  sitemap, and robots.
 
 ## Contributing
 
