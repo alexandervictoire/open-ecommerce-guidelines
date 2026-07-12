@@ -6,6 +6,26 @@ readiness). Think "Baymard meets MDN," as open docs-as-code. The site is itself 
 reference implementation of agent-readable content: clean semantic HTML, JSON-LD
 per guideline, a sitemap, and fast static pages.
 
+## Ways to contribute
+
+You don't need to write a full guideline to help. Pick your level:
+
+- **Report a failure pattern.** Seen a recurring UX or technical problem in
+  real shops? [Open an issue](../../issues/new) describing it — even a few
+  sentences and a screenshot help. We'll help shape it into a guideline.
+- **Propose a guideline idea.** Not sure it qualifies? Open an issue and
+  we'll discuss it before you invest writing time.
+- **Review and improve existing guidelines.** Unclear wording, missing
+  failure signals, better verification steps — small PRs are very welcome.
+- **Write a new guideline.** See [CONTRIBUTING.md](CONTRIBUTING.md) for the
+  template and acceptance criteria. Check the
+  [help-wanted issues](../../issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
+  for where gaps are biggest.
+- **Discuss the standard itself.** Category structure, dimensions, scope —
+  [GitHub Discussions](../../discussions) is the place.
+
+All content contributions are accepted under CC BY-SA 4.0.
+
 ## How it works
 
 - **Content** lives as Markdown in [`content/guidelines/`](content/guidelines),
