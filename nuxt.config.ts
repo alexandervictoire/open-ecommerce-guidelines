@@ -24,6 +24,11 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+      ],
+      script: [
+        // Vercel Web Analytics (enabled in the dashboard). Served by Vercel at
+        // this path in production; harmless 404 in local/preview builds.
+        { src: '/_vercel/insights/script.js', defer: true }
       ]
     }
   }
