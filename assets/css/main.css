@@ -50,6 +50,24 @@ a {
   border-radius: 4px;
 }
 
+/* Guideline list rows: the title link covers the whole row, while the nested
+   metadata links stay clickable on top of it. Keeps the large click target
+   without putting an <a> inside an <a>. */
+.guideline-row {
+  position: relative;
+}
+
+.guideline-row-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.guideline-row a:not(.guideline-row-link) {
+  position: relative;
+  z-index: 1;
+}
+
 /* presetTypography adds decorative backtick quotes around inline code — drop them. */
 .prose :not(pre) > code::before,
 .prose :not(pre) > code::after {
