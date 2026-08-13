@@ -11,7 +11,7 @@
 // Guarantees: drops "Max Score" (PLAN §4), validates every output, skips (never
 // emits) broken guidelines, is idempotent (per-file overwrite), prints a summary.
 
-import { readFileSync, mkdirSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, mkdirSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -173,7 +173,41 @@ function filenameFor(g) {
   return join(OUT_ROOT, g.category, `${g.id.toLowerCase()}.md`)
 }
 
-function render(g) {
+// ---- Platform data (Shopware / Shopify) -------------------------------------
+// The Notion export has no platform columns: the classification is maintained by
+// hand in the Markdown files. Re-running the converter must therefore carry over
+// whatever is already on disk instead of resetting it to the default.
+const PLATFORMS = [
+  { key: 'shopware', field: 'shopware_status', heading: 'Shopware specific' },
+  { key: 'shopify', field: 'shopify_status', heading: 'Shopify specific' }
+]
+const DEFAULT_PLATFORM_STATUS = 'no_divergence'
+
+function readExistingPlatformData(path) {
+  const result = {}
+  for (const p of PLATFORMS) result[p.key] = { status: DEFAULT_PLATFORM_STATUS, section: null }
+  if (!existsSync(path)) return result
+
+  const text = readFileSync(path, 'utf8')
+  const match = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/.exec(text)
+  if (!match) return result
+  const [, fm, body] = match
+
+  for (const p of PLATFORMS) {
+    const status = new RegExp(`^${p.field}:\\s*(\\S+)\\s*$`, 'm').exec(fm)
+    if (status) result[p.key].status = status[1]
+
+    // Section runs from its heading to the next H2 (or end of file).
+    const section = new RegExp(`^## ${p.heading}\\s*$([\\s\\S]*?)(?=^## |\\s*$(?![\\s\\S]))`, 'm').exec(body)
+    if (section) {
+      const content = section[1].trim()
+      if (content) result[p.key].section = content
+    }
+  }
+  return result
+}
+
+function render(g, platform) {
   const fm = [
     '---',
     `id: ${g.id}`,
@@ -183,11 +217,18 @@ function render(g) {
     `severity: ${g.severity}`,
     `targets: [${g.targets.join(', ')}]`,
     `status: ${g.status}`,
+    ...PLATFORMS.map((p) => `${p.field}: ${platform[p.key].status}`),
     '---',
     ''
   ].join('\n')
-  const body = SECTION_ORDER.map(([key, heading]) => `## ${heading}\n\n${g.sections[key]}`).join('\n\n')
-  return `${fm}\n${body}\n`
+  const sections = SECTION_ORDER.map(([key, heading]) => `## ${heading}\n\n${g.sections[key]}`)
+  // Platform sections stay last, and only exist for `platform_specific`.
+  for (const p of PLATFORMS) {
+    if (platform[p.key].status === 'platform_specific' && platform[p.key].section) {
+      sections.push(`## ${p.heading}\n\n${platform[p.key].section}`)
+    }
+  }
+  return `${fm}\n${sections.join('\n\n')}\n`
 }
 
 // A converted file must never contain a score field (PLAN §4).
@@ -218,12 +259,12 @@ function main() {
     if (g.id && seenIds.has(g.id)) errs.push(`duplicate id (also on ${seenIds.get(g.id)})`)
 
     if (errs.length === 0) {
-      const out = render(g)
+      const path = filenameFor(g)
+      const out = render(g, readExistingPlatformData(path))
       if (containsScore(out)) {
         skipped.push({ label, reasons: ['output contains a score field'] })
         continue
       }
-      const path = filenameFor(g)
       mkdirSync(dirname(path), { recursive: true })
       writeFileSync(path, out, 'utf8')
       seenIds.set(g.id, label)

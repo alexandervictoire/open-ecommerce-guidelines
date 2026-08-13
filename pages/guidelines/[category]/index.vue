@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { CATEGORY_LABELS, categoryLabel } from '~/utils/labels'
+import { PLATFORM_LABELS } from '~/utils/platforms'
 import { SITE_NAME } from '~/utils/site'
 
 const route = useRoute()
@@ -11,12 +12,15 @@ if (!CATEGORY_LABELS[category.value]) {
 }
 
 const all = await useAllGuidelines()
-const items = computed(() => sortGuidelines(all.value.filter((g) => g.category === category.value)))
+const inCategory = computed(() => sortGuidelines(all.value.filter((g) => g.category === category.value)))
+
+const { platform, setPlatform } = usePlatformFilter()
+const items = computed(() => filterByPlatform(inCategory.value, platform.value))
 
 const label = computed(() => categoryLabel(category.value))
 useSeoMeta({
   title: () => `${label.value} guidelines — ${SITE_NAME}`,
-  description: () => `E-commerce guidelines for the ${label.value.toLowerCase()}: testable, vendor-neutral checks across UX and machine-readability.`
+  description: () => `E-commerce guidelines for the ${label.value.toLowerCase()}: testable, platform-aware checks across UX and machine-readability.`
 })
 </script>
 
@@ -29,8 +33,21 @@ useSeoMeta({
     </nav>
 
     <h1 class="text-3xl font-semibold tracking-tight">{{ label }} guidelines</h1>
-    <p class="mt-2 text-muted">{{ items.length }} guideline{{ items.length === 1 ? '' : 's' }}.</p>
+    <p class="mt-2 text-muted">
+      {{ items.length }} guideline{{ items.length === 1 ? '' : 's' }}<template
+        v-if="platform !== 'all'"
+      > relevant for {{ PLATFORM_LABELS[platform] }} (of {{ inCategory.length }})</template>.
+    </p>
 
-    <GuidelineList class="mt-8" :items="items" />
+    <PlatformFilter
+      class="mt-6"
+      :model-value="platform"
+      @update:model-value="setPlatform"
+    />
+
+    <GuidelineList v-if="items.length" class="mt-8" :items="items" :platform="platform" />
+    <p v-else class="mt-8 text-muted">
+      No guidelines in this category apply to {{ PLATFORM_LABELS[platform] }} yet.
+    </p>
   </div>
 </template>

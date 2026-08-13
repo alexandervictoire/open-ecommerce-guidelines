@@ -21,6 +21,8 @@ dimension: decision-clarity    # kebab-case (see dimension list below)
 severity: high                 # enum: low | medium | high | critical
 targets: [human, agent]        # array; subset of [human, agent, machine]
 status: published              # enum: draft | published | deprecated
+shopware_status: no_divergence # not_applicable | no_divergence | platform_specific
+shopify_status: no_divergence  # not_applicable | no_divergence | platform_specific
 ---
 ```
 
@@ -48,6 +50,27 @@ status: published              # enum: draft | published | deprecated
 
 All five must be present and non-empty. `Failure signals` is a `-` bullet list;
 `How to verify` is a numbered list (one step per line).
+
+### Platform sections (optional, always last)
+
+```markdown
+## Shopware specific
+## Shopify specific
+```
+
+Present **only** when the matching `*_status` is `platform_specific`; absent for
+`no_divergence` (the default) and `not_applicable`. Missing status field means
+`no_divergence`. The five core sections stay vendor-neutral — the platform
+sections are the one place where product names, default storefront behavior, and
+plugin types belong.
+
+`npm run validate` (wired into `build`/`generate`) fails the build on any
+mismatch between status and section. See `utils/platforms.ts` for the shared
+logic and `scripts/validate-guidelines.mjs` for the rules.
+
+> **Do not guess platform behavior.** The classification per guideline is a
+> manual, maintainer-owned judgement. Leave `no_divergence` unless the actual
+> platform default is known.
 
 ### Dimensions (kebab-case enum, derived from content)
 
@@ -91,7 +114,9 @@ appears in a contributor PR or a converted file, remove it before merge.
 
 ## Writing style for guidelines
 
-- Imperative, testable, vendor-neutral. No marketing language.
+- Imperative and testable. The five core sections stay vendor-neutral; only the
+  platform sections may name platforms and their defaults. No marketing language
+  anywhere.
 - Every guideline must be verifiable by following the steps in "How to verify".
 - Describe observable behavior and DOM/UX facts, not opinions.
 - Never modify a published guideline's `id`. A breaking change to its meaning
@@ -104,6 +129,7 @@ Node is provided via nvm (`nvm use` picks up the repo default). Then:
 ```bash
 npm install            # install deps (better-sqlite3 backs Nuxt Content)
 npm run dev            # local dev server
+npm run validate       # validate all guidelines (runs automatically on build)
 npm run generate       # fully static build (nuxt generate) → .output/public
 npm run preview        # preview the generated build
 

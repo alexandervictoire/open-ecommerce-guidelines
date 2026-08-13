@@ -14,7 +14,15 @@ export default defineContentConfig({
         dimension: z.string(),
         severity: z.enum(['low', 'medium', 'high', 'critical']),
         targets: z.array(z.enum(['human', 'agent', 'machine'])),
-        status: z.enum(['draft', 'published', 'deprecated'])
+        status: z.enum(['draft', 'published', 'deprecated']),
+        // Platform applicability — see utils/platforms.ts. Absent means
+        // `no_divergence`, so existing guidelines remain valid.
+        shopware_status: z
+          .enum(['not_applicable', 'no_divergence', 'platform_specific'])
+          .default('no_divergence'),
+        shopify_status: z
+          .enum(['not_applicable', 'no_divergence', 'platform_specific'])
+          .default('no_divergence')
       })
     })
   }

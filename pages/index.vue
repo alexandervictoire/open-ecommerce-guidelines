@@ -40,8 +40,9 @@ useSeoMeta({
       <p class="mt-4 text-lg text-muted leading-relaxed">
         An open, community-maintained collection of e-commerce guidelines — UX
         <em>and</em> technical: performance, semantic structure, machine-readability,
-        and agentic-commerce readiness. Each guideline is testable, vendor-neutral,
-        and verifiable by concrete steps.
+        and agentic-commerce readiness. Each guideline is testable and verifiable
+        by concrete steps, with a vendor-neutral core and explicit notes on what
+        applies on Shopware and Shopify.
       </p>
       <p class="mt-4 text-sm">
         <a class="text-ink underline underline-offset-2" :href="githubBlobUrl('CONTRIBUTING.md')">

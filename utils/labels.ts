@@ -1,6 +1,8 @@
 // Human-readable labels and ordering for categories and dimensions.
 // Keep in sync with the enums in content.config.ts / CLAUDE.md.
 
+import type { PlatformStatus } from '~/utils/platforms'
+
 export const CATEGORY_LABELS: Record<string, string> = {
   pdp: 'Product Detail Page',
   cart: 'Cart',
@@ -50,4 +52,6 @@ export interface GuidelineMeta {
   targets: string[]
   status: string
   path: string
+  shopware_status: PlatformStatus
+  shopify_status: PlatformStatus
 }

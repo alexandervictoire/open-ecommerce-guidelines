@@ -1,0 +1,224 @@
+#!/usr/bin/env node
+// validate-guidelines.mjs — build-time gate for content/guidelines/**.
+//
+// Runs before `nuxt build` / `nuxt generate` (see package.json). Exits non-zero
+// with a report so a broken guideline fails the build instead of shipping.
+//
+// Checks:
+//   - frontmatter enums are legal (incl. the two platform status fields)
+//   - id matches the filename (filename = lowercased id, by contract)
+//   - the five core H2 sections exist, in order, non-empty
+//   - platform status <-> platform section coupling:
+//       platform_specific  => the matching section MUST exist
+//       otherwise          => the section MUST NOT exist
+//   - no score-like field anywhere (score policy, PLAN §4)
+//
+// Usage: node scripts/validate-guidelines.mjs
+
+import { readdirSync, readFileSync, statSync } from 'node:fs'
+import { join, dirname, resolve, relative } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
+const CONTENT_ROOT = join(REPO_ROOT, 'content', 'guidelines')
+
+const CATEGORIES = ['pdp', 'cart', 'checkout']
+const SEVERITIES = ['low', 'medium', 'high', 'critical']
+const TARGETS = ['human', 'agent', 'machine']
+const STATUSES = ['draft', 'published', 'deprecated']
+const DIMENSIONS = [
+  'decision-clarity',
+  'system-robustness',
+  'semantic-integrity',
+  'machine-extractability',
+  'trust-decision-enablement'
+]
+
+const CORE_SECTIONS = [
+  'What is being checked',
+  'Why it matters',
+  'Failure signals',
+  'How to verify',
+  'Recommended fix'
+]
+
+// Keep in sync with utils/platforms.ts.
+const PLATFORMS = ['shopware', 'shopify']
+const PLATFORM_LABELS = { shopware: 'Shopware', shopify: 'Shopify' }
+const PLATFORM_STATUSES = ['not_applicable', 'no_divergence', 'platform_specific']
+const DEFAULT_PLATFORM_STATUS = 'no_divergence'
+
+const sectionHeading = (p) => `${PLATFORM_LABELS[p]} specific`
+
+function walk(dir) {
+  const out = []
+  let entries
+  try { entries = readdirSync(dir) } catch { return out }
+  for (const entry of entries) {
+    const full = join(dir, entry)
+    if (statSync(full).isDirectory()) out.push(...walk(full))
+    else if (entry.endsWith('.md')) out.push(full)
+  }
+  return out
+}
+
+// Split leading frontmatter from the body. Returns null if absent.
+function splitFrontmatter(text) {
+  const match = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/.exec(text)
+  if (!match) return null
+  return { fm: match[1], body: match[2] }
+}
+
+// The frontmatter our converter and contributors write is flat `key: value`.
+function parseFrontmatter(fm) {
+  const out = {}
+  for (const line of fm.split(/\r?\n/)) {
+    if (!line.trim() || /^\s*#/.test(line)) continue
+    const idx = line.indexOf(':')
+    if (idx === -1) continue
+    out[line.slice(0, idx).trim()] = line.slice(idx + 1).trim()
+  }
+  return out
+}
+
+function parseList(value) {
+  return String(value ?? '')
+    .replace(/^\[|\]$/g, '')
+    .split(',')
+    .map((v) => v.trim())
+    .filter(Boolean)
+}
+
+// H2 headings with their content, ignoring fenced code blocks.
+function parseSections(body) {
+  const withoutFences = body.replace(/^```[\s\S]*?^```/gm, '')
+  const sections = []
+  const re = /^##[ \t]+(.+?)[ \t]*$/gm
+  let match
+  const marks = []
+  while ((match = re.exec(withoutFences)) !== null) {
+    marks.push({ title: match[1].trim(), start: match.index, end: re.lastIndex })
+  }
+  for (let i = 0; i < marks.length; i++) {
+    const next = i + 1 < marks.length ? marks[i + 1].start : withoutFences.length
+    sections.push({
+      title: marks[i].title,
+      content: withoutFences.slice(marks[i].end, next).trim()
+    })
+  }
+  return sections
+}
+
+function validateFile(file) {
+  const errors = []
+  const rel = relative(REPO_ROOT, file)
+  const text = readFileSync(file, 'utf8')
+
+  const split = splitFrontmatter(text)
+  if (!split) return [{ file: rel, errors: ['missing or malformed frontmatter'] }]
+
+  const fm = parseFrontmatter(split.fm)
+  const sections = parseSections(split.body)
+  const titles = sections.map((s) => s.title)
+
+  // ---- frontmatter enums --------------------------------------------------
+  const id = (fm.id ?? '').trim()
+  if (!id) errors.push('missing `id`')
+  else {
+    const expected = `${id.toLowerCase()}.md`
+    const actual = file.split('/').pop()
+    if (expected !== actual) errors.push(`filename "${actual}" does not match id "${id}" (expected "${expected}")`)
+  }
+  if (!fm.title) errors.push('missing `title`')
+  if (!CATEGORIES.includes(fm.category)) errors.push(`illegal category "${fm.category}"`)
+  if (!DIMENSIONS.includes(fm.dimension)) errors.push(`illegal dimension "${fm.dimension}"`)
+  if (!SEVERITIES.includes(fm.severity)) errors.push(`illegal severity "${fm.severity}"`)
+  if (!STATUSES.includes(fm.status)) errors.push(`illegal status "${fm.status}"`)
+
+  const targets = parseList(fm.targets)
+  if (targets.length === 0) errors.push('empty `targets`')
+  for (const t of targets) if (!TARGETS.includes(t)) errors.push(`illegal target "${t}"`)
+
+  // ---- core sections ------------------------------------------------------
+  const coreFound = titles.filter((t) => CORE_SECTIONS.includes(t))
+  for (const heading of CORE_SECTIONS) {
+    const section = sections.find((s) => s.title === heading)
+    if (!section) errors.push(`missing section "## ${heading}"`)
+    else if (!section.content) errors.push(`empty section "## ${heading}"`)
+  }
+  if (coreFound.length === CORE_SECTIONS.length && coreFound.join('|') !== CORE_SECTIONS.join('|')) {
+    errors.push(`core sections out of order: ${coreFound.join(' -> ')}`)
+  }
+
+  // ---- platform status <-> section coupling -------------------------------
+  for (const platform of PLATFORMS) {
+    const field = `${platform}_status`
+    const raw = fm[field]
+    const status = raw === undefined ? DEFAULT_PLATFORM_STATUS : raw
+
+    if (!PLATFORM_STATUSES.includes(status)) {
+      errors.push(`illegal ${field} "${raw}" (expected one of: ${PLATFORM_STATUSES.join(', ')})`)
+      continue
+    }
+
+    const heading = sectionHeading(platform)
+    const section = sections.find((s) => s.title === heading)
+
+    if (status === 'platform_specific') {
+      if (!section) {
+        errors.push(`${field} is "platform_specific" but section "## ${heading}" is missing`)
+      } else if (!section.content) {
+        errors.push(`section "## ${heading}" is empty`)
+      }
+    } else if (section) {
+      errors.push(`section "## ${heading}" is present but ${field} is "${status}" (must be "platform_specific")`)
+    }
+  }
+
+  // Platform sections must come last, after the five core sections.
+  const platformHeadings = PLATFORMS.map(sectionHeading)
+  const firstPlatformIdx = titles.findIndex((t) => platformHeadings.includes(t))
+  if (firstPlatformIdx !== -1) {
+    const trailing = titles.slice(firstPlatformIdx)
+    const stray = trailing.filter((t) => !platformHeadings.includes(t))
+    if (stray.length) errors.push(`section(s) after the platform block: ${stray.join(', ')}`)
+    // Shopware before Shopify.
+    const ordered = trailing.filter((t) => platformHeadings.includes(t))
+    const expected = platformHeadings.filter((h) => ordered.includes(h))
+    if (ordered.join('|') !== expected.join('|')) {
+      errors.push(`platform sections out of order: ${ordered.join(' -> ')}`)
+    }
+  }
+
+  // ---- score policy (PLAN §4) --------------------------------------------
+  if (/(^|\n)\s*(max[_\s-]*)?score\s*:/i.test(text) || /max\s*score/i.test(text)) {
+    errors.push('contains a score-like field — scores must never appear in this repo')
+  }
+
+  return errors.length ? [{ file: rel, errors }] : []
+}
+
+function main() {
+  const files = walk(CONTENT_ROOT).sort()
+  if (files.length === 0) {
+    console.error(`No guidelines found under ${relative(REPO_ROOT, CONTENT_ROOT)}`)
+    process.exit(1)
+  }
+
+  const failures = files.flatMap(validateFile)
+
+  if (failures.length === 0) {
+    console.log(`✔ ${files.length} guidelines valid.`)
+    return
+  }
+
+  console.error(`\n✖ Guideline validation failed — ${failures.length} of ${files.length} file(s):\n`)
+  for (const failure of failures) {
+    console.error(`  ${failure.file}`)
+    for (const error of failure.errors) console.error(`    - ${error}`)
+  }
+  console.error('')
+  process.exit(1)
+}
+
+main()

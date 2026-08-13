@@ -5,7 +5,7 @@
 
 export const SITE_NAME = 'Open E-Commerce Guidelines'
 export const SITE_DESCRIPTION =
-  'An open, community-maintained collection of UX and technical e-commerce guidelines — including machine-readability and agentic-commerce readiness.'
+  'An open, community-maintained collection of UX and technical e-commerce guidelines — including machine-readability, agentic-commerce readiness, and what applies specifically on Shopware and Shopify.'
 
 // GitHub "owner/repo" slug and default branch.
 export const GITHUB_REPO = 'alexandervictoire/open-ecommerce-guidelines'

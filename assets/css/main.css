@@ -50,6 +50,38 @@ a {
   border-radius: 4px;
 }
 
+/* Platform filter chips. The selected chip gets a bold black outline, the rest
+   a regular grey one. The extra weight comes from an inset shadow rather than a
+   thicker border, so selecting a chip never shifts the row's layout. */
+.platform-chip {
+  border: 1px solid #e5e5e5;
+  border-radius: 9999px;
+  padding: 0.25rem 0.85rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #5c5c5c;
+  background: transparent;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.platform-chip:hover {
+  border-color: #1a1a1a;
+  color: #1a1a1a;
+}
+
+.platform-chip[aria-pressed='true'] {
+  border-color: #1a1a1a;
+  color: #1a1a1a;
+  font-weight: 600;
+  box-shadow: inset 0 0 0 1px #1a1a1a;
+}
+
+.platform-chip:focus-visible {
+  outline: 2px solid #1a1a1a;
+  outline-offset: 2px;
+}
+
 /* Guideline list rows: the title link covers the whole row, while the nested
    metadata links stay clickable on top of it. Keeps the large click target
    without putting an <a> inside an <a>. */
@@ -66,6 +98,38 @@ a {
 .guideline-row a:not(.guideline-row-link) {
   position: relative;
   z-index: 1;
+}
+
+/* Platform sections (Shopware / Shopify) sit in their own container so the
+   platform translation is clearly distinct from the generic principle. */
+.platform-note {
+  border: 1px solid #e5e5e5;
+  border-left: 3px solid #1a1a1a;
+  border-radius: 6px;
+  background: #fafafa;
+  padding: 0.85rem 1.15rem;
+}
+
+/* Inside the card the section heading is the card title — drop the rule and the
+   large top margin the generic prose h2 carries. */
+.platform-note .prose h2 {
+  margin-top: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+  font-size: 1rem;
+}
+
+.platform-note .prose > :last-child {
+  margin-bottom: 0;
+}
+
+.platform-note-na {
+  margin: 0;
+  border: 1px dashed #e5e5e5;
+  border-radius: 6px;
+  padding: 0.7rem 1.15rem;
+  color: #5c5c5c;
+  font-size: 0.925rem;
 }
 
 /* presetTypography adds decorative backtick quotes around inline code — drop them. */

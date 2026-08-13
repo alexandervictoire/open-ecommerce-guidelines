@@ -1,7 +1,22 @@
 <script setup lang="ts">
 import type { GuidelineMeta } from '~/utils/labels'
+import { PLATFORMS, PLATFORM_LABELS, platformStatus } from '~/utils/platforms'
+import type { PlatformFilterValue } from '~/utils/platforms'
 
-const props = defineProps<{ items: GuidelineMeta[] }>()
+const props = withDefaults(
+  defineProps<{ items: GuidelineMeta[]; platform?: PlatformFilterValue }>(),
+  { platform: 'all' }
+)
+
+// In the unfiltered view, flag the platforms a guideline does not apply to —
+// under an active filter those guidelines are hidden anyway, so the note would
+// only be noise.
+function notApplicableOn(guideline: GuidelineMeta): string[] {
+  if (props.platform !== 'all') return []
+  return PLATFORMS
+    .filter((p) => platformStatus(guideline, p) === 'not_applicable')
+    .map((p) => PLATFORM_LABELS[p])
+}
 </script>
 
 <template>
@@ -25,6 +40,9 @@ const props = defineProps<{ items: GuidelineMeta[] }>()
           class="no-underline hover:text-ink"
         >{{ dimensionLabel(g.dimension) }}</NuxtLink>
         <span class="text-faint">{{ g.targets.join(' · ') }}</span>
+        <span v-if="notApplicableOn(g).length" class="text-faint">
+          Not applicable: {{ notApplicableOn(g).join(' · ') }}
+        </span>
       </div>
     </li>
   </ul>

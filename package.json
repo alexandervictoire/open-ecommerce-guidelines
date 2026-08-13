@@ -5,10 +5,11 @@
   "license": "MIT",
   "scripts": {
     "dev": "nuxt dev",
-    "build": "nuxt build",
-    "generate": "nuxt generate",
+    "build": "npm run validate && nuxt build",
+    "generate": "npm run validate && nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
+    "validate": "node scripts/validate-guidelines.mjs",
     "convert": "node scripts/convert-notion.mjs"
   },
   "devDependencies": {

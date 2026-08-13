@@ -1,5 +1,13 @@
 <script setup lang="ts">
 import { CATEGORY_LABELS, categoryLabel, dimensionLabel, deriveGuidelineId } from '~/utils/labels'
+import {
+  PLATFORMS,
+  PLATFORM_LABELS,
+  docWithBody,
+  platformStatus,
+  splitPlatformBody
+} from '~/utils/platforms'
+import type { Platform } from '~/utils/platforms'
 import { SITE_NAME, SITE_URL, githubEditUrl } from '~/utils/site'
 
 const route = useRoute()
@@ -37,6 +45,36 @@ const editUrl = computed(() => githubEditUrl(`content/guidelines/${category}/${i
 
 // Canonical guideline id (frontmatter `id` is not queryable — see deriveGuidelineId).
 const gid = computed(() => deriveGuidelineId((doc.value as any)?.stem ?? path.replace(/^\//, '')))
+
+// The generic body and the platform sections are rendered separately so the
+// platform content can sit in its own visually distinct block.
+const split = computed(() => splitPlatformBody(doc.value as any))
+const coreDoc = computed(() => docWithBody(doc.value as any, split.value.core))
+
+function sectionDoc(platform: Platform) {
+  const nodes = split.value.sections[platform]
+  return nodes ? docWithBody(doc.value as any, nodes) : null
+}
+
+function statusFor(platform: Platform) {
+  return platformStatus(doc.value as any, platform)
+}
+
+// Platforms this guideline does not apply to. Shown as a short note so the
+// omission is explicit in the unfiltered view rather than silent.
+const notApplicable = computed(() =>
+  PLATFORMS.filter((p) => statusFor(p) === 'not_applicable')
+)
+
+// Platforms the guideline does apply to (both `no_divergence` and
+// `platform_specific`), for the header meta line.
+const applicablePlatforms = computed(() =>
+  PLATFORMS.filter((p) => statusFor(p) !== 'not_applicable').map((p) => PLATFORM_LABELS[p])
+)
+
+const hasPlatformBlock = computed(() =>
+  PLATFORMS.some((p) => split.value.sections[p]) || notApplicable.value.length > 0
+)
 
 // ---- SEO + JSON-LD (PLAN §6) ----------------------------------------------
 const canonical = `${SITE_URL}${path}`
@@ -97,12 +135,37 @@ useHead(() => ({
           class="no-underline text-ink hover:underline underline-offset-2"
         >{{ dimensionLabel(doc.dimension) }}</NuxtLink>
         <span class="text-faint">Targets: {{ doc.targets.join(' · ') }}</span>
+        <span class="text-faint">
+          Platforms: {{ applicablePlatforms.length ? applicablePlatforms.join(' · ') : 'none' }}
+        </span>
       </div>
     </header>
 
     <div class="prose prose-neutral max-w-none mt-8">
-      <ContentRenderer :value="doc" />
+      <ContentRenderer :value="coreDoc" />
     </div>
+
+    <section v-if="hasPlatformBlock" class="mt-10" aria-label="Platform notes">
+      <!-- Visual label only; the section is named via aria-label so this does
+           not compete with the `h2` headings inside each platform card. -->
+      <div class="text-xs font-semibold uppercase tracking-wide text-faint">
+        Platform notes
+      </div>
+      <div class="mt-3 space-y-3">
+        <template v-for="p in PLATFORMS" :key="p">
+          <div v-if="sectionDoc(p)" class="platform-note">
+            <div class="prose prose-neutral max-w-none">
+              <ContentRenderer :value="sectionDoc(p)!" />
+            </div>
+          </div>
+          <p v-else-if="statusFor(p) === 'not_applicable'" class="platform-note-na">
+            <strong class="font-medium text-ink">{{ PLATFORM_LABELS[p] }}:</strong>
+            not applicable — this guideline does not apply structurally on
+            {{ PLATFORM_LABELS[p] }}.
+          </p>
+        </template>
+      </div>
+    </section>
 
     <div class="mt-10 pt-6 border-t border-line text-sm">
       <a :href="editUrl" class="no-underline text-muted hover:text-ink">Edit this page on GitHub →</a>
