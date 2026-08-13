@@ -6,6 +6,8 @@ dimension: system-robustness
 severity: critical
 targets: [human, agent]
 status: published
+shopware_status: no_divergence
+shopify_status: no_divergence
 ---
 
 ## What is being checked

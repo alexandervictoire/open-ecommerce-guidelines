@@ -6,6 +6,8 @@ dimension: trust-decision-enablement
 severity: high
 targets: [human, machine]
 status: published
+shopware_status: no_divergence
+shopify_status: no_divergence
 ---
 
 ## What is being checked

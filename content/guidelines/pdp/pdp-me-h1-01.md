@@ -6,6 +6,8 @@ dimension: machine-extractability
 severity: medium
 targets: [agent, machine]
 status: published
+shopware_status: no_divergence
+shopify_status: no_divergence
 ---
 
 ## What is being checked

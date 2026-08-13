@@ -6,6 +6,8 @@ dimension: semantic-integrity
 severity: high
 targets: [agent, machine]
 status: published
+shopware_status: no_divergence
+shopify_status: no_divergence
 ---
 
 ## What is being checked
