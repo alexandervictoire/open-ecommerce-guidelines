@@ -30,6 +30,14 @@ shopify_status: no_divergence  # not_applicable | no_divergence | platform_speci
 > content also uses `machine` (machine-readability is a first-class concern for
 > this project). The valid set is therefore `[human, agent, machine]`.
 
+> **Draft visibility:** `status: draft` guidelines are rendered on Vercel
+> preview deployments only (`VERCEL_ENV=preview`), so a PR can be reviewed as
+> rendered. Every other build — production included — hides them completely:
+> not listed, not in navigation or the sitemap, no detail page. Set
+> `NUXT_PUBLIC_SHOW_DRAFTS=true` to see drafts in a local build. Consequence for
+> editing: a published guideline must not point readers at a draft, because on
+> the live site the draft does not exist.
+
 > **Reserved `id` gotcha:** Nuxt Content v3 reserves the `id` field internally
 > (it stores the file key there), so a guideline's own `id:` frontmatter is
 > **not queryable** — `doc.id` returns the internal path. Keep `id:` in the
@@ -133,9 +141,17 @@ npm run validate       # validate all guidelines (runs automatically on build)
 npm run generate       # fully static build (nuxt generate) → .output/public
 npm run preview        # preview the generated build
 
-# Convert the Notion export (a CSV) into guideline Markdown files:
+# Create guidelines from a Notion export (a CSV) that do not exist yet:
 node scripts/convert-notion.mjs <path-to-notion-export.csv>
+# Regenerate existing files from the export (discards repo edits to core sections):
+node scripts/convert-notion.mjs <path-to-notion-export.csv> --overwrite
 ```
+
+> **The repo is the source of truth, not Notion.** Nothing syncs from Notion;
+> the converter only runs when started by hand. By default it leaves existing
+> files untouched. Only `--overwrite` regenerates them, and it carries over
+> platform status and platform sections but replaces the five core sections —
+> so never use it on a guideline whose core text has been edited in the repo.
 
 > **Conversion input note:** PLAN §5 describes the export as a folder of Notion
 > Markdown files; the actual export the maintainer provided is a single CSV
