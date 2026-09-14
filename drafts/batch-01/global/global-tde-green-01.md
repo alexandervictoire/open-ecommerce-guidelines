@@ -7,7 +7,8 @@ severity: high
 targets: [human, agent]
 status: draft
 audience: [b2c]
-platforms: [shopware, shopify]
+shopware_status: no_divergence
+shopify_status: no_divergence
 regulation: ["Dir 2005/29/EC as amended by Dir (EU) 2024/825, Annex I"]
 jurisdiction: [eu]
 ---
@@ -42,7 +43,7 @@ The practical exposure is concentrated in places nobody audits: a sustainability
 
 **Timing note:** the amending directive enters into application on 27 September 2026. The detail of national transposition and the precise treatment of stock already on shelves before that date should be confirmed with counsel. This guideline checks the observable properties of the claim and does not assert what any particular claim's legal status is.
 
-**Shopware and Shopify:** substantively identical. Claims typically live in CMS content, product properties or metafields and app-driven badges. The inventory step matters more than the platform: claims are rarely all in one place.
+Claims typically live in several places at once: CMS content, product properties and custom fields, and badges rendered by third-party widgets. That is why the inventory in step 1 matters: they are rarely all in one place.
 
 ## Recommended fix
 

@@ -6,7 +6,8 @@ dimension: trust-decision-enablement
 severity: medium
 targets: [human, agent]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: no_divergence
+shopify_status: no_divergence
 ---
 
 ## What is being checked
@@ -37,7 +38,7 @@ This cuts one way only. A shop that really holds a certification throws away its
 5. Confirm claimed certifications are current.
 6. Confirm no badge is self-issued while presented as third-party.
 
-**Shopware and Shopify:** identical in substance. Trust badges are usually theme assets or app-injected widgets, and neither platform validates them. Where a badge comes from an app, confirm the app is actually connected to the certification rather than rendering a static image.
+Badges are usually theme assets or third-party widgets. Where a badge comes from a third-party widget, confirm it is actually connected to the certification rather than rendering a static image.
 
 ## Recommended fix
 

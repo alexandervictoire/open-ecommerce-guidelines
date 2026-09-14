@@ -6,7 +6,8 @@ dimension: decision-clarity
 severity: high
 targets: [human, agent, machine]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: no_divergence
+shopify_status: no_divergence
 ---
 
 ## What is being checked
@@ -39,7 +40,7 @@ The machine-readability half is the one that is usually invisible to the shop: w
 5. Record a decision, navigate to three further pages, and confirm the layer does not reappear.
 6. Decline non-essential consent and confirm the shop remains fully usable.
 
-**Shopware and Shopify:** the layer is almost always third-party in both cases, injected before theme content, which is why it is rarely covered by theme QA. Test the deployed configuration rather than the vendor's demo.
+The consent layer is usually supplied by a third party and injected independently of the theme, which is why theme testing rarely covers it. Test the deployed configuration rather than the vendor's demo.
 
 ## Recommended fix
 
