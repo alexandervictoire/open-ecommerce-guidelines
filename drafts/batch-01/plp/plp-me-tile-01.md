@@ -6,7 +6,8 @@ dimension: machine-extractability
 severity: high
 targets: [agent, machine]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 ---
 
 ## What is being checked
@@ -36,10 +37,14 @@ This is the listing counterpart of the existing product page guidelines requirin
 
 Whether the tile's availability wording agrees with the product detail page is checked separately by `PDP-SI-SURFACE-01`; this guideline only asks that the wording exists as text.
 
-**Shopware:** the storefront renders listings server-side by default, so this usually passes unless a headless or heavily customised frontend is in use. For Shopware Frontends and other Vue or Nuxt storefronts, confirm the listing route is server-rendered rather than client-only.
-
-**Shopify:** Liquid renders tiles server-side, but themes using the section rendering API for filtering can end up serving an empty grid to a client that does not run scripts. Confirm the first paint of a filtered URL contains tiles.
-
 ## Recommended fix
 
 Render tile title, price and availability as server-side text. Where lazy rendering is used for performance, ensure a client that does not run scripts still receives the first page of results in full, and that further results are reachable by URL. Emit `ItemList` structured data generated from the same data that produced the tiles.
+
+## Shopware specific
+
+The standard Twig storefront renders listings on the server. For headless frontends, including Shopware Frontends, confirm that the listing route is server-rendered rather than rendered only in the browser.
+
+## Shopify specific
+
+Liquid renders the first page of a collection on the server. Where filtering or pagination is handled by an app or custom script, request a filtered URL directly and confirm the served document contains tiles.

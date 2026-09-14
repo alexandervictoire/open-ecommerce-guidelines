@@ -6,7 +6,8 @@ dimension: trust-decision-enablement
 severity: high
 targets: [human, agent, machine]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 regulation: ["Dir 2000/31/EC Art. 5", "Dir 2011/83/EU Art. 6(1)(b),(c)", "DDG §5 (DE)", "BGB §312k (DE)"]
 jurisdiction: [eu, de]
 ---
@@ -40,10 +41,14 @@ Trader identity and contact details are also a standing legal requirement for on
 5. Repeat at a mobile viewport.
 6. Confirm the information is selectable text.
 
-**Shopware:** these are usually CMS pages assigned to a footer service menu per sales channel. The frequent failure is a second sales channel or a second language where the assignments were never repeated.
-
-**Shopify:** policy pages cover refund, privacy, terms and shipping, but a trader identity page is generally not among the defaults and has to be created and linked manually. Confirm it exists rather than assuming the policy set covers it.
-
 ## Recommended fix
 
 Maintain the full set as first-class pages linked from a persistent footer on every template and every viewport, repeat the assignment for every sales channel and language, and review them for placeholder content, which is the common failure rather than absence. Where the shop sells continuing obligations, treat the cancellation control as part of this set rather than as a feature of the customer account, since the whole point of it is that it works without signing in.
+
+## Shopware specific
+
+Imprint, privacy, terms, revocation, shipping and payment, and contact pages are assigned under Settings, Basic information, and can be set per sales channel; the footer's service navigation links to them. Check every sales channel and every language.
+
+## Shopify specific
+
+Store policies include a legal notice alongside the return, privacy, terms, shipping and subscription policies. Shopify links policies in the checkout footer automatically, but the storefront footer shows them only if the merchant adds them to a menu. Check that the legal notice is filled in and linked from every storefront page, not only from checkout.

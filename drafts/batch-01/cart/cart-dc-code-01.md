@@ -6,7 +6,8 @@ dimension: decision-clarity
 severity: medium
 targets: [human, agent]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 ---
 
 ## What is being checked
@@ -35,10 +36,14 @@ The removal path matters for the same reason. A user who applied the wrong code 
 4. Remove the applied code and confirm the totals return to their prior state.
 5. Confirm messages are text in the document rather than transient toasts only, so that a returning or assistive-technology user can still read them.
 
-**Shopware:** codes are line items in the cart, so an applied code has a natural place to be listed. Confirm the theme renders that line and its removal control rather than hiding it.
-
-**Shopify:** discount handling differs between the cart page and checkout, and some setups accept codes only at checkout. If the cart shows a code field, it must behave as described here; if it cannot, the honest fix is to remove the field from the cart rather than let it fail quietly.
-
 ## Recommended fix
 
 Return distinct outcomes for unknown, expired, and conditions-not-met, and render the result as persistent text. List every applied code as its own line with its amount and a removal control. If a surface cannot apply codes, do not show a field there.
+
+## Shopware specific
+
+Promotion codes are applied as promotion line items in the cart, so an applied code has a natural place to be listed. Check that the theme renders that line with its amount and a removal control.
+
+## Shopify specific
+
+Discount codes can be applied to the cart itself through the cart API, but whether the cart page offers a field depends on the theme: Horizon's cart summary has a code field with apply, remove and error states, while Dawn's cart leaves code entry to checkout. If a cart shows a field, it must behave as described here.

@@ -6,7 +6,8 @@ dimension: system-robustness
 severity: high
 targets: [human]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: no_divergence
+shopify_status: no_divergence
 regulation: ["Dir (EU) 2019/882", "EN 301 549 / WCAG 2.1 AA: 2.1.1, 2.4.7, 4.1.2, 4.1.3"]
 jurisdiction: [eu]
 ---
@@ -39,10 +40,6 @@ Icon-only controls are the specific recurring failure: a bin glyph with no acces
 4. Change a quantity by keyboard and confirm the totals change is announced.
 5. Remove a line by keyboard and confirm focus lands somewhere sensible rather than being lost.
 6. Confirm the checkout control is reachable by keyboard from the end of the cart.
-
-**Shopware:** the standard cart uses real form controls and buttons. Custom quantity steppers built from styled elements are the usual regression, along with suppressed focus styles in the theme's reset.
-
-**Shopify:** quantity inputs are native in most themes, but removal is often an icon anchor and drawer implementations frequently move focus unpredictably when contents change. Test the drawer specifically.
 
 ## Recommended fix
 

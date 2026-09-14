@@ -6,7 +6,8 @@ dimension: system-robustness
 severity: high
 targets: [human, agent]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: no_divergence
+shopify_status: no_divergence
 ---
 
 ## What is being checked
@@ -36,10 +37,6 @@ For agents this is the difference between a cart that can be corrected and one t
 3. Remove the third line and confirm the discount code and delivery selection survive.
 4. Enter a quantity above available stock and confirm it is rejected or corrected at the cart, with an explanation, rather than accepted.
 5. Confirm every change is reflected in the breakdown required by `CART-DC-TOTALS-01`, not only in the grand total.
-
-**Shopware:** quantity change and line removal are standard cart operations and normally survive this test. The failures seen in practice come from off-canvas cart implementations in custom themes that update the drawer but not the cart page, so test both surfaces.
-
-**Shopify:** the cart API supports in-place updates, but drawer implementations frequently re-render only part of the state. Test the drawer and the cart page independently, and confirm the two agree after a change made in either.
 
 ## Recommended fix
 

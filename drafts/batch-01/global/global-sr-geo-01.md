@@ -6,7 +6,8 @@ dimension: system-robustness
 severity: medium
 targets: [human]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 regulation: ["Reg (EU) 2018/302 Art. 3, 4, 5"]
 jurisdiction: [eu]
 ---
@@ -37,10 +38,14 @@ The payment half is the one with the sharpest edge: refusing a card because of i
 3. Confirm the storefront is fully usable, including reaching checkout.
 4. Confirm the payment methods offered do not differ in a way tied to the visitor's member state.
 
-**Shopware:** country-based redirects usually come from a plugin rather than from the platform. Review any storefront-switching extension for automatic redirection without an escape.
-
-**Shopify:** market-based recommendations and redirects are configurable, and the recommendation modes differ from the forced ones. Confirm which is active, and confirm any redirect leaves the visitor able to choose otherwise and keeps that choice.
-
 ## Recommended fix
 
 Recommend a storefront rather than imposing one, persist the visitor's own choice above any inference, and keep every storefront reachable by direct URL.
+
+## Shopware specific
+
+Check any storefront-switching extension for automatic redirection without a way back.
+
+## Shopify specific
+
+Automatic redirection is enabled under Online Store, Preferences. Shopify exempts EU visitors only when they access a localised experience on an EU country-code domain, so a store using subfolders or subdomains for its markets can still redirect EU visitors automatically. Check the setting together with the domain setup, and that country and language selectors are offered.

@@ -7,7 +7,8 @@ severity: high
 targets: [human]
 status: draft
 audience: [b2c]
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 ---
 
 ## What is being checked
@@ -38,10 +39,14 @@ The data argument for forced registration is weaker than it looks, since the ord
 4. Confirm no password is required along the guest path.
 5. Confirm the guest path is available for every payment method offered.
 
-**Shopware:** guest ordering is a sales channel setting. Confirm it is enabled in the consumer channel, and confirm the login page does not present registration as the default action.
-
-**Shopify:** customer account behaviour is a store setting with an optional and a required mode. Confirm the store is not set to require accounts, and check whether any installed app forces identification at checkout.
-
 ## Recommended fix
 
 Enable guest ordering on consumer channels, present it with equal weight to signing in, and offer account creation after the order is placed, pre-filled from the order data.
+
+## Shopware specific
+
+The standard checkout always offers ordering without a customer account. The setting "Create customer account by default" decides whether account creation is pre-selected on the checkout page; check that it is off, or that the guest path stays equally prominent with it on.
+
+## Shopify specific
+
+Check whether "Require customers to sign in to their account before checkout" is active in the checkout settings' customer contact method section; with it on, customers must sign in first and accelerated checkout options are hidden in the online store cart. Also check whether an installed app forces identification.

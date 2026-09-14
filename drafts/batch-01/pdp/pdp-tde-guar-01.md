@@ -7,7 +7,8 @@ severity: high
 targets: [human, machine]
 status: draft
 audience: [b2c]
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 regulation: ["Dir 2011/83/EU Art. 6(1) as amended by Dir (EU) 2024/825", "Implementing Reg (EU) 2025/1960"]
 jurisdiction: [eu]
 ---
@@ -44,10 +45,14 @@ There is a commercial case as well as a compliance one. A shop that states the s
 
 **Timing note:** the notice requirement stems from the directive amending the Consumer Rights Directive, which enters into application on 27 September 2026. Its binding design and content were fixed by a Commission implementing regulation adopted in September 2025, covering both the harmonised notice on the legal guarantee of conformity and the harmonised label for a producer commercial guarantee of durability, and applying online as well as in store. Verification should therefore compare what the shop renders against the prescribed form rather than judge whether the wording reads reasonably. Confirm the current form and the national transposition detail with counsel before publishing this guideline.
 
-**Shopware:** there is no dedicated field for this; it is usually solved as a shared storefront block or a CMS element inserted into the product layout. Do not solve it in the product description field, which cannot be maintained centrally.
-
-**Shopify:** usually solved as a section or block in the product template, or a metafield rendered for all products. The same caution applies: per-product free text will drift.
-
 ## Recommended fix
 
 Render the statutory guarantee notice from a single shared component included in the product template and the checkout summary, so that its wording can be changed in one place. Where a commercial guarantee is sold, render it through a separate component that explicitly states it does not affect statutory rights.
+
+## Shopware specific
+
+Check where the notice lives. A shared CMS element in the product page layout or a template block can be maintained centrally; text in individual product descriptions cannot.
+
+## Shopify specific
+
+Check where the notice lives. A section or block in the product template, or a metafield rendered for all products, can be maintained centrally; per-product text cannot.

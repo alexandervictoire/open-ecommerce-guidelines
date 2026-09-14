@@ -7,7 +7,8 @@ severity: high
 targets: [human, machine]
 status: draft
 audience: [b2c]
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 regulation: ["Dir 2011/83/EU Art. 8(7), Art. 6(1)(h), Art. 10"]
 jurisdiction: [eu]
 ---
@@ -42,10 +43,14 @@ Omitting the withdrawal information has a specific and expensive consequence: th
 5. Compare the confirmation totals against the amount actually charged.
 6. Confirm the guest confirmation is not less complete than the registered one.
 
-**Shopware:** the confirmation mail template is editable per sales channel and per language. The usual failure is a customised template that dropped attachments or terms, or a language variant that was never updated.
-
-**Shopify:** order confirmation notification templates are editable. Terms and withdrawal information are frequently absent by default and typically need to be added to the template or attached.
-
 ## Recommended fix
 
 Treat the confirmation message as the contractual record rather than as a receipt: include the full breakdown, the delivery expectation and the terms as content, attach the withdrawal information rather than linking it, and verify every language variant of the template separately.
+
+## Shopware specific
+
+The order confirmation email is sent through the Flow Builder. Templates are translated per language and allow one attachment per language, while headers and footers are assigned per sales channel. Check every language version, including whether the terms and withdrawal information are included as content or as an attachment.
+
+## Shopify specific
+
+The order confirmation is an editable notification template. Check whether it contains the terms and withdrawal information.

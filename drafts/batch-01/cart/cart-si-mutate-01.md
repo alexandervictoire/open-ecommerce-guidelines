@@ -7,7 +7,8 @@ severity: high
 targets: [human, agent]
 status: draft
 audience: [b2c]
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 regulation: ["Dir 2011/83/EU Art. 22"]
 jurisdiction: [eu]
 ---
@@ -42,10 +43,14 @@ A free gift added automatically and then removed when the qualifying line change
 4. Cross a promotional threshold, for example a free gift or free delivery threshold, and confirm any resulting addition is announced rather than silent.
 5. Fall back below that threshold and confirm any removal is announced.
 
-**Shopware:** promotions can add line items automatically by design. That mechanism is legitimate for free promotional items provided the addition is visible and explained; it is not legitimate for paid additions. Review the configured promotions rather than assuming the default is safe.
-
-**Shopify:** auto-add behaviour usually comes from an installed app rather than the platform. Inventory the apps that can write to the cart before auditing, because the theme will not reveal them.
-
 ## Recommended fix
 
 Require an explicit user action for every paid line. Where a promotion adds an item automatically, render it with a visible explanation of why it is there and what removes it, and announce both addition and removal. Never let an upsell mutate an existing line; offer a replacement the user has to accept.
+
+## Shopware specific
+
+Native promotions apply discounts, including automatic promotions without a code, but none of their discount types adds a product to the cart. An automatically added gift or paid item therefore comes from an extension; review the extensions that can write to the cart.
+
+## Shopify specific
+
+Check the installed apps that can write to the cart before auditing; the theme does not reveal them.

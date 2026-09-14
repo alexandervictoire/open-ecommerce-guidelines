@@ -7,7 +7,8 @@ severity: critical
 targets: [human, agent, machine]
 status: draft
 audience: [b2c]
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 regulation: ["Dir 2011/83/EU Art. 8(2)", "BGB §312j(3), (4) (DE)", "BGH I ZR 159/24 (DE)"]
 jurisdiction: [eu, de]
 ---
@@ -40,10 +41,14 @@ German case law has recently hardened rather than softened this. A 2025 decision
 4. For every express payment control offered earlier in the flow, follow it as far as it goes without completing, and establish whether it leads to a review step carrying its own compliant order control or whether the express control is itself the last step. Only the second case falls under this guideline, and where the path cannot be resolved without placing an order, place one.
 5. Confirm the label is text, not an image, and is the accessible name of the control.
 
-**Shopware:** the confirm page and its button label are part of the storefront template and are fully controllable, and the default German storefront ships compliant wording. Verify that a theme or a translation override has not replaced it, and check each additional language separately.
-
-**Shopify:** the final order control is rendered by Shopify's checkout, not by the theme, so the label is platform-controlled and cannot be freely edited outside the customisation available on the higher plan tier. Verify the actual rendered label in each language rather than assuming the localisation is sufficient. Where it is not, this is a platform-level limitation to escalate and document, not a theme fix, and the shop should be told that plainly.
-
 ## Recommended fix
 
 Label the concluding control with wording that states the payment obligation, in every storefront language, and treat that label as a controlled string rather than editable theme copy. Audit express payment paths separately, since they conclude orders outside the main flow.
+
+## Shopware specific
+
+The default German storefront labels the order button "Zahlungspflichtig bestellen", which states the payment obligation. The default English label is "Submit order", which does not. Check the rendered label in every storefront language, and check that no theme or snippet override has replaced the German wording.
+
+## Shopify specific
+
+The order button is rendered by Shopify's checkout rather than the theme, but its default wording can be changed under Settings, Checkout, Edit checkout content; only wording that differs per market requires the Advanced or Plus plan. Check the rendered label in every checkout language rather than assuming the default translation is sufficient.

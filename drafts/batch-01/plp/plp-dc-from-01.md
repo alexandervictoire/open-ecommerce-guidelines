@@ -6,7 +6,8 @@ dimension: decision-clarity
 severity: medium
 targets: [human, agent]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 ---
 
 ## What is being checked
@@ -34,10 +35,14 @@ Colour swatches on tiles compound this: a user who clicks the third swatch and l
 4. If the tile carries swatches, select a variant that differs in price and confirm the tile price updates, or that the tile made clear the price was a starting price.
 5. Confirm the bounds of any range correspond to variants that can actually be bought.
 
-**Shopware:** variant listings depend on how the main variant and variant display configuration are set. A product whose variants are listed individually needs no range; one listed through a main variant does. Check both patterns if the catalogue mixes them.
-
-**Shopify:** most themes render the price of the first available variant with no qualification. Confirm the theme's card price snippet handles `compare at` and variant ranges, rather than assuming the first variant is representative.
-
 ## Recommended fix
 
 Where a tile stands for more than one price point, qualify the figure explicitly as a starting price or render a bounded range, and derive the bounds from purchasable variants only. If the tile offers variant selection, make the price respond to it.
+
+## Shopware specific
+
+Whether a tile stands for one variant or several is set per product in the variant listing configuration: show the parent product, show a chosen main variant, or expand the variants in the listing. When a tile represents variants with different prices, the standard storefront labels the figure "Variants from". Check that a customised product box keeps that label.
+
+## Shopify specific
+
+Shopify's own themes differ here. Horizon shows the price of the selected or first available variant on product cards with no qualification (a range appears only with volume pricing); Dawn labels the figure as a "From" price when variant prices differ. Check which theme and card price snippet the shop uses before recording a verdict.

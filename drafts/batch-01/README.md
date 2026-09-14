@@ -7,8 +7,9 @@ The history of this directory is the review trail:
 
 1. the files exactly as written in the handoff
 2. gate one: overlaps with the published corpus and within the batch resolved
-3. gate two (pending): platform notes checked against current documentation,
+3. gate two: platform notes checked against current documentation and source code,
    then lifted into `## Shopware specific` / `## Shopify specific` sections
+   (evidence in `gate-two-sources.md`)
 
 Files move into `content/guidelines/<category>/` in the content PRs, after the
 schema changes for the `plp` and `global` categories and the `regulation`,

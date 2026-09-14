@@ -6,7 +6,8 @@ dimension: system-robustness
 severity: high
 targets: [human]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 ---
 
 ## What is being checked
@@ -36,10 +37,14 @@ The browser back control matters specifically because users do not distinguish i
 5. Return to the cart from checkout and confirm no line was removed and the cart was not rebuilt. Whether quantities survive this round trip is checked by `CART-SR-QTY-01`.
 6. Repeat the browser back test on mobile, including the swipe gesture where the platform supports it.
 
-**Shopware:** checkout steps are separate routes, so browser navigation between them usually works. The exposure is in the recalculation that follows an address change, which can silently reset a delivery method.
-
-**Shopify:** the platform checkout handles step navigation itself and is generally robust here. The exposure sits at the boundary between theme-owned cart and platform checkout, which is also where returning to the cart can rebuild it.
-
 ## Recommended fix
 
 Persist checkout state server-side keyed to the session rather than to the step, restore it on re-entry from any direction, and announce any change that an edit forces on a later step instead of applying it silently.
+
+## Shopware specific
+
+The standard checkout runs across separate routes for the cart, registration or address, confirmation and finish. When an address change blocks the selected shipping method, the storefront switches it and shows a notice; the change is silent only if a theme drops cart notices, so check that they are rendered.
+
+## Shopify specific
+
+Checkout defaults to a single page, so there are no earlier steps to return to; step navigation applies only where three-page checkout is selected. In either layout, test the boundary between the theme's cart and the checkout, including returning to the cart.

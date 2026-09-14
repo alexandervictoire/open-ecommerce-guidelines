@@ -6,7 +6,8 @@ dimension: system-robustness
 severity: high
 targets: [human, agent]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 regulation: ["Dir (EU) 2019/882", "EN 301 549 / WCAG 2.1 AA: 2.1.1, 4.1.2, 4.1.3, 1.4.1"]
 jurisdiction: [eu]
 ---
@@ -40,10 +41,14 @@ The announcement half matters as much as the operation half. A user who can acti
 5. Select a variant with a different price and confirm the price change is announced rather than only rendered.
 6. Confirm unavailable options are exposed as unavailable, not merely styled as such.
 
-**Shopware:** the standard storefront renders variant selection with real form controls, which gives a reasonable baseline. Custom themes that replace them with styled elements usually lose it. Verify against the theme in use rather than against the platform default.
-
-**Shopify:** newer theme architectures use native inputs for variant pickers, older and heavily customised themes frequently do not. Check whether the picker is built from inputs and labels or from generic elements with handlers.
-
 ## Recommended fix
 
 Build variant pickers from native form controls with visible labels, and let the browser supply focus, state and semantics. Where a custom control is unavoidable, give it a role, an accessible name and a programmatic selected state. Announce price and availability changes through a polite status region so that the consequence of the selection reaches the user who cannot see it.
+
+## Shopware specific
+
+The standard storefront builds the variant configurator from a fieldset with a legend and native radio inputs with labels, which gives a sound baseline. Themes that replace these with styled elements can lose it; check the theme in use.
+
+## Shopify specific
+
+Horizon builds variant pickers from fieldsets, legends and native radio inputs with labels, or a labelled select; Dawn also uses native radio inputs. Older and heavily customised themes vary; check whether the picker is built from inputs and labels or from generic elements with click handlers.

@@ -7,7 +7,8 @@ severity: high
 targets: [human, agent, machine]
 status: draft
 audience: [b2c]
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 regulation: ["Dir 98/6/EC Art. 3(1)", "PAngV §4 (DE)"]
 jurisdiction: [eu, de]
 ---
@@ -46,12 +47,16 @@ The obligation is also broader than the product page. In EU price indication law
 
 **Exclusions:** the obligation does not apply to every product. Defined exceptions exist, including very small nominal quantities, products made up of different unmixed items, and cases where the unit price would be identical to the selling price. Establish which products in the catalogue are actually in scope before recording a failure, rather than flagging every tile without a unit price.
 
-**Shopware:** driven by the product's purchase unit, reference unit and unit name fields, and rendered in the same storefront price block as the tax and shipping notices. The usual failure is data, not template: products imported without those fields populated silently render no unit price. Audit the catalogue for empty reference units rather than only inspecting one tile.
-
-**Shopify:** unit pricing is supported through the variant's unit price measurement fields and was built for exactly this requirement. The usual failure is that the fields are unpopulated after a migration, or that a custom theme's price snippet does not render them.
-
 ## Recommended fix
 
 Populate the reference unit data at the catalogue level and render it from the shared price component so that tiles, product pages and cart lines cannot disagree.
 
 Note that the reference unit is not a free choice. The law prescribes it: one kilogram, one litre, one metre, one square metre or one cubic metre, depending on the goods, with a narrow exception allowing 100 grams or 100 millilitres for certain small quantities. Consistency across a category follows from using the prescribed unit rather than from a house rule, so a shop showing per 100 g on one tile and per kg on the next usually has a data problem, not a design decision.
+
+## Shopware specific
+
+Unit prices come from the product's purchase unit, reference unit and unit fields, and the listing tile renders a unit price only when they are populated. Products imported without them silently show none, so audit the catalogue for missing reference units rather than inspecting a single tile.
+
+## Shopify specific
+
+A unit price is set per product or variant, one each. Shopify documents unit prices as displayed automatically on product, collection, cart and checkout pages of any Online Store 2.0 theme; vintage themes need code changes. Check for variants with the unit price fields left empty, typically after a migration.

@@ -7,7 +7,8 @@ severity: high
 targets: [human, agent]
 status: draft
 audience: [b2c]
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 regulation: ["Dir 2011/83/EU Art. 6(1)(e), Art. 6(6)"]
 jurisdiction: [eu]
 ---
@@ -41,10 +42,14 @@ There is a direct commercial consequence as well as a reputational one. Where a 
 
 Restrictions that block an order rather than add a charge, such as a minimum order value, are checked by `PDP-C-RESTRICT-01`.
 
-**Shopware:** payment and delivery surcharges are configured on the payment and shipping methods and frequently surface only at checkout because nothing earlier renders them. If surcharges are configured, the fix belongs on the product page and cart, not at checkout.
-
-**Shopify:** additional fees are commonly implemented through apps or shipping rate configuration, both of which resolve late by nature. Establish which fees exist before auditing, since they will not be visible from the storefront until they apply.
-
 ## Recommended fix
 
 Enumerate every configured surcharge and either display it earlier or state earlier that it exists and what determines it. How the cart presents a cost that cannot be computed before an address is known is covered by `CART-DC-TOTALS-01`.
+
+## Shopware specific
+
+Shipping costs are configured on the shipping methods. Payment methods have no native surcharge field, so any payment surcharge comes from an extension. List the extensions that add fees before auditing, since they do not show on the storefront until they apply.
+
+## Shopify specific
+
+Fees usually come from apps or from shipping rate configuration and appear only once they apply. Establish which fees exist before auditing.
