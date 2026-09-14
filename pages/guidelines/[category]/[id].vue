@@ -24,7 +24,8 @@ const { data: doc } = await useAsyncData(`guideline-${category}-${id}`, () =>
   queryCollection('guidelines').path(path).first()
 )
 
-if (!doc.value) {
+// A draft does not exist outside preview builds, even if something links to it.
+if (!doc.value || (doc.value.status === 'draft' && !visibleStatuses().includes('draft'))) {
   throw createError({ statusCode: 404, statusMessage: 'Guideline not found', fatal: true })
 }
 

@@ -3,13 +3,20 @@ import { SEVERITY_ORDER, deriveGuidelineId } from '~/utils/labels'
 import { matchesPlatform, platformStatus } from '~/utils/platforms'
 import type { PlatformFilterValue } from '~/utils/platforms'
 
-// Fetch metadata for all published guidelines (no body).
+// Statuses shown in this build: drafts only on preview deployments (see
+// `showDrafts` in nuxt.config.ts). Deprecated guidelines are never listed.
+export function visibleStatuses(): string[] {
+  return useRuntimeConfig().public.showDrafts ? ['published', 'draft'] : ['published']
+}
+
+// Fetch metadata for all visible guidelines (no body).
 // The canonical guideline id is derived from the stem (see deriveGuidelineId).
-// Shared by the homepage, category lists, and dimension lists.
+// Shared by the homepage, navigation, category lists, and dimension lists.
 export async function useAllGuidelines() {
+  const statuses = visibleStatuses()
   const { data } = await useAsyncData('guidelines-meta', () =>
     queryCollection('guidelines')
-      .where('status', '=', 'published')
+      .where('status', 'IN', statuses)
       .select(
         'title', 'category', 'dimension', 'severity', 'targets', 'status', 'path', 'stem',
         'shopware_status', 'shopify_status'
