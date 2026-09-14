@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { CATEGORY_LABELS, categoryLabel } from '~/utils/labels'
-import { PLATFORM_LABELS } from '~/utils/platforms'
 import { SITE_NAME } from '~/utils/site'
 
 const route = useRoute()
@@ -13,9 +12,6 @@ if (!CATEGORY_LABELS[category.value]) {
 
 const all = await useAllGuidelines()
 const inCategory = computed(() => sortGuidelines(all.value.filter((g) => g.category === category.value)))
-
-const { platform, setPlatform } = usePlatformFilter()
-const items = computed(() => filterByPlatform(inCategory.value, platform.value))
 
 const label = computed(() => categoryLabel(category.value))
 useSeoMeta({
@@ -33,22 +29,7 @@ useSeoMeta({
     </nav>
 
     <h1 class="text-3xl font-semibold tracking-tight">{{ label }} guidelines</h1>
-    <p class="mt-2 text-muted">
-      {{ items.length }} guideline{{ items.length === 1 ? '' : 's' }}<template
-        v-if="platform !== 'all'"
-      > relevant for {{ PLATFORM_LABELS[platform] }} (of {{ inCategory.length }})</template>.
-    </p>
 
-    <PlatformFilter
-      class="mt-6"
-      :model-value="platform"
-      @update:model-value="setPlatform"
-    />
-
-    <GuidelineList v-if="items.length" class="mt-8" :items="items" :platform="platform" />
-    <p v-else class="mt-8 text-muted">
-      <template v-if="platform === 'all'">No guidelines in this category yet.</template>
-      <template v-else>No guidelines in this category apply to {{ PLATFORM_LABELS[platform] }} yet.</template>
-    </p>
+    <FilteredGuidelines :items="inCategory" scope="category" />
   </div>
 </template>

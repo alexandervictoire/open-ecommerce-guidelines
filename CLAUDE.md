@@ -16,15 +16,21 @@ Every file in `content/guidelines/**` MUST have exactly this frontmatter:
 ---
 id: CART-DC-QTY-01            # uppercase, unique, immutable once published
 title: Cart quantity value remains fully readable at all supported quantities
-category: cart                 # enum: pdp | cart | checkout (extendable)
+category: cart                 # enum: plp | pdp | cart | checkout | global
 dimension: decision-clarity    # kebab-case (see dimension list below)
 severity: high                 # enum: low | medium | high | critical
 targets: [human, agent]        # array; subset of [human, agent, machine]
 status: published              # enum: draft | published | deprecated
 shopware_status: no_divergence # not_applicable | no_divergence | platform_specific
 shopify_status: no_divergence  # not_applicable | no_divergence | platform_specific
+regulation: ["Dir 2011/83/EU Art. 8(2)", "BGB §312j(3) (DE)"]  # optional
+jurisdiction: [eu, de]         # optional; eu and/or lowercase ISO country codes
+audience: [b2c]                # optional; subset of [b2c, b2b]
 ---
 ```
+
+The last three fields are optional and absent on most guidelines — see "Legal
+references and audience" below.
 
 > **`targets` note:** PLAN §3's example lists `[human, agent]`, but the source
 > content also uses `machine` (machine-readability is a first-class concern for
@@ -80,6 +86,38 @@ logic and `scripts/validate-guidelines.mjs` for the rules.
 > manual, maintainer-owned judgement. Leave `no_divergence` unless the actual
 > platform default is known.
 
+### Categories
+
+- `plp` — listings: category pages, collections, search results
+- `pdp` — the product detail page
+- `cart` — cart page and cart drawer
+- `checkout` — checkout through to the order confirmation
+- `global` — conditions that hold on every page rather than one funnel step
+  (site chrome, legal reachability, consent layer, trust marks, market access)
+
+`CATEGORY_ORDER` in `utils/labels.ts` follows the funnel, `global` last; it sets
+the order on the homepage and in the header. Categories without a visible
+guideline get no page and no navigation entry.
+
+### Legal references and audience (optional)
+
+- `regulation` — double-quoted citations (the validator parses the field as a
+  JSON list, because citations contain commas and brackets). Citations are
+  pointers to the provision a reviewer should read, never legal conclusions;
+  the guideline page renders them as plain text with a not-legal-advice notice
+  (`LEGAL_DISCLAIMER` in `utils/legal.ts`). EU instruments before national ones.
+- `jurisdiction` — `eu` and/or lowercase ISO country codes. Absent means the
+  guideline is not jurisdiction-bound.
+- `audience` — `[b2c]` or `[b2b]`. Absent means it applies to both, which is the
+  norm; restrict only where the guideline would be wrong or inapplicable for the
+  other audience. Category and dimension pages offer an audience filter only
+  when a guideline in the list is restricted.
+
+> **Accessibility guidelines** are filed under the dimension matching what they
+> check, not a separate dimension. Each must say in its own text that it is an
+> accessibility requirement, name the standard and the specific success
+> criteria, and carry them in `regulation` too.
+
 ### Dimensions (kebab-case enum, derived from content)
 
 - `decision-clarity`
@@ -94,7 +132,8 @@ Add a new dimension only when a guideline genuinely does not fit an existing one
 
 Format: `<CATEGORY>-<DIMENSION-ABBREV>-<TOPIC>-<NN>`, uppercase.
 
-- `CATEGORY` — matches the `category` enum (`PDP`, `CART`, `CHECKOUT`).
+- `CATEGORY` — matches the `category` enum (`PLP`, `PDP`, `CART`, `CHECKOUT`,
+  `GLOBAL`).
 - `DIMENSION-ABBREV` — short code per dimension. Canonical codes for **new**
   guidelines: `DC` decision-clarity · `SR` system-robustness ·
   `SI` semantic-integrity · `ME` machine-extractability ·
@@ -150,7 +189,8 @@ node scripts/convert-notion.mjs <path-to-notion-export.csv> --overwrite
 > **The repo is the source of truth, not Notion.** Nothing syncs from Notion;
 > the converter only runs when started by hand. By default it leaves existing
 > files untouched. Only `--overwrite` regenerates them, and it carries over
-> platform status and platform sections but replaces the five core sections —
+> platform status, platform sections and the legal fields but replaces the five
+> core sections —
 > so never use it on a guideline whose core text has been edited in the repo.
 
 > **Conversion input note:** PLAN §5 describes the export as a folder of Notion

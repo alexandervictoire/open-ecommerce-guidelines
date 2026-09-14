@@ -50,10 +50,10 @@ a {
   border-radius: 4px;
 }
 
-/* Platform filter chips. The selected chip gets a bold black outline, the rest
+/* Filter chips (platform, audience). The selected chip gets a bold black outline, the rest
    a regular grey one. The extra weight comes from an inset shadow rather than a
    thicker border, so selecting a chip never shifts the row's layout. */
-.platform-chip {
+.filter-chip {
   border: 1px solid #e5e5e5;
   border-radius: 9999px;
   padding: 0.25rem 0.85rem;
@@ -65,19 +65,19 @@ a {
   transition: color 0.15s, border-color 0.15s, box-shadow 0.15s;
 }
 
-.platform-chip:hover {
+.filter-chip:hover {
   border-color: #1a1a1a;
   color: #1a1a1a;
 }
 
-.platform-chip[aria-pressed='true'] {
+.filter-chip[aria-pressed='true'] {
   border-color: #1a1a1a;
   color: #1a1a1a;
   font-weight: 600;
   box-shadow: inset 0 0 0 1px #1a1a1a;
 }
 
-.platform-chip:focus-visible {
+.filter-chip:focus-visible {
   outline: 2px solid #1a1a1a;
   outline-offset: 2px;
 }
@@ -98,6 +98,33 @@ a {
 .guideline-row a:not(.guideline-row-link) {
   position: relative;
   z-index: 1;
+}
+
+/* Legal references under the guideline header: quiet, small, clearly separate
+   from the guideline text, with the disclaimer directly beneath the citations. */
+.legal-refs {
+  margin-top: 1.25rem;
+  border-left: 2px solid #e5e5e5;
+  padding: 0.1rem 0 0.1rem 0.9rem;
+  font-size: 0.85rem;
+  color: #5c5c5c;
+}
+
+.legal-refs-title {
+  margin: 0;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.legal-refs-list {
+  margin: 0.35rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.legal-refs-disclaimer {
+  margin: 0.5rem 0 0;
+  color: #8a8a8a;
+  font-size: 0.8rem;
 }
 
 /* Platform sections (Shopware / Shopify) sit in their own container so the

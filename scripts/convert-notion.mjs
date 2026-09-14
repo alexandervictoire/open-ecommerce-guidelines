@@ -12,8 +12,9 @@
 // By default the script only creates guidelines that do not exist yet and leaves
 // existing files untouched, so a forgotten run cannot discard edits made in the
 // repo. `--overwrite` regenerates existing files from the export: the core
-// sections are replaced (repo edits to them are lost) and only the platform
-// status fields and platform sections are carried over.
+// sections are replaced (repo edits to them are lost); the platform status
+// fields, platform sections and legal fields (audience, regulation,
+// jurisdiction) are carried over.
 //
 // Guarantees: drops "Max Score" (PLAN §4), validates every output, skips (never
 // emits) broken guidelines, is idempotent, prints a summary.
@@ -26,7 +27,7 @@ const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const OUT_ROOT = join(REPO_ROOT, 'content', 'guidelines')
 
 // ---- Enums (PLAN §3; dimensions derived from content, see CLAUDE.md) --------
-const CATEGORIES = new Set(['pdp', 'cart', 'checkout'])
+const CATEGORIES = new Set(['plp', 'pdp', 'cart', 'checkout', 'global'])
 const SEVERITIES = new Set(['low', 'medium', 'high', 'critical'])
 const TARGETS = new Set(['human', 'agent', 'machine'])
 const TARGET_ORDER = ['human', 'agent', 'machine']
@@ -180,18 +181,19 @@ function filenameFor(g) {
   return join(OUT_ROOT, g.category, `${g.id.toLowerCase()}.md`)
 }
 
-// ---- Platform data (Shopware / Shopify) -------------------------------------
-// The Notion export has no platform columns: the classification is maintained by
-// hand in the Markdown files. Re-running the converter must therefore carry over
-// whatever is already on disk instead of resetting it to the default.
+// ---- Repo-maintained data ---------------------------------------------------
+// The Notion export has no platform or legal columns: platform classification and
+// the legal fields are maintained by hand in the Markdown files. `--overwrite`
+// must therefore carry over whatever is already on disk instead of dropping it.
 const PLATFORMS = [
   { key: 'shopware', field: 'shopware_status', heading: 'Shopware specific' },
   { key: 'shopify', field: 'shopify_status', heading: 'Shopify specific' }
 ]
 const DEFAULT_PLATFORM_STATUS = 'no_divergence'
+const LEGAL_FIELDS = ['audience', 'regulation', 'jurisdiction']
 
-function readExistingPlatformData(path) {
-  const result = {}
+function readExistingRepoData(path) {
+  const result = { legal: [] }
   for (const p of PLATFORMS) result[p.key] = { status: DEFAULT_PLATFORM_STATUS, section: null }
   if (!existsSync(path)) return result
 
@@ -199,6 +201,11 @@ function readExistingPlatformData(path) {
   const match = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/.exec(text)
   if (!match) return result
   const [, fm, body] = match
+
+  // Legal fields are copied line for line, in the order written in the file.
+  for (const line of fm.split(/\r?\n/)) {
+    if (LEGAL_FIELDS.some((field) => line.startsWith(`${field}:`))) result.legal.push(line)
+  }
 
   for (const p of PLATFORMS) {
     const status = new RegExp(`^${p.field}:\\s*(\\S+)\\s*$`, 'm').exec(fm)
@@ -225,6 +232,7 @@ function render(g, platform) {
     `targets: [${g.targets.join(', ')}]`,
     `status: ${g.status}`,
     ...PLATFORMS.map((p) => `${p.field}: ${platform[p.key].status}`),
+    ...platform.legal,
     '---',
     ''
   ].join('\n')
@@ -275,7 +283,7 @@ function main() {
         kept.push(label)
         continue
       }
-      const out = render(g, readExistingPlatformData(path))
+      const out = render(g, readExistingRepoData(path))
       if (containsScore(out)) {
         skipped.push({ label, reasons: ['output contains a score field'] })
         continue

@@ -6,7 +6,9 @@
 //
 // Checks:
 //   - frontmatter enums are legal (incl. the two platform status fields)
-//   - id matches the filename (filename = lowercased id, by contract)
+//   - optional legal fields are well-formed: regulation, jurisdiction, audience
+//   - id matches the filename (filename = lowercased id, by contract), and the
+//     file sits in the directory named by its category
 //   - the five core H2 sections exist, in order, non-empty
 //   - platform status <-> platform section coupling:
 //       platform_specific  => the matching section MUST exist
@@ -22,7 +24,7 @@ import { fileURLToPath } from 'node:url'
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const CONTENT_ROOT = join(REPO_ROOT, 'content', 'guidelines')
 
-const CATEGORIES = ['pdp', 'cart', 'checkout']
+const CATEGORIES = ['plp', 'pdp', 'cart', 'checkout', 'global']
 const SEVERITIES = ['low', 'medium', 'high', 'critical']
 const TARGETS = ['human', 'agent', 'machine']
 const STATUSES = ['draft', 'published', 'deprecated']
@@ -47,6 +49,10 @@ const PLATFORMS = ['shopware', 'shopify']
 const PLATFORM_LABELS = { shopware: 'Shopware', shopify: 'Shopify' }
 const PLATFORM_STATUSES = ['not_applicable', 'no_divergence', 'platform_specific']
 const DEFAULT_PLATFORM_STATUS = 'no_divergence'
+
+// Legal anchoring (all optional; see CLAUDE.md).
+const AUDIENCES = ['b2c', 'b2b']
+const JURISDICTION_PATTERN = /^(eu|[a-z]{2})$/
 
 const sectionHeading = (p) => `${PLATFORM_LABELS[p]} specific`
 
@@ -79,6 +85,17 @@ function parseFrontmatter(fm) {
     out[line.slice(0, idx).trim()] = line.slice(idx + 1).trim()
   }
   return out
+}
+
+// `regulation` values contain commas and brackets of their own, so the field is
+// written as a flow sequence of double-quoted strings, which is also valid JSON.
+function parseQuotedList(value) {
+  try {
+    const parsed = JSON.parse(value)
+    return Array.isArray(parsed) && parsed.every((v) => typeof v === 'string') ? parsed : null
+  } catch {
+    return null
+  }
 }
 
 function parseList(value) {
@@ -131,6 +148,11 @@ function validateFile(file) {
   }
   if (!fm.title) errors.push('missing `title`')
   if (!CATEGORIES.includes(fm.category)) errors.push(`illegal category "${fm.category}"`)
+  else {
+    // The directory decides the URL, so it must agree with the frontmatter.
+    const directory = file.split('/').slice(-2, -1)[0]
+    if (directory !== fm.category) errors.push(`category "${fm.category}" but file lives in "${directory}/"`)
+  }
   if (!DIMENSIONS.includes(fm.dimension)) errors.push(`illegal dimension "${fm.dimension}"`)
   if (!SEVERITIES.includes(fm.severity)) errors.push(`illegal severity "${fm.severity}"`)
   if (!STATUSES.includes(fm.status)) errors.push(`illegal status "${fm.status}"`)
@@ -138,6 +160,25 @@ function validateFile(file) {
   const targets = parseList(fm.targets)
   if (targets.length === 0) errors.push('empty `targets`')
   for (const t of targets) if (!TARGETS.includes(t)) errors.push(`illegal target "${t}"`)
+
+  // ---- legal anchoring (optional fields) ----------------------------------
+  if (fm.regulation !== undefined) {
+    const regulation = parseQuotedList(fm.regulation)
+    if (!regulation) errors.push('`regulation` must be a list of double-quoted strings, e.g. ["Dir 2011/83/EU Art. 8(2)"]')
+    else if (regulation.length === 0 || regulation.some((r) => !r.trim())) errors.push('`regulation` must not be empty or contain empty entries')
+  }
+  if (fm.jurisdiction !== undefined) {
+    const jurisdiction = parseList(fm.jurisdiction)
+    if (jurisdiction.length === 0) errors.push('`jurisdiction` is present but empty (omit it when the guideline is not jurisdiction-bound)')
+    for (const j of jurisdiction) {
+      if (!JURISDICTION_PATTERN.test(j)) errors.push(`illegal jurisdiction "${j}" (expected "eu" or a lowercase two-letter country code)`)
+    }
+  }
+  if (fm.audience !== undefined) {
+    const audience = parseList(fm.audience)
+    if (audience.length === 0) errors.push('`audience` is present but empty (omit it when the guideline applies to both)')
+    for (const a of audience) if (!AUDIENCES.includes(a)) errors.push(`illegal audience "${a}"`)
+  }
 
   // ---- core sections ------------------------------------------------------
   const coreFound = titles.filter((t) => CORE_SECTIONS.includes(t))

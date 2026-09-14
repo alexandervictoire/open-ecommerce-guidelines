@@ -4,12 +4,15 @@
 import type { PlatformStatus } from '~/utils/platforms'
 
 export const CATEGORY_LABELS: Record<string, string> = {
+  plp: 'Product Listing Page',
   pdp: 'Product Detail Page',
   cart: 'Cart',
-  checkout: 'Checkout'
+  checkout: 'Checkout',
+  global: 'Global'
 }
 
-export const CATEGORY_ORDER = ['pdp', 'cart', 'checkout']
+// Funnel order, with conditions that hold on every page last.
+export const CATEGORY_ORDER = ['plp', 'pdp', 'cart', 'checkout', 'global']
 
 export const DIMENSION_LABELS: Record<string, string> = {
   'decision-clarity': 'Decision Clarity',
@@ -54,4 +57,6 @@ export interface GuidelineMeta {
   path: string
   shopware_status: PlatformStatus
   shopify_status: PlatformStatus
+  // Empty (field absent in frontmatter) means the guideline applies to B2C and B2B.
+  audience: string[]
 }
