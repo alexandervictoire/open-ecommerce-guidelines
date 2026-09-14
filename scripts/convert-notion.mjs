@@ -6,10 +6,17 @@
 // this script parses CSV. The field -> frontmatter mapping (PLAN §3) is
 // unchanged; only the input reader differs. See CLAUDE.md.
 //
-// Usage: node scripts/convert-notion.mjs <path-to-notion-export.csv>
+// Usage: node scripts/convert-notion.mjs <path-to-notion-export.csv> [--overwrite]
+//
+// The Markdown files in the repo are the source of truth; Notion is not synced.
+// By default the script only creates guidelines that do not exist yet and leaves
+// existing files untouched, so a forgotten run cannot discard edits made in the
+// repo. `--overwrite` regenerates existing files from the export: the core
+// sections are replaced (repo edits to them are lost) and only the platform
+// status fields and platform sections are carried over.
 //
 // Guarantees: drops "Max Score" (PLAN §4), validates every output, skips (never
-// emits) broken guidelines, is idempotent (per-file overwrite), prints a summary.
+// emits) broken guidelines, is idempotent, prints a summary.
 
 import { existsSync, readFileSync, mkdirSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
@@ -238,15 +245,18 @@ function containsScore(text) {
 
 // ---- Main -------------------------------------------------------------------
 function main() {
-  const input = process.argv[2]
+  const args = process.argv.slice(2)
+  const overwrite = args.includes('--overwrite')
+  const input = args.find((a) => !a.startsWith('--'))
   if (!input) {
-    console.error('Usage: node scripts/convert-notion.mjs <path-to-notion-export.csv>')
+    console.error('Usage: node scripts/convert-notion.mjs <path-to-notion-export.csv> [--overwrite]')
     process.exit(1)
   }
   const text = readFileSync(resolve(input), 'utf8')
   const records = toRecords(text)
 
   let converted = 0
+  const kept = []
   const skipped = []
   const seenIds = new Map()
 
@@ -260,6 +270,11 @@ function main() {
 
     if (errs.length === 0) {
       const path = filenameFor(g)
+      if (existsSync(path) && !overwrite) {
+        seenIds.set(g.id, label)
+        kept.push(label)
+        continue
+      }
       const out = render(g, readExistingPlatformData(path))
       if (containsScore(out)) {
         skipped.push({ label, reasons: ['output contains a score field'] })
@@ -276,15 +291,16 @@ function main() {
 
   // ---- Summary --------------------------------------------------------------
   console.log(`\nConversion complete.`)
-  console.log(`  Converted: ${converted}`)
+  console.log(`  Written:   ${converted}`)
+  console.log(`  Kept:      ${kept.length}${kept.length ? ' (file exists — pass --overwrite to regenerate from the export)' : ''}`)
   console.log(`  Skipped:   ${skipped.length}`)
   for (const s of skipped) {
     console.log(`    - ${s.label}: ${s.reasons.join('; ')}`)
   }
   console.log('')
 
-  // Non-zero exit if nothing converted (likely a wrong input file).
-  if (converted === 0) process.exit(1)
+  // Non-zero exit if no row was usable at all (likely a wrong input file).
+  if (converted === 0 && kept.length === 0) process.exit(1)
 }
 
 main()
