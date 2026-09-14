@@ -18,7 +18,7 @@ Whether every charge on the final total was either shown earlier in the funnel o
 
 ## Why it matters
 
-An existing guideline requires that the total price be determinable before checkout. This is the enforcement of that requirement at the far end: the check that nothing arrived in between.
+`PDP-DC-TOTAL-01` requires that the total price be determinable before checkout, checked from the product page. This guideline is its counterpart at the far end: the check, made at checkout, that nothing arrived in between. The two look at the same property from opposite ends, and a shop failing one usually fails the other; this one exists because reconciling the final total is the more reliable test.
 
 Late costs are the most reliable predictor of abandonment, and the abandonment is not a pricing response but a trust response. A user who would have accepted a handling fee stated on the product page rejects the same fee when it appears after they have entered their address, because its timing implies it was concealed.
 
@@ -29,7 +29,6 @@ There is a direct commercial consequence as well as a reputational one. Where a 
 - A handling, service or small-order fee appears for the first time at checkout.
 - A payment method surcharge appears only after the method is selected, with no earlier indication that surcharges exist.
 - Delivery cost for the user's destination materially exceeds any figure indicated earlier, with no earlier statement that it varies by destination.
-- A minimum order value is enforced only at checkout.
 - The total at checkout differs from the cart total without any user action explaining the difference.
 
 ## How to verify
@@ -40,10 +39,12 @@ There is a direct commercial consequence as well as a reputational one. Where a 
 4. Select each available payment method in turn and confirm no surcharge appears that was not indicated before checkout.
 5. Repeat with a destination away from the default market, if the shop ships beyond it.
 
+Restrictions that block an order rather than add a charge, such as a minimum order value, are checked by `PDP-C-RESTRICT-01`.
+
 **Shopware:** payment and delivery surcharges are configured on the payment and shipping methods and frequently surface only at checkout because nothing earlier renders them. If surcharges are configured, the fix belongs on the product page and cart, not at checkout.
 
 **Shopify:** additional fees are commonly implemented through apps or shipping rate configuration, both of which resolve late by nature. Establish which fees exist before auditing, since they will not be visible from the storefront until they apply.
 
 ## Recommended fix
 
-Enumerate every configured surcharge and either display it earlier or state earlier that it exists and what determines it. Where a cost genuinely cannot be computed before an address is known, say so at the cart with the range or the rule, rather than showing nothing.
+Enumerate every configured surcharge and either display it earlier or state earlier that it exists and what determines it. How the cart presents a cost that cannot be computed before an address is known is covered by `CART-DC-TOTALS-01`.

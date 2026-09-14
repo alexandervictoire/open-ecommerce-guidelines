@@ -31,14 +31,17 @@ For agents, an unflagged stale line means the offer they are about to accept is 
 
 ## How to verify
 
-This check needs a stock change while an item is held in a cart, so it requires preparation. Use a low-stock product in a staging environment, or a product whose stock can be adjusted in the admin.
+This check needs an item to become unpurchasable while it is held in a cart, so it requires preparation. Use a staging environment, or a product whose settings can be changed in the admin.
 
-1. Add a product with limited stock to the cart and leave it.
-2. In the admin, reduce that product's available stock below the cart quantity, or set it unavailable.
-3. Reload the cart and confirm the line is identified as affected, with the available quantity stated.
-4. Confirm the total either excludes the unavailable quantity or clearly states that it is provisional.
-5. Confirm the line is not removed silently.
-6. Attempt to enter checkout and confirm the user is stopped at the cart rather than deeper in the flow.
+Falling stock alone does not make every product unpurchasable. A product configured to remain orderable when out of stock stays purchasable at zero or negative stock, and a cart that keeps such a line unflagged is behaving correctly, not failing this guideline. `PDP-SR-STOCK-01` describes where each platform keeps that setting. Establish which case applies before recording a verdict.
+
+1. In the admin, confirm whether the chosen product enforces its stock, meaning it cannot be ordered beyond what is available.
+2. Add the product to the cart and leave it.
+3. Make the line genuinely unpurchasable: set the product unavailable, or, only if step 1 confirmed that stock is enforced, reduce its available stock below the cart quantity.
+4. Reload the cart and confirm the line is identified as affected, with the available quantity stated.
+5. Confirm the total either excludes the unavailable quantity or clearly states that it is provisional.
+6. Confirm the line is not removed silently.
+7. Attempt to enter checkout and confirm the user is stopped at the cart rather than deeper in the flow.
 
 **Shopware:** the cart is recalculated server-side on each load, so availability errors are typically raised as cart errors. The common failure is a theme that does not render the error collection. Check that cart notices are output before concluding the platform is not detecting the change.
 

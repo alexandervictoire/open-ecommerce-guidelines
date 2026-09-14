@@ -1,6 +1,6 @@
 ---
 id: CART-SI-MUTATE-01
-title: The cart changes only when the customer changes it
+title: The cart contains only what the customer chose
 category: cart
 dimension: semantic-integrity
 severity: high
@@ -14,7 +14,9 @@ jurisdiction: [eu]
 
 ## What is being checked
 
-Whether anything in the cart, meaning lines, quantities and paid options, was put there by the user. Automatically added samples, gifts, insurance, packaging options, service plans and donations are in scope, whether or not they carry a charge.
+Whether every line in the cart was put there by the user, and whether no line was replaced without the user accepting it. Automatically added samples, gifts, insurance, packaging options, service plans and donations are in scope, whether or not they carry a charge.
+
+Neighbouring checks are covered elsewhere: a paid option or consent control that is pre-selected or pre-ticked, in the cart as well as in checkout, by `CHECKOUT-DC-OPTIN-01`; quantities that change across navigation by `CART-SR-QTY-01`; and the selected variant carried from the product page into the cart by `CART-SR-PERSIST-01`.
 
 ## Why it matters
 
@@ -26,21 +28,19 @@ A free gift added automatically and then removed when the qualifying line change
 
 ## Failure signals
 
-- A paid option such as insurance, express handling or extended warranty appears in the cart without having been selected.
-- A donation, offset or round-up is added by default rather than offered.
+- A paid item such as insurance, express handling or extended warranty is added to the cart as a line without the user having chosen it.
 - A free item is auto-added and later auto-removed as the cart changes, with no explanation.
 - An upsell module changes a line's variant in place, for example upgrading a size, rather than offering a separate line.
-- A paid line has no way to remove or deselect it.
+- A paid line has no way to remove it.
 - A free promotional line appears with no explanation of why it is there and what makes it go away.
 
 ## How to verify
 
 1. Build a cart consisting only of deliberately chosen lines.
 2. Compare the cart contents against what was selected and confirm they match exactly.
-3. Confirm every paid line and every paid option can be removed or deselected. A free promotional item added by a rule may not be removable on its own, which is acceptable; what it must have is a visible explanation of why it is in the cart.
+3. Confirm every paid line can be removed. A free promotional item added by a rule may not be removable on its own, which is acceptable; what it must have is a visible explanation of why it is in the cart.
 4. Cross a promotional threshold, for example a free gift or free delivery threshold, and confirm any resulting addition is announced rather than silent.
 5. Fall back below that threshold and confirm any removal is announced.
-6. Confirm no pre-ticked control adds a cost.
 
 **Shopware:** promotions can add line items automatically by design. That mechanism is legitimate for free promotional items provided the addition is visible and explained; it is not legitimate for paid additions. Review the configured promotions rather than assuming the default is safe.
 

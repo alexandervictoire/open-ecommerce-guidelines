@@ -33,7 +33,7 @@ The browser back control matters specifically because users do not distinguish i
 2. Use the interface's own control to return to the address step, change nothing, and continue. Confirm all later data survives.
 3. Repeat using the browser back control.
 4. Change the address in a way that legitimately affects delivery options, and confirm the change to the delivery method is stated rather than silent.
-5. Return to the cart from checkout and confirm the cart is intact.
+5. Return to the cart from checkout and confirm no line was removed and the cart was not rebuilt. Whether quantities survive this round trip is checked by `CART-SR-QTY-01`.
 6. Repeat the browser back test on mobile, including the swipe gesture where the platform supports it.
 
 **Shopware:** checkout steps are separate routes, so browser navigation between them usually works. The exposure is in the recalculation that follows an address change, which can silently reset a delivery method.
