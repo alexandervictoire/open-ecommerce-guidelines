@@ -7,7 +7,7 @@ severity: high
 targets: [human]
 status: draft
 shopware_status: platform_specific
-shopify_status: platform_specific
+shopify_status: not_applicable
 ---
 
 ## What is being checked
@@ -44,7 +44,3 @@ Persist checkout state server-side keyed to the session rather than to the step,
 ## Shopware specific
 
 The standard checkout runs across separate routes for the cart, registration or address, confirmation and finish. When an address change blocks the selected shipping method, the storefront switches it and shows a notice; the change is silent only if a theme drops cart notices, so check that they are rendered.
-
-## Shopify specific
-
-Checkout defaults to a single page, so there are no earlier steps to return to; step navigation applies only where three-page checkout is selected. In either layout, test the boundary between the theme's cart and the checkout, including returning to the cart.
