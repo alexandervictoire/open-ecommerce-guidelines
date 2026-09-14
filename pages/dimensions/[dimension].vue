@@ -49,7 +49,8 @@ useSeoMeta({
 
     <GuidelineList v-if="items.length" class="mt-8" :items="items" :platform="platform" />
     <p v-else class="mt-8 text-muted">
-      No guidelines in this dimension apply to {{ PLATFORM_LABELS[platform] }} yet.
+      <template v-if="platform === 'all'">No guidelines in this dimension yet.</template>
+      <template v-else>No guidelines in this dimension apply to {{ PLATFORM_LABELS[platform] }} yet.</template>
     </p>
   </div>
 </template>
