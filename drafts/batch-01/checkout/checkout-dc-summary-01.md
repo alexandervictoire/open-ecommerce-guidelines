@@ -7,7 +7,8 @@ severity: high
 targets: [human, agent, machine]
 status: draft
 audience: [b2c]
-platforms: [shopware, shopify]
+shopware_status: no_divergence
+shopify_status: platform_specific
 regulation: ["Dir 2011/83/EU Art. 8(2) with Art. 6(1)(a),(e),(o),(p)", "BGB §312j(2) (DE)"]
 jurisdiction: [eu, de]
 ---
@@ -41,10 +42,10 @@ It is also the single most effective place to prevent post-purchase disputes, be
 4. Confirm no required element of the summary is behind a closed disclosure control.
 5. Confirm the total shown here matches the total charged.
 
-**Shopware:** the confirm page presents line items and totals above the order control by default. The frequent regression is a custom theme that collapses the item list on mobile, which splits the two apart precisely where most orders are placed.
-
-**Shopify:** the checkout's final step is platform-rendered and generally presents an order summary, but on narrow viewports the summary is commonly collapsed by default while the order control remains visible. Verify the rendered mobile behaviour rather than the desktop layout.
-
 ## Recommended fix
 
 Render the summary immediately above the order control and keep it expanded at every viewport. If space is the reason for collapsing, shorten the item presentation rather than hiding it, and never let a sticky order control separate itself from the summary it belongs to.
+
+## Shopify specific
+
+On mobile, Shopify's checkout hides the order summary in a collapsed section by default. The "Always show discount code field" setting expands it only in three-page checkout; in the default one-page checkout it just places the discount field above the still-collapsed summary. Check the rendered mobile checkout, and where the summary stays collapsed in one-page checkout, record it as a limitation of that layout rather than as a theme fix.

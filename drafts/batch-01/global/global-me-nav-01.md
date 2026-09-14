@@ -6,7 +6,8 @@ dimension: machine-extractability
 severity: medium
 targets: [agent, machine]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 ---
 
 ## What is being checked
@@ -35,10 +36,14 @@ The practical consequence is narrow but real: the deeper category structure, whi
 4. Compare the set available without scripts against the set in the rendered mega menu.
 5. Confirm the mobile navigation does not omit branches that exist nowhere else.
 
-**Shopware:** navigation is server-rendered from the category tree, so this normally passes on the standard storefront. Verify headless and Shopware Frontends implementations, where navigation is commonly fetched client-side.
-
-**Shopify:** menus are rendered from Liquid and normally present as anchors. The exposure is in themes and apps that build mega menus dynamically, and in navigation depth that exceeds what the menu resource holds.
-
 ## Recommended fix
 
 Render at least two levels of the category structure as anchors in the served document. Where a mega menu is loaded on demand for performance, keep a server-rendered equivalent available, and ensure every category is reachable through some addressable path even if not exposed in the menu.
+
+## Shopware specific
+
+The standard Twig storefront renders the main navigation from the category tree on the server. For headless frontends, including Shopware Frontends, confirm that navigation is not fetched only in the browser.
+
+## Shopify specific
+
+Menus are rendered by Liquid as links. Check themes and apps that build mega menus in the browser.

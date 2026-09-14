@@ -7,7 +7,8 @@ severity: high
 targets: [human, agent, machine]
 status: draft
 audience: [b2c]
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 regulation: ["Dir 2005/29/EC Art. 7(6)", "Dir 2005/29/EC Annex I No. 23b, 23c"]
 jurisdiction: [eu]
 ---
@@ -41,10 +42,14 @@ In EU consumer law, presenting reviews as coming from actual purchasers without 
 5. Determine whether the aggregate covers this product only or a family, and confirm that scope is stated.
 6. Check whether structured review data expresses the same scope as the visible aggregate.
 
-**Shopware:** native reviews are tied to orders in the shop, so verification is usually possible; the disclosure often is simply absent. If a third-party review provider is in use, the disclosure obligation does not transfer to the provider.
-
-**Shopify:** review functionality is app-provided, and syndication and aggregation settings differ per app. Confirm what the configured app actually does before writing the disclosure, rather than describing the default.
-
 ## Recommended fix
 
 Place a short, plain statement adjacent to the review block describing the source, the verification performed and the scope of the aggregate, and link it to a fuller description. Where reviews are syndicated or aggregated across variants, say so at the point where the score appears rather than in a policy page.
+
+## Shopware specific
+
+Native product reviews require a signed-in customer, allow one review per customer per product, and are saved inactive until approved in the administration. Submission does not check for a purchase, and the standard code never sets the storefront's "verified buyer" marker. A shop claiming verified reviews therefore relies on an extension or a manual process; establish which before accepting the claim.
+
+## Shopify specific
+
+Reviews come from third-party apps, whose collection, syndication and aggregation settings differ. Check what the installed app actually does before accepting or writing a disclosure.

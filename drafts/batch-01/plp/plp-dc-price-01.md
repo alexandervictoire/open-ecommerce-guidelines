@@ -7,7 +7,8 @@ severity: high
 targets: [human, agent, machine]
 status: draft
 audience: [b2c]
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 regulation: ["Dir 98/6/EC Art. 2(a), 3(1)", "PAngV §3, §6 (DE)"]
 jurisdiction: [eu, de]
 ---
@@ -42,10 +43,14 @@ That is why large retailers can show bare figures on category pages and be fine:
 
 **Jurisdiction note:** the second condition follows German case law on where price disclosures may sit, which turns on the consumer necessarily encountering them before the ordering process begins. Treat it as the safe construction rather than as a settled rule in every member state, and confirm the position for the markets a shop serves.
 
-**Shopware:** the storefront renders the tax and delivery notice in the same price block used by tiles and detail pages, so the disclosures usually travel with the price by default. Check whether a theme has stripped the notice from the tile variant specifically, and whether any quick-add or off-canvas add-to-cart has been enabled on listings.
-
-**Shopify:** whether displayed prices include tax for a given market is a store setting rather than a theme decision, so confirm the setting before inspecting the template. Quick-add on cards is a standard option in current themes and is frequently switched on without any accompanying disclosure change.
-
 ## Recommended fix
 
 Render tiles from the same price component as the product detail page so the payable figure cannot diverge. Treat quick-add as a decision that moves the disclosure obligation onto the listing, and either carry the statements on the listing or do not offer quick-add.
+
+## Shopware specific
+
+The standard storefront ties the tax and shipping notice on listing tiles to the setting that allows buying from the listing (`core.listing.allowBuyInListing`): with it on, every tile renders the notice; with it off, tiles carry none and the product page provides it. Check that a theme has not removed that block from the tile, and that any quick-view or quick-add extension that adds to the cart from the listing also brings the notice with it.
+
+## Shopify specific
+
+Whether displayed prices include tax is set per market, in the market's taxes and duties settings, not in the theme, so confirm that setting before inspecting templates. Both Dawn (a card setting) and Horizon (a quick-add modal) can add to the cart from a collection page; where quick add is enabled, check that the cards carry the tax and shipping statement.

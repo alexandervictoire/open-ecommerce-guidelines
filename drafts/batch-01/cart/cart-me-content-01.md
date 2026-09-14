@@ -6,7 +6,8 @@ dimension: machine-extractability
 severity: medium
 targets: [agent, machine]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 ---
 
 ## What is being checked
@@ -37,10 +38,14 @@ Scope note: this guideline asks that the cart be readable at its own URL by the 
 4. Confirm the text matches what the drawer shows.
 5. Confirm the cart URL is reachable from every page, not only after an add-to-cart event.
 
-**Shopware:** the cart page is server-rendered by default and normally passes. Verify headless and Shopware Frontends storefronts specifically, where the cart route may be client-rendered.
-
-**Shopify:** a cart page exists by default, but some themes route all cart interaction to the drawer and leave the page untested or visually broken. Confirm the page is maintained, not merely present.
-
 ## Recommended fix
 
 Keep a server-rendered cart page as the single true record of what is in the cart, and treat the drawer as a convenient view of it. Ensure both derive from the same response so they cannot disagree.
+
+## Shopware specific
+
+The standard Twig storefront renders the cart page on the server. For headless frontends, including Shopware Frontends, confirm that the cart route is server-rendered.
+
+## Shopify specific
+
+Every store has a cart page at `/cart`, but a theme can route all cart interaction to a drawer. Check that the cart page is maintained and complete, not merely present.

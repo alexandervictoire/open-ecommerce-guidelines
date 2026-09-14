@@ -6,7 +6,8 @@ dimension: decision-clarity
 severity: high
 targets: [human]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: no_divergence
+shopify_status: platform_specific
 regulation: ["Dir (EU) 2019/882", "EN 301 549 / WCAG 2.1 AA: 3.3.1, 3.3.2, 3.3.3, 1.3.1, 4.1.2"]
 jurisdiction: [eu]
 ---
@@ -41,10 +42,10 @@ These are not marginal cases at this step: the user is entering an address under
 5. Confirm grouped controls announce their group label.
 6. Confirm any format requirement is available before submission, not only after.
 
-**Shopware:** the standard checkout form uses labelled inputs with required attributes. Regressions come from themes that convert labels to placeholders for density, and from plugin fields that omit the association.
-
-**Shopify:** the platform checkout is generally sound here. The exposure is in checkout extension fields and in theme-owned forms earlier in the path, both of which are your responsibility rather than the platform's.
-
 ## Recommended fix
 
 Give every input a visible, associated label, express required status programmatically as well as visually, associate error messages with their fields, group related controls with a group label, and state format expectations with the field rather than in the error that follows.
+
+## Shopify specific
+
+The checkout is rendered by Shopify. Test fields added through checkout extensions and theme-owned forms earlier in the path, which are the merchant's responsibility.

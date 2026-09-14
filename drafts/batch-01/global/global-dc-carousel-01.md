@@ -6,7 +6,8 @@ dimension: decision-clarity
 severity: medium
 targets: [human]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 regulation: ["Dir (EU) 2019/882", "EN 301 549 / WCAG 2.1 AA: 2.2.2, 2.1.1, 4.1.2"]
 jurisdiction: [eu]
 ---
@@ -45,10 +46,14 @@ The commercial case runs the same way. A carousel that rotates away from a slide
 5. Continue tabbing and confirm focus does not enter non-visible slides.
 6. Confirm controls have accessible names that describe their action.
 
-**Shopware:** the standard slider element supports configurable autoplay. The straightforward fix is to disable autoplay in the CMS layout, which resolves the guideline without any code change and is usually the right choice.
-
-**Shopify:** slideshow sections typically expose an autoplay setting with a configurable interval, and the accompanying pause control varies by theme. Confirm the control exists in the theme in use rather than assuming it, and prefer disabling autoplay.
-
 ## Recommended fix
 
 Prefer not to auto-advance at all; the evidence that carousels earn their position is thin, and disabling autoplay resolves the whole class of problem in one setting. Where autoplay is required, provide a persistent, keyboard-reachable pause control, stop rotation on focus and on hover, and keep non-visible slides out of the focus order.
+
+## Shopware specific
+
+The standard image slider supports automatic sliding but renders no pause control when it is enabled. An auto-sliding slider built from the standard element therefore fails this guideline by construction; switch automatic sliding off in the layout.
+
+## Shopify specific
+
+Dawn's slideshow renders a pause button whenever auto-rotate is on. In Horizon the autoplay control is part of the slideshow controls, whose display style can be changed; check that it stays visible with the chosen style. Disabling autoplay avoids the question.

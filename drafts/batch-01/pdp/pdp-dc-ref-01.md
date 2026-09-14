@@ -7,7 +7,8 @@ severity: high
 targets: [human, agent, machine]
 status: draft
 audience: [b2c]
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 regulation: ["Dir 98/6/EC Art. 6a", "CJEU C-330/23 (Aldi Süd)", "PAngV §11 (DE)"]
 jurisdiction: [eu, de]
 ---
@@ -49,10 +50,14 @@ That makes internal consistency an auditable property rather than a stylistic pr
 5. Repeat on a listing tile for the same product, since campaign badges are often rendered by a different component that omits the label or recomputes the percentage differently.
 6. Where the shop uses a recommended retail price as the reference, confirm it is labelled as such rather than as a previous price.
 
-**Shopware:** the catalogue distinguishes the list price from the regulation price, which exists specifically to carry the lowest prior price required by the reduction rules. Confirm which field the theme is rendering, because rendering the list price while labelling it as a previous price is the common and consequential mistake.
-
-**Shopify:** there is no native field for a prior-price reference distinct from the compare-at price, so this usually requires a metafield or an app. Confirm that whatever populates the reference is documented, and that the label the theme renders matches what that source actually contains.
-
 ## Recommended fix
 
 Compute the displayed percentage from the same field that supplies the displayed reference figure, rather than from whatever price the product last carried. Label every reference figure with what it is, at the component level rather than per campaign, so that no promotion can ship without one. Where two different kinds of reference exist in the catalogue, render two different labels driven by the field in use, and never let a recommended price be presented as a price previously charged.
+
+## Shopware specific
+
+The price data distinguishes a list price from a regulation price, the field intended for the lowest prior price (available since 6.4.10.0). The standard templates, on listing tiles and on the product page, compute the displayed saving percentage from the list price and show the regulation price separately as "previously". Wherever a list price is set higher than the regulation price, this default rendering produces exactly the mismatch step 4 checks for. On listing tiles, the list price also carries its label only for screen readers.
+
+## Shopify specific
+
+Products have only two price fields, the price and the compare-at price; there is no native field for a lowest prior price, and Shopify's own guidance is to add a statement to the theme. Check what the compare-at price actually contains, and whether any percentage or sale badge follows from the price the page names as the reference.

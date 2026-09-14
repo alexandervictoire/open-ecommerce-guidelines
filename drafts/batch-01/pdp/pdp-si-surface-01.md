@@ -6,7 +6,8 @@ dimension: semantic-integrity
 severity: high
 targets: [human, agent, machine]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: no_divergence
+shopify_status: platform_specific
 ---
 
 ## What is being checked
@@ -39,10 +40,10 @@ For agents the problem is worse still: an agent that reads a listing and acts on
 5. Enter checkout and compare the delivery statement and any promotional claim once more.
 6. Note any difference that is not explained by an explicit variant or shipping method change made by the user.
 
-**Shopware:** listing and detail render from the same entity but through different price contexts, so differences usually originate in a price rule that resolves differently in the two contexts. Check advanced pricing and customer group context rather than the templates.
-
-**Shopify:** the common origin is a discount applied at cart level while the tile renders a badge from a metafield or an app, with nothing keeping the two in step. Identify which component owns the claim.
-
 ## Recommended fix
 
 Derive these values from one source shared across the surfaces, rather than letting each template resolve them for itself, and treat any divergence as a data problem rather than a display problem. Where a difference is legitimate, for example a delivery estimate that narrows once a destination is known, state the reason at the point where the value changes.
+
+## Shopify specific
+
+A promotional badge on a product card can be rendered from a metafield or an app while the discount itself is applied at cart level, with nothing keeping the two in step. Identify which component owns each claim before comparing surfaces.

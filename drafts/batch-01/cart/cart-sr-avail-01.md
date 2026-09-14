@@ -6,7 +6,8 @@ dimension: system-robustness
 severity: high
 targets: [human, agent, machine]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 ---
 
 ## What is being checked
@@ -43,10 +44,14 @@ Falling stock alone does not make every product unpurchasable. A product configu
 6. Confirm the line is not removed silently.
 7. Attempt to enter checkout and confirm the user is stopped at the cart rather than deeper in the flow.
 
-**Shopware:** the cart is recalculated server-side on each load, so availability errors are typically raised as cart errors. The common failure is a theme that does not render the error collection. Check that cart notices are output before concluding the platform is not detecting the change.
-
-**Shopify:** availability is enforced at checkout, and the cart page does not necessarily revalidate. Confirm what the theme does on cart load, since the default behaviour in some themes is to display the stale line unchanged.
-
 ## Recommended fix
 
 Revalidate availability on every cart render, mark affected lines explicitly with the quantity actually available, keep the line visible rather than deleting it, and make the state explicit in the totals. Block entry to checkout until the user has acknowledged or resolved the affected line.
+
+## Shopware specific
+
+The cart page outputs cart errors as alerts, so an affected line should be announced there. Whether falling stock makes a product unpurchasable at all depends on its stock settings, see `PDP-SR-STOCK-01`.
+
+## Shopify specific
+
+Whether the cart page marks an affected line before checkout is theme behaviour, so reload the cart after the stock change and check it there. A variant set to continue selling when out of stock does not become unpurchasable, see `PDP-SR-STOCK-01`.

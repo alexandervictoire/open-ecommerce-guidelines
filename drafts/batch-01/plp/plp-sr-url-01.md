@@ -6,7 +6,8 @@ dimension: system-robustness
 severity: high
 targets: [human, agent, machine]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 ---
 
 ## What is being checked
@@ -38,10 +39,14 @@ Note the scope: this guideline is about addressability, not about interaction st
 5. Open a product from the filtered listing, go back, and confirm the filtered position is restored.
 6. Navigate to the end of the result set and confirm each further page has its own URL.
 
-**Shopware:** the storefront writes listing state to the URL through query parameters and supports requesting those URLs directly. Confirm that any custom filter plugin does the same rather than holding state in a session, which is the usual failure mode with third-party filter extensions.
-
-**Shopify:** the standard filtering mechanism writes filter state into query parameters on the collection URL. Confirm custom or app-driven filtering does the same, and that sort order is included, since it is the parameter most often dropped.
-
 ## Recommended fix
 
 Treat the URL as the single source of truth for listing state. Write filters, sort and page into it on every change, and build the listing from the URL on load rather than from client-side state. Where an app or plugin owns filtering, verify it round-trips state through the URL before adopting it.
+
+## Shopware specific
+
+The standard listing writes active filters, the sort order (`order`) and the page (`p`) into the URL, and a listing can be requested from such a URL directly. Check that third-party filter extensions do the same rather than keeping state elsewhere.
+
+## Shopify specific
+
+Dawn writes the state of its filter form into the collection URL. Where filtering or sorting comes from an app or a customised theme, check that it does the same, and that the sort order is included.

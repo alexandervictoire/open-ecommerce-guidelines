@@ -6,7 +6,8 @@ dimension: machine-extractability
 severity: medium
 targets: [human, agent, machine]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 regulation: ["EN 301 549 / WCAG 2.1 AA: 1.3.5"]
 jurisdiction: [eu]
 ---
@@ -37,10 +38,14 @@ Incorrect tokens are worse than absent ones, because the browser fills confident
 4. Repeat where billing and delivery differ, confirming the two are not conflated.
 5. Confirm any custom fields are tokenised or deliberately left untokenised because no token applies.
 
-**Shopware:** the standard address form includes autocomplete attributes on core fields. Custom address fields added by plugins commonly do not, so audit the extension-added fields rather than the defaults.
-
-**Shopify:** the platform checkout handles this well. The exposure is in theme-owned forms earlier in the path and in fields added through checkout extensions.
-
 ## Recommended fix
 
 Tokenise every contact and address field, group billing and delivery with the appropriate section prefixes, verify with a real browser profile rather than by inspection alone, and include tokenisation in the definition of done for any custom checkout field.
+
+## Shopware specific
+
+Core address and contact fields in the standard storefront carry autocomplete tokens. Check fields added by extensions, which may not.
+
+## Shopify specific
+
+The checkout is rendered by Shopify. Check theme-owned forms earlier in the path and fields added through checkout extensions.

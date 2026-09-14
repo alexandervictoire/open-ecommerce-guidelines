@@ -7,7 +7,8 @@ severity: high
 targets: [human, agent, machine]
 status: draft
 audience: [b2c]
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 regulation: ["Dir 2011/83/EU Art. 6(1)(e),(o),(p)", "BGB §312k (DE)"]
 jurisdiction: [eu, de]
 ---
@@ -41,10 +42,14 @@ An existing guideline covers the visibility of payment and financing options. It
 
 **Jurisdiction note:** German law additionally requires a permanently and directly reachable cancellation control for continuing obligations concluded online, reachable without signing in. That is a site-level obligation rather than a product page one, so it is checked by `GLOBAL-TDE-LEGAL-01`. What this guideline checks is that the product page says how the arrangement ends; where the control itself belongs is a separate question.
 
-**Shopware:** subscription capability depends on the edition and on extensions. Confirm which component owns the recurring terms and whether it renders them or only the price.
-
-**Shopify:** subscriptions are provided through apps using the selling plan model. Selling plan names are frequently the only place the interval appears, and they are frequently written as marketing labels. Confirm the interval and term are rendered as explicit text rather than implied by a plan name.
-
 ## Recommended fix
 
 Render recurring terms as a labelled block adjacent to the purchase control: amount per period, interval, minimum term, notice period, cancellation route. Derive it from the selling plan or subscription configuration so that it cannot go stale, and never pre-select a recurring option over a one-time one.
+
+## Shopware specific
+
+Subscriptions are a commercial feature (from 6.5.4.0, on the Beyond plan, part of the Shopware Commercial extension) with configurable intervals and a minimum term. On the product page the customer selects a plan next to the add-to-cart option. Check that the selection states the interval and minimum term as text, not only a plan name.
+
+## Shopify specific
+
+Subscriptions are provided by apps built on selling plans, and a plan name can be the only place the interval appears. Check that interval, minimum term and cancellation are stated as explicit text. Shopify's store policies include a subscription policy; if the shop relies on it, check that it is reachable from the product page, not only from checkout.

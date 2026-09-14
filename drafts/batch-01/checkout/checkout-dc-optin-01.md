@@ -7,7 +7,8 @@ severity: high
 targets: [human, agent]
 status: draft
 audience: [b2c]
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 regulation: ["Dir 2011/83/EU Art. 22", "Reg (EU) 2016/679 Art. 4(11), Art. 7"]
 jurisdiction: [eu]
 ---
@@ -42,10 +43,14 @@ Note what is not in scope: pre-selecting a delivery *method* among several is le
 5. Confirm the pre-selected delivery method, if any, is not the most expensive available.
 6. Repeat in the cart, since additions are frequently offered there rather than in checkout.
 
-**Shopware:** additions typically arrive as promotions, custom products or extensions, and their default state is configured per extension rather than centrally. Audit each extension that can add a line or a surcharge.
-
-**Shopify:** upsell and add-on behaviour is app-provided, and several popular apps default to selected. Inventory the apps that can modify the order before auditing, and verify the state as rendered rather than as documented.
-
 ## Recommended fix
 
 Set every paid option to unselected and every consent control to unticked, as a configuration standard rather than per campaign. Separate terms acceptance from marketing consent. Give accepting and declining equal visual weight.
+
+## Shopware specific
+
+Native promotions only discount. Paid additions come from extensions, for example product option extensions such as Custom Products, and each sets its own default selection. Check every extension that can add a line or a surcharge.
+
+## Shopify specific
+
+Add-ons, upsells and donations come from apps, and each app sets its own default. Check the state as rendered in the cart and checkout rather than as documented.

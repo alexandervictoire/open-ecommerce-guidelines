@@ -6,7 +6,8 @@ dimension: decision-clarity
 severity: high
 targets: [human, agent, machine]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 regulation: ["Dir 2011/83/EU Art. 6(1)(e)"]
 jurisdiction: [eu]
 ---
@@ -39,10 +40,14 @@ For agents, an unbroken total cannot be reconciled against the offer they select
 4. Change a quantity and confirm every affected component updates, not only the total.
 5. Where delivery cannot be determined without a destination, confirm the cart says what is missing rather than showing nothing.
 
-**Shopware:** the standard cart renders a breakdown by default, including tax lines per rate. Verify that a theme has not collapsed it, and that net and gross presentation follows the customer group rather than a fixed template choice.
-
-**Shopify:** the cart page typically shows subtotal and defers everything else to checkout. Since delivery and tax are frequently determinable earlier, confirm what is genuinely unknown at cart stage rather than accepting the default deferral as a constraint.
-
 ## Recommended fix
 
 Render the breakdown from the same totals object that produces the grand total, so the figures cannot diverge. Where a component genuinely cannot be determined yet, state why and what would determine it, rather than omitting the line.
+
+## Shopware specific
+
+The standard cart summary lists a tax line per tax rate. Check that a theme has not collapsed it, and that net or gross presentation matches the customer group.
+
+## Shopify specific
+
+Dawn's cart shows an estimated total with a note that taxes and shipping are calculated at checkout. Since delivery and tax are often determinable earlier, check what is genuinely unknown at the cart rather than accepting that deferral as a constraint.

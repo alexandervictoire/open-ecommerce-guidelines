@@ -6,7 +6,8 @@ dimension: system-robustness
 severity: high
 targets: [human]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: no_divergence
+shopify_status: platform_specific
 ---
 
 ## What is being checked
@@ -37,10 +38,10 @@ Clearing a password field, a card field or a whole step on error is the version 
 5. Test known-awkward but valid inputs: postcodes with spaces, addresses without house numbers, names with accented characters and apostrophes, long street names.
 6. On a multi-step checkout, introduce an error at the final step and confirm earlier steps retain their data.
 
-**Shopware:** checkout validation is server-side with a full page re-render, so preservation depends on the form being repopulated from the request. The common failure is a custom field in a theme or plugin that is not repopulated.
-
-**Shopify:** validation in the platform checkout is largely outside the theme's control and generally behaves well. The exposure sits in custom fields added through extensions and in any theme-owned form earlier in the path.
-
 ## Recommended fix
 
 Repopulate every field from the submitted request on error, attach messages to individual fields, move focus to the first failure, and review validation rules against real address formats in every market served rather than against a single-market assumption.
+
+## Shopify specific
+
+The checkout is rendered by Shopify, so validation of its standard fields is outside the theme's control. Test fields added through checkout extensions and any theme-owned forms before checkout.

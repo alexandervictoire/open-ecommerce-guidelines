@@ -6,7 +6,8 @@ dimension: system-robustness
 severity: medium
 targets: [human, agent, machine]
 status: draft
-platforms: [shopware, shopify]
+shopware_status: platform_specific
+shopify_status: platform_specific
 ---
 
 ## What is being checked
@@ -38,10 +39,14 @@ The empty state is where intent goes to die. A user who searched for something t
 4. Search for a deliberately unmatched term and confirm the empty state offers categories, popular products or a contact route.
 5. Search for a product code and a misspelling of a stocked product, and confirm the behaviour is reasonable or that the empty state compensates.
 
-**Shopware:** search has its own route and template with a query parameter, so addressability normally passes. The empty state is template-owned and is commonly left as a bare message.
-
-**Shopify:** search results have a route with a query parameter by default. Where search is replaced by an app with an overlay-only interface, confirm an addressable result page still exists.
-
 ## Recommended fix
 
 Keep a real, addressable search result page even where an overlay provides the primary interface, carry the query in the URL, and treat the empty state as a merchandising surface: offer categories, popular products and a way to ask a human.
+
+## Shopware specific
+
+Search results are served at `/search` with the query in the `search` parameter, so addressability normally passes. The empty state is template-owned; check what it offers.
+
+## Shopify specific
+
+Search results are served at `/search` with the query in the `q` parameter. Where an app replaces search with an overlay, check that an addressable result page still exists.
