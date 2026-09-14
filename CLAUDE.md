@@ -155,6 +155,12 @@ The `id` is **immutable once published**. The filename is the lowercased id
 > are immutable and left as-is; the `dimension` frontmatter field is the source
 > of truth for browsing/filtering. Use the canonical codes above for new IDs.
 
+> **Retired, never published:** `PDP-SR-VAR-01` ("Active Variant State
+> Synchronization") exists only as a row in the Notion export. It is
+> deliberately not published — its checks are covered by `PDP-SI-IMAGE-01`,
+> `PDP-MI-ID-01`, `PDP-SR-VARIANT-01` and `PDP-SI-SURFACE-01` — and the converter
+> refuses it. Do not reuse the ID.
+
 ## Score policy (do not violate)
 
 "Max Score" belongs to the maintainer's private audit/scoring system and MUST

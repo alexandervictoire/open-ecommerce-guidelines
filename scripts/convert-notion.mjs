@@ -251,6 +251,15 @@ function containsScore(text) {
   return /(^|\n)\s*(max[_\s-]*)?score\s*:/i.test(text) || /max\s*score/i.test(text)
 }
 
+// Source rows deliberately never published. They stay in the Notion export, so
+// the converter has to refuse them explicitly (see CLAUDE.md, ID scheme).
+const RETIRED_IDS = new Map([
+  [
+    'PDP-SR-VAR-01',
+    'retired, not published: covered by PDP-SI-IMAGE-01, PDP-MI-ID-01, PDP-SR-VARIANT-01 and PDP-SI-SURFACE-01'
+  ]
+])
+
 // ---- Main -------------------------------------------------------------------
 function main() {
   const args = process.argv.slice(2)
@@ -272,6 +281,10 @@ function main() {
     const rec = records[i]
     const label = (rec['Criterion ID'] || rec['Criterion Name'] || `row ${i + 1}`).trim() || `row ${i + 1}`
     const g = buildGuideline(rec)
+    if (RETIRED_IDS.has(g.id)) {
+      skipped.push({ label, reasons: [RETIRED_IDS.get(g.id)] })
+      continue
+    }
     const errs = validate(g)
 
     if (g.id && seenIds.has(g.id)) errs.push(`duplicate id (also on ${seenIds.get(g.id)})`)
