@@ -8,6 +8,7 @@ import {
   splitPlatformBody
 } from '~/utils/platforms'
 import type { Platform } from '~/utils/platforms'
+import { AUDIENCE_LABELS, LEGAL_DISCLAIMER, jurisdictionLabel } from '~/utils/legal'
 import { SITE_NAME, SITE_URL, githubEditUrl } from '~/utils/site'
 
 const route = useRoute()
@@ -77,6 +78,14 @@ const hasPlatformBlock = computed(() =>
   PLATFORMS.some((p) => split.value.sections[p]) || notApplicable.value.length > 0
 )
 
+// Legal anchoring (optional fields). An absent audience means both, so the meta
+// line only names an audience when the guideline is restricted to one.
+const audienceLabels = computed(() =>
+  ((doc.value as any)?.audience ?? []).map((a: string) => AUDIENCE_LABELS[a as keyof typeof AUDIENCE_LABELS] ?? a)
+)
+const regulation = computed<string[]>(() => (doc.value as any)?.regulation ?? [])
+const jurisdiction = computed<string[]>(() => ((doc.value as any)?.jurisdiction ?? []).map(jurisdictionLabel))
+
 // ---- SEO + JSON-LD (PLAN §6) ----------------------------------------------
 const canonical = `${SITE_URL}${path}`
 useSeoMeta({
@@ -139,7 +148,23 @@ useHead(() => ({
         <span class="text-faint">
           Platforms: {{ applicablePlatforms.length ? applicablePlatforms.join(' · ') : 'none' }}
         </span>
+        <span v-if="audienceLabels.length" class="text-faint">
+          Audience: {{ audienceLabels.join(' · ') }} only
+        </span>
       </div>
+
+      <!-- A guideline carrying a legal reference is a different kind of claim from
+           one resting on testing alone; say so, and say it is not legal advice.
+           Plain text, no links: legislation databases rot. -->
+      <section v-if="regulation.length" class="legal-refs" aria-label="Legal references">
+        <p class="legal-refs-title">
+          Legal references<template v-if="jurisdiction.length"> ({{ jurisdiction.join(' · ') }})</template>
+        </p>
+        <ul class="legal-refs-list">
+          <li v-for="citation in regulation" :key="citation">{{ citation }}</li>
+        </ul>
+        <p class="legal-refs-disclaimer">{{ LEGAL_DISCLAIMER }}</p>
+      </section>
     </header>
 
     <div class="prose prose-neutral max-w-none mt-8">

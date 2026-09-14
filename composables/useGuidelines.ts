@@ -2,6 +2,8 @@ import type { GuidelineMeta } from '~/utils/labels'
 import { SEVERITY_ORDER, deriveGuidelineId } from '~/utils/labels'
 import { matchesPlatform, platformStatus } from '~/utils/platforms'
 import type { PlatformFilterValue } from '~/utils/platforms'
+import { matchesAudience } from '~/utils/legal'
+import type { AudienceFilterValue } from '~/utils/legal'
 
 // Statuses shown in this build: drafts only on preview deployments (see
 // `showDrafts` in nuxt.config.ts). Deprecated guidelines are never listed.
@@ -19,7 +21,7 @@ export async function useAllGuidelines() {
       .where('status', 'IN', statuses)
       .select(
         'title', 'category', 'dimension', 'severity', 'targets', 'status', 'path', 'stem',
-        'shopware_status', 'shopify_status'
+        'shopware_status', 'shopify_status', 'audience'
       )
       .all()
   )
@@ -36,7 +38,8 @@ export async function useAllGuidelines() {
       // Normalized here so every consumer sees a legal value, even if the
       // frontmatter field is absent (see utils/platforms.ts).
       shopware_status: platformStatus(d, 'shopware'),
-      shopify_status: platformStatus(d, 'shopify')
+      shopify_status: platformStatus(d, 'shopify'),
+      audience: Array.isArray(d.audience) ? d.audience : []
     }))
   )
 }
@@ -49,6 +52,14 @@ export function filterByPlatform(
 ): GuidelineMeta[] {
   if (platform === 'all') return items
   return items.filter((g) => matchesPlatform(g, platform))
+}
+
+// Apply the audience filter. Guidelines without an audience apply to both.
+export function filterByAudience(
+  items: GuidelineMeta[],
+  audience: AudienceFilterValue
+): GuidelineMeta[] {
+  return items.filter((g) => matchesAudience(g.audience, audience))
 }
 
 // Sort by severity (critical first), then id — a stable, useful default order.

@@ -10,7 +10,7 @@ export default defineContentConfig({
       source: 'guidelines/**/*.md',
       schema: z.object({
         id: z.string(),
-        category: z.enum(['pdp', 'cart', 'checkout']),
+        category: z.enum(['plp', 'pdp', 'cart', 'checkout', 'global']),
         dimension: z.string(),
         severity: z.enum(['low', 'medium', 'high', 'critical']),
         targets: z.array(z.enum(['human', 'agent', 'machine'])),
@@ -22,7 +22,14 @@ export default defineContentConfig({
           .default('no_divergence'),
         shopify_status: z
           .enum(['not_applicable', 'no_divergence', 'platform_specific'])
-          .default('no_divergence')
+          .default('no_divergence'),
+        // Legal anchoring — all optional (see CLAUDE.md). `regulation` names the
+        // provisions a guideline relates to; `jurisdiction` is `eu` or a lowercase
+        // ISO country code and is absent when the guideline is not jurisdiction-
+        // bound; `audience` is absent when the guideline applies to B2C and B2B.
+        regulation: z.array(z.string().min(1)).optional(),
+        jurisdiction: z.array(z.string().regex(/^(eu|[a-z]{2})$/)).optional(),
+        audience: z.array(z.enum(['b2c', 'b2b'])).optional()
       })
     })
   }

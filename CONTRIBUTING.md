@@ -25,13 +25,17 @@ submitted as pull requests and merged by the maintainer.
 ---
 id: PDP-DC-STOCK-01
 title: Stock availability is stated in plain language on the PDP
-category: pdp                  # pdp | cart | checkout
+category: pdp                  # plp | pdp | cart | checkout | global
 dimension: decision-clarity    # see dimension list below
 severity: high                 # low | medium | high | critical
 targets: [human, agent]        # subset of [human, agent, machine]
-status: published              # draft | published | deprecated
+status: draft                  # draft | published | deprecated
 shopware_status: no_divergence # not_applicable | no_divergence | platform_specific
 shopify_status: no_divergence  # not_applicable | no_divergence | platform_specific
+# Optional, see "Legal references and audience" below:
+# regulation: ["Dir 2011/83/EU Art. 6(1)(e)"]
+# jurisdiction: [eu]
+# audience: [b2c]
 ---
 
 ## What is being checked
@@ -93,17 +97,55 @@ Write a platform section only when you know the platform's actual default
 behavior. If you are unsure, leave the status at `no_divergence` rather than
 guessing.
 
+### Categories
+
+- `plp` — listings: category pages, collections and search results
+- `pdp` — the product detail page
+- `cart` — the cart page and cart drawer
+- `checkout` — checkout, from the first step to the order confirmation
+- `global` — conditions that hold on every page rather than on one funnel step:
+  site chrome, legal reachability, the consent layer, trust marks, market access
+
 ### Dimensions
 
 `decision-clarity`, `system-robustness`, `semantic-integrity`,
 `machine-extractability`, `trust-decision-enablement`. Propose a new dimension
 only if a guideline genuinely fits none of these.
 
+### Legal references and audience (optional)
+
+Three optional frontmatter fields mark a guideline that rests on a legal
+provision or applies to only one kind of shop:
+
+| Field | Value | Omit when |
+|---|---|---|
+| `regulation` | list of double-quoted citations, e.g. `["Dir 98/6/EC Art. 3(1)", "PAngV §4 (DE)"]` | the guideline rests on testing, not on a provision |
+| `jurisdiction` | `eu` and/or lowercase country codes, e.g. `[eu, de]` | the guideline is not jurisdiction-bound |
+| `audience` | `[b2c]` or `[b2b]` | it applies to consumer and business shops alike (the usual case) |
+
+Rules for citations:
+
+- A citation is a **pointer** to the provision a reviewer should read, never a
+  legal conclusion. The guideline text describes observable properties; it does
+  not tell a merchant what the law requires of them. The site shows every
+  citation with a not-legal-advice notice.
+- List the EU instrument before a national one — this is not a German standard.
+- Use `audience: [b2c]` only where the guideline would be wrong or inapplicable
+  in a business-facing shop, typically because it rests on consumer law. It
+  marks where the guideline applies as written, not where the idea stops being
+  sensible.
+
+**Accessibility guidelines** are filed under the dimension that matches what
+they check, not under a separate one. Because a reader arriving from that
+dimension has no other signal, every accessibility guideline must say in its own
+text that it is an accessibility requirement, name the standard, and name the
+specific success criteria — and carry them in `regulation` as well.
+
 ## ID scheme — picking the next free number
 
 Format: `<CATEGORY>-<DIMENSION-ABBREV>-<TOPIC>-<NN>`, uppercase.
 
-- `CATEGORY`: `PDP`, `CART`, `CHECKOUT`.
+- `CATEGORY`: `PLP`, `PDP`, `CART`, `CHECKOUT`, `GLOBAL`.
 - `DIMENSION-ABBREV`: `DC` (decision-clarity), `SR` (system-robustness),
   `SI` (semantic-integrity), `ME` (machine-extractability),
   `TDE` (trust-decision-enablement). A few older IDs use legacy variants
@@ -127,6 +169,10 @@ A guideline is accepted when it is:
   unwelcome everywhere.
 - **Non-duplicative** — not already covered by an existing guideline.
 - **Complete** — includes concrete failure signals and verification steps.
+- **Reproducible** — two competent auditors following the same steps on the
+  same shop record the same verdict. Needing admin access, a test order, a
+  foreign IP or a screen reader is fine; a step whose outcome depends on the
+  auditor's judgement rather than on the shop is not.
 - **Score-free** — never include any score/points/weighting field. Scoring is
   the maintainer's private tooling and must not appear in this public repo.
 
