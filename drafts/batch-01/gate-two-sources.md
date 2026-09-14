@@ -146,3 +146,12 @@ Checked against: shopware/shopware trunk, latest release v6.7.14.0 (2026-09-09).
   language. (docs.shopware.com/en/shopware-6-en/settings/email-templates)
 - PDP-TDE-REVAUTH-01 (Shopify) — app-provided confirmed (no first-party storefront reviews app found).
 - CART-SR-AVAIL-01 (Shopify) — not confirmable from docs for online store cart -> soften to check.
+
+## Maintainer decisions after gate two
+
+- CHECKOUT-SR-BACK-01 — Shopify set to not_applicable (maintainer decision). The guideline
+  checks returning to earlier checkout steps; Shopify's checkout defaults to a single page.
+  Three-page checkout remains selectable in Shopify, so on a store using it the guideline is
+  still reachable under the unfiltered view.
+- CHECKOUT-DC-SUMMARY-01 — Shopify note kept as is: the collapsed mobile summary in the
+  default one-page checkout is recorded as a limitation of that layout.
