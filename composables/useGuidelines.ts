@@ -2,7 +2,7 @@ import type { GuidelineMeta } from '~/utils/labels'
 import { SEVERITY_ORDER, deriveGuidelineId } from '~/utils/labels'
 import { matchesPlatform, platformStatus } from '~/utils/platforms'
 import type { PlatformFilterValue } from '~/utils/platforms'
-import { matchesAudience } from '~/utils/legal'
+import { instrumentsFor, matchesAudience, matchesRegulation } from '~/utils/legal'
 import type { AudienceFilterValue } from '~/utils/legal'
 
 // Statuses shown in this build: drafts only on preview deployments (see
@@ -21,7 +21,7 @@ export async function useAllGuidelines() {
       .where('status', 'IN', statuses)
       .select(
         'title', 'category', 'dimension', 'severity', 'targets', 'status', 'path', 'stem',
-        'shopware_status', 'shopify_status', 'audience'
+        'shopware_status', 'shopify_status', 'audience', 'regulation'
       )
       .all()
   )
@@ -39,7 +39,8 @@ export async function useAllGuidelines() {
       // frontmatter field is absent (see utils/platforms.ts).
       shopware_status: platformStatus(d, 'shopware'),
       shopify_status: platformStatus(d, 'shopify'),
-      audience: Array.isArray(d.audience) ? d.audience : []
+      audience: Array.isArray(d.audience) ? d.audience : [],
+      instruments: instrumentsFor(Array.isArray(d.regulation) ? d.regulation : [])
     }))
   )
 }
@@ -60,6 +61,11 @@ export function filterByAudience(
   audience: AudienceFilterValue
 ): GuidelineMeta[] {
   return items.filter((g) => matchesAudience(g.audience, audience))
+}
+
+// Apply the regulation filter (an instrument id from utils/regulations.json).
+export function filterByRegulation(items: GuidelineMeta[], regulation: string): GuidelineMeta[] {
+  return items.filter((g) => matchesRegulation(g.instruments, regulation))
 }
 
 // Sort by severity (critical first), then id — a stable, useful default order.

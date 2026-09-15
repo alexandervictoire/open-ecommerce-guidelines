@@ -135,6 +135,13 @@ Rules for citations:
   not tell a merchant what the law requires of them. The site shows every
   citation with a not-legal-advice notice.
 - List the EU instrument before a national one — this is not a German standard.
+- Every citation must belong to an instrument listed in
+  [`utils/regulations.json`](utils/regulations.json), which powers the "Legal
+  reference" filter: the citation has to contain one of the instrument's `match`
+  strings. Citing a directive, law, standard or court decision that is not
+  there yet? Add an entry (or a `match` string; a court decision goes under the
+  instrument it interprets) in the same pull request. `npm run validate` names
+  any citation it cannot place.
 - Use `audience: [b2c]` only where the guideline would be wrong or inapplicable
   in a business-facing shop, typically because it rests on consumer law. It
   marks where the guideline applies as written, not where the idea stops being

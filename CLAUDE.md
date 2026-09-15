@@ -111,6 +111,13 @@ guideline get no page and no navigation entry.
   pointers to the provision a reviewer should read, never legal conclusions;
   the guideline page renders them as plain text with a not-legal-advice notice
   (`LEGAL_DISCLAIMER` in `utils/legal.ts`). EU instruments before national ones.
+  Every citation must belong to an instrument in `utils/regulations.json` (it
+  contains one of the instrument's `match` strings; an amending act can be a
+  second instrument). The validator fails otherwise. A new directive, law,
+  standard or court decision adds an entry or a `match` string there — a court
+  decision goes under the instrument it interprets. The registry drives the
+  "Legal reference" dropdown on category and dimension pages
+  (`?regulation=<instrument id>`), which lists only instruments cited on the page.
 - `jurisdiction` — `eu` and/or lowercase ISO country codes. Absent means the
   guideline is not jurisdiction-bound.
 - `audience` — `[b2c]` or `[b2b]`. Absent means it applies to both, which is the

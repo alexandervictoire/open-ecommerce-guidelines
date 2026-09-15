@@ -59,4 +59,7 @@ export interface GuidelineMeta {
   shopify_status: PlatformStatus
   // Empty (field absent in frontmatter) means the guideline applies to B2C and B2B.
   audience: string[]
+  // Ids of the instruments (utils/regulations.json) the guideline's citations
+  // belong to; empty when it carries no `regulation`.
+  instruments: string[]
 }
