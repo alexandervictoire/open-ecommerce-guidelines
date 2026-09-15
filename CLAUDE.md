@@ -36,6 +36,11 @@ references and audience" below.
 > content also uses `machine` (machine-readability is a first-class concern for
 > this project). The valid set is therefore `[human, agent, machine]`.
 
+> **Release policy (maintainer decision):** publish by default, new guidelines
+> included. Guidelines are released and revised afterwards, so others can review
+> and correct them on the live site. `status: draft` is reserved for a guideline
+> with genuinely large uncertainty.
+
 > **Draft visibility:** `status: draft` guidelines are rendered on Vercel
 > preview deployments only (`VERCEL_ENV=preview`), so a PR can be reviewed as
 > rendered. Every other build — production included — hides them completely:
