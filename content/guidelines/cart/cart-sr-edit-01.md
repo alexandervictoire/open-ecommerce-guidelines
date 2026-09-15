@@ -5,7 +5,7 @@ category: cart
 dimension: system-robustness
 severity: high
 targets: [human, agent]
-status: draft
+status: published
 shopware_status: no_divergence
 shopify_status: no_divergence
 ---

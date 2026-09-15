@@ -5,7 +5,7 @@ category: cart
 dimension: system-robustness
 severity: high
 targets: [human]
-status: draft
+status: published
 shopware_status: no_divergence
 shopify_status: no_divergence
 regulation: ["Dir (EU) 2019/882", "EN 301 549 / WCAG 2.1 AA: 2.1.1, 2.4.7, 4.1.2, 4.1.3"]

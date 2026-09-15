@@ -5,7 +5,7 @@ category: cart
 dimension: machine-extractability
 severity: medium
 targets: [agent, machine]
-status: draft
+status: published
 shopware_status: platform_specific
 shopify_status: platform_specific
 ---

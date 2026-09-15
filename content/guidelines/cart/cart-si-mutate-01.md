@@ -5,7 +5,7 @@ category: cart
 dimension: semantic-integrity
 severity: high
 targets: [human, agent]
-status: draft
+status: published
 audience: [b2c]
 shopware_status: platform_specific
 shopify_status: platform_specific
