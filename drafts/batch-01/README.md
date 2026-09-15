@@ -12,12 +12,13 @@ The history of this directory is the review trail:
    (evidence in `gate-two-sources.md`)
 
 Files move into `content/guidelines/<category>/` in the content PRs, one PR per
-category, and are published as they move (publish by default, see CLAUDE.md).
-A guideline another category's PR cites moves with that PR, so no published
-guideline points at a draft. Already moved:
+category, and go live as they move (see the release policy in CLAUDE.md); one
+with genuinely large uncertainty moves as `status: draft` and is marked on the
+site. A guideline another category's PR cites moves with that PR, so nothing
+live cross-references a file that is still staged here. Already moved:
 
 - `checkout/` (11), plus `CART-DC-TOTALS-01`, which `CHECKOUT-DC-COST-01` cites
 
 `edits/` holds proposed changes to already published guidelines. They go live
-only together with the publication of the draft they refer to — a published
-guideline must not point readers at a draft (see CLAUDE.md).
+together with the staged guidelines they refer to, since until then those do
+not exist on the site.

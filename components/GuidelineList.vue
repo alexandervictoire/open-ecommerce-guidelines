@@ -28,6 +28,7 @@ function notApplicableOn(guideline: GuidelineMeta): string[] {
       <div class="flex items-baseline gap-3 flex-wrap">
         <span class="font-mono text-xs text-faint">{{ g.id }}</span>
         <SeverityBadge :severity="g.severity" />
+        <StatusBadge :status="g.status" />
       </div>
       <h3 class="mt-1 mb-0 text-lg font-medium text-ink">
         <NuxtLink :to="g.path" class="no-underline guideline-row-link group-hover:underline">

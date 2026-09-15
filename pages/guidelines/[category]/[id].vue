@@ -25,8 +25,7 @@ const { data: doc } = await useAsyncData(`guideline-${category}-${id}`, () =>
   queryCollection('guidelines').path(path).first()
 )
 
-// A draft does not exist outside preview builds, even if something links to it.
-if (!doc.value || (doc.value.status === 'draft' && !visibleStatuses().includes('draft'))) {
+if (!doc.value) {
   throw createError({ statusCode: 404, statusMessage: 'Guideline not found', fatal: true })
 }
 
@@ -109,6 +108,7 @@ useHead(() => ({
         articleSection: categoryLabel(category),
         keywords: [dimensionLabel(doc.value?.dimension as string), ...(doc.value?.targets ?? [])].join(', '),
         url: canonical,
+        creativeWorkStatus: doc.value?.status === 'draft' ? 'Draft' : doc.value?.status === 'deprecated' ? 'Deprecated' : 'Published',
         isPartOf: { '@type': 'WebSite', name: SITE_NAME, url: SITE_URL },
         license: 'https://creativecommons.org/licenses/by-sa/4.0/'
       })
@@ -133,10 +133,7 @@ useHead(() => ({
       <div class="flex items-center gap-3 flex-wrap">
         <span class="font-mono text-xs text-faint">{{ gid }}</span>
         <SeverityBadge :severity="doc.severity" />
-        <span
-          v-if="doc.status !== 'published'"
-          class="text-xs uppercase tracking-wide text-faint border border-line rounded-full px-2 py-0.5"
-        >{{ doc.status }}</span>
+        <StatusBadge :status="doc.status" />
       </div>
       <h1 class="mt-3 text-3xl font-semibold tracking-tight leading-tight">{{ doc.title }}</h1>
       <div class="mt-3 flex gap-x-4 gap-y-1 flex-wrap text-sm">
@@ -152,6 +149,14 @@ useHead(() => ({
           Audience: {{ audienceLabels.join(' · ') }} only
         </span>
       </div>
+
+      <!-- Drafts are live so they can be tested and corrected in the open; say
+           what that means for the reader, and where to correct it. -->
+      <p v-if="doc.status === 'draft'" class="draft-note">
+        This guideline is a draft: it is published so it can be tested and corrected
+        in the open, and its checks may still change.
+        <a :href="editUrl">Suggest a change on GitHub</a>
+      </p>
 
       <!-- A guideline carrying a legal reference is a different kind of claim from
            one resting on testing alone; say so, and say it is not legal advice.

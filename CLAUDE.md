@@ -36,18 +36,18 @@ references and audience" below.
 > content also uses `machine` (machine-readability is a first-class concern for
 > this project). The valid set is therefore `[human, agent, machine]`.
 
-> **Release policy (maintainer decision):** publish by default, new guidelines
+> **Release policy (maintainer decision):** everything goes live, new guidelines
 > included. Guidelines are released and revised afterwards, so others can review
-> and correct them on the live site. `status: draft` is reserved for a guideline
-> with genuinely large uncertainty.
+> and correct them on the live site. `status: draft` marks a guideline with
+> genuinely large uncertainty — it does not hold the guideline back.
 
-> **Draft visibility:** `status: draft` guidelines are rendered on Vercel
-> preview deployments only (`VERCEL_ENV=preview`), so a PR can be reviewed as
-> rendered. Every other build — production included — hides them completely:
-> not listed, not in navigation or the sitemap, no detail page. Set
-> `NUXT_PUBLIC_SHOW_DRAFTS=true` to see drafts in a local build. Consequence for
-> editing: a published guideline must not point readers at a draft, because on
-> the live site the draft does not exist.
+> **Status on the site:** `published` and `draft` guidelines are both live in
+> every build: listed, in navigation and the sitemap, with a detail page
+> (`LISTED_STATUSES` in `utils/labels.ts`). A draft carries a "Draft" badge in
+> lists and on its page, a notice that it may still change with a link to edit
+> it, and `creativeWorkStatus: Draft` in its JSON-LD. `deprecated` guidelines
+> keep their page but are not listed. A guideline must only cross-reference
+> guidelines that exist under `content/`.
 
 > **Reserved `id` gotcha:** Nuxt Content v3 reserves the `id` field internally
 > (it stores the file key there), so a guideline's own `id:` frontmatter is

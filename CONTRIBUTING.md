@@ -19,10 +19,10 @@ submitted as pull requests and merged by the maintainer.
   deprecate the old one (`status: deprecated`) and add a new guideline with a new
   ID instead.
 - **Status:** publish by default (`status: published`). The collection gets
-  better through revision after release, and a published guideline is one
-  others can find and correct. Use `status: draft` only when a guideline rests
-  on something genuinely unresolved; a draft appears on preview deployments,
-  never on the live site.
+  better through revision after release, and a live guideline is one others can
+  find and correct. Use `status: draft` when a guideline rests on something
+  genuinely unresolved: it still goes live, marked "Draft" with a notice that it
+  may change.
 
 ## Guideline template (copy-paste)
 

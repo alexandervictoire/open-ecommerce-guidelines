@@ -136,6 +136,22 @@ a {
   z-index: 1;
 }
 
+/* Draft notice under the guideline header: the guideline is live but not
+   settled, and the notice says where to correct it. */
+.draft-note {
+  margin: 1.25rem 0 0;
+  border: 1px dashed #d4d4d4;
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.875rem;
+  color: #5c5c5c;
+}
+
+.draft-note a {
+  color: #1a1a1a;
+  text-underline-offset: 2px;
+}
+
 /* Legal references under the guideline header: quiet, small, clearly separate
    from the guideline text, with the disclaimer directly beneath the citations. */
 .legal-refs {
