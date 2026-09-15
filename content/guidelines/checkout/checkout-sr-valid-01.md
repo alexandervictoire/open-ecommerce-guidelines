@@ -5,7 +5,7 @@ category: checkout
 dimension: system-robustness
 severity: high
 targets: [human]
-status: draft
+status: published
 shopware_status: no_divergence
 shopify_status: platform_specific
 ---

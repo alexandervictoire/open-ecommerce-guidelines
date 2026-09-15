@@ -5,7 +5,7 @@ category: checkout
 dimension: machine-extractability
 severity: medium
 targets: [human, agent, machine]
-status: draft
+status: published
 shopware_status: platform_specific
 shopify_status: platform_specific
 regulation: ["EN 301 549 / WCAG 2.1 AA: 1.3.5"]

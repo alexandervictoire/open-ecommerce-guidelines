@@ -5,7 +5,7 @@ category: checkout
 dimension: decision-clarity
 severity: high
 targets: [human, agent, machine]
-status: draft
+status: published
 audience: [b2c]
 shopware_status: no_divergence
 shopify_status: platform_specific
