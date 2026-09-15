@@ -69,7 +69,7 @@ const isFiltered = computed(
     <p class="mt-2 text-muted">
       {{ filtered.length }} guideline{{ filtered.length === 1 ? '' : 's' }}<template
         v-if="isFiltered"
-      > match the selected filters (of {{ props.items.length }})</template>{{ props.countSuffix ?? '' }}.
+      > match{{ filtered.length === 1 ? 'es' : '' }} the selected filters (of {{ props.items.length }})</template>{{ props.countSuffix ?? '' }}.
     </p>
 
     <div class="mt-6 flex flex-col gap-3">
