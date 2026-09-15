@@ -5,7 +5,7 @@ category: pdp
 dimension: semantic-integrity
 severity: high
 targets: [human, agent, machine]
-status: draft
+status: published
 shopware_status: no_divergence
 shopify_status: platform_specific
 ---
