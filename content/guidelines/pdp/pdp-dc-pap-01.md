@@ -23,9 +23,8 @@ Isolated pricing reduces perceived value and increases price sensitivity. Effect
 - • Single standalone price shown without contextual comparison
 - • No indication of savings, discount, or reference value (if applicable)
 - • No bundle, multi-buy, or tiered pricing visibility (where relevant)
-- • Discount percentage shown without clear original reference price
 - • Pricing advantages hidden below primary decision area
-- • Reference pricing appears misleading or legally unclear
+- • A reference price or savings figure fails `PDP-DC-REF-01`: its basis is not identified, or the stated saving does not follow from the stated reference
 
 ## How to verify
 
@@ -38,3 +37,5 @@ Isolated pricing reduces perceived value and increases price sensitivity. Effect
 ## Recommended fix
 
 Introduce transparent price comparison or value framing elements (e.g., reference pricing, savings display, bundle advantage, tiered pricing) to contextualize the product price and strengthen perceived value.
+
+Whatever is used as a reference must have its basis identified, and any percentage or saving must follow from that reference. `PDP-DC-REF-01` sets out how that is checked.
