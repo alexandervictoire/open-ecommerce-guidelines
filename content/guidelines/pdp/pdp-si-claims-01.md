@@ -12,7 +12,7 @@ shopify_status: no_divergence
 
 ## What is being checked
 
-Checks whether key product claims are supported by concrete evidence such as specifications, certifications, or verifiable references.
+Checks whether key product claims are supported by concrete evidence such as specifications, certifications, or verifiable references. This includes environmental and sustainability claims, such as "eco-friendly", "sustainable" or "climate neutral".
 
 ## Why it matters
 
@@ -24,6 +24,7 @@ Unsupported claims reduce trustworthiness and introduce verification uncertainty
 - Vague or generic marketing statements
 - Evidence exists but is disconnected from the claim
 - Claims contradict structured product data
+- A generic environmental claim ("eco-friendly", "green") with no stated basis
 
 ## How to verify
 
@@ -32,3 +33,5 @@ Unsupported claims reduce trustworthiness and introduce verification uncertainty
 ## Recommended fix
 
 Ensure that all significant product claims are supported by explicit, verifiable evidence presented near the claim.
+
+Environmental claims and sustainability labels anywhere on the site are covered by `GLOBAL-TDE-GREEN-01`.
