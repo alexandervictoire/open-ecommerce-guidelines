@@ -5,7 +5,7 @@ category: global
 dimension: trust-decision-enablement
 severity: high
 targets: [human, agent]
-status: draft
+status: published
 audience: [b2c]
 shopware_status: no_divergence
 shopify_status: no_divergence

@@ -5,7 +5,7 @@ category: global
 dimension: decision-clarity
 severity: high
 targets: [human, agent, machine]
-status: draft
+status: published
 shopware_status: no_divergence
 shopify_status: no_divergence
 ---

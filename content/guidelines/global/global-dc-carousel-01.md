@@ -5,7 +5,7 @@ category: global
 dimension: decision-clarity
 severity: medium
 targets: [human]
-status: draft
+status: published
 shopware_status: platform_specific
 shopify_status: platform_specific
 regulation: ["Dir (EU) 2019/882", "EN 301 549 / WCAG 2.1 AA: 2.2.2, 2.1.1, 4.1.2"]

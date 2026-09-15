@@ -5,7 +5,7 @@ category: global
 dimension: system-robustness
 severity: medium
 targets: [human]
-status: draft
+status: published
 shopware_status: platform_specific
 shopify_status: platform_specific
 regulation: ["Reg (EU) 2018/302 Art. 3, 4, 5"]

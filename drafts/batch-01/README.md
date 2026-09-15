@@ -20,6 +20,7 @@ live cross-references a file that is still staged here. Already moved:
 - `checkout/` (11), plus `CART-DC-TOTALS-01`, which `CHECKOUT-DC-COST-01` cites
 - `plp/` (5), plus `PDP-SI-SURFACE-01`, which `PLP-ME-TILE-01` cites
 - `cart/` (the remaining 6)
+- `global/` (8)
 
 `edits/` holds proposed changes to already published guidelines. They go live
 together with the staged guidelines they refer to, since until then those do
