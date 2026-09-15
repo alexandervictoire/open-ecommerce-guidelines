@@ -5,7 +5,7 @@ category: checkout
 dimension: decision-clarity
 severity: high
 targets: [human]
-status: draft
+status: published
 shopware_status: no_divergence
 shopify_status: platform_specific
 regulation: ["Dir (EU) 2019/882", "EN 301 549 / WCAG 2.1 AA: 3.3.1, 3.3.2, 3.3.3, 1.3.1, 4.1.2"]
