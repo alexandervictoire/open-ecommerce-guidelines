@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import type { GuidelineMeta } from '~/utils/labels'
 import { PLATFORMS, PLATFORM_LABELS, normalizePlatformFilter } from '~/utils/platforms'
-import { AUDIENCES, AUDIENCE_LABELS, normalizeAudienceFilter } from '~/utils/legal'
+import {
+  AUDIENCES,
+  AUDIENCE_LABELS,
+  INSTRUMENTS,
+  instrumentGroupLabel,
+  instrumentLabel,
+  normalizeAudienceFilter,
+  normalizeRegulationFilter
+} from '~/utils/legal'
 
 // The filterable guideline list shared by category and dimension pages: filter
 // chips, a count line, the list, and an empty state.
@@ -13,6 +21,7 @@ const props = defineProps<{
 
 const { platform, setPlatform } = usePlatformFilter()
 const { audience, setAudience } = useAudienceFilter()
+const { regulation, setRegulation } = useRegulationFilter()
 
 const platformOptions = [
   { value: 'all', label: 'All' },
@@ -27,10 +36,32 @@ const audienceOptions = [
 // an audience; otherwise every option would show the same list.
 const hasAudienceRestriction = computed(() => props.items.some((g) => g.audience.length > 0))
 
+// Offer only the instruments cited in this list, grouped EU law, national law,
+// standards, in registry order. A selection from a shared URL stays listed even
+// when nothing here cites it, so it can be seen and reset.
+const regulationGroups = computed(() => {
+  const cited = new Set(props.items.flatMap((g) => g.instruments))
+  if (regulation.value !== 'all') cited.add(regulation.value)
+  const groups: { label: string; options: { value: string; label: string }[] }[] = []
+  for (const instrument of INSTRUMENTS) {
+    if (!cited.has(instrument.id)) continue
+    const label = instrumentGroupLabel(instrument.group)
+    let group = groups.find((g) => g.label === label)
+    if (!group) groups.push((group = { label, options: [] }))
+    group.options.push({ value: instrument.id, label: instrumentLabel(instrument) })
+  }
+  return groups
+})
+
 const filtered = computed(() =>
-  filterByAudience(filterByPlatform(props.items, platform.value), audience.value)
+  filterByRegulation(
+    filterByAudience(filterByPlatform(props.items, platform.value), audience.value),
+    regulation.value
+  )
 )
-const isFiltered = computed(() => platform.value !== 'all' || audience.value !== 'all')
+const isFiltered = computed(
+  () => platform.value !== 'all' || audience.value !== 'all' || regulation.value !== 'all'
+)
 </script>
 
 <template>
@@ -54,6 +85,14 @@ const isFiltered = computed(() => platform.value !== 'all' || audience.value !==
         :options="audienceOptions"
         :model-value="audience"
         @update:model-value="(v) => setAudience(normalizeAudienceFilter(v))"
+      />
+      <FilterSelect
+        v-if="regulationGroups.length"
+        label="Legal reference"
+        all-label="All guidelines"
+        :groups="regulationGroups"
+        :model-value="regulation"
+        @update:model-value="(v) => setRegulation(normalizeRegulationFilter(v))"
       />
     </div>
 

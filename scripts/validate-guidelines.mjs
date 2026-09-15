@@ -7,6 +7,8 @@
 // Checks:
 //   - frontmatter enums are legal (incl. the two platform status fields)
 //   - optional legal fields are well-formed: regulation, jurisdiction, audience
+//   - every citation belongs to an instrument in utils/regulations.json, and the
+//     registry itself is well-formed
 //   - id matches the filename (filename = lowercased id, by contract), and the
 //     file sits in the directory named by its category
 //   - the five core H2 sections exist, in order, non-empty
@@ -53,6 +55,15 @@ const DEFAULT_PLATFORM_STATUS = 'no_divergence'
 // Legal anchoring (all optional; see CLAUDE.md).
 const AUDIENCES = ['b2c', 'b2b']
 const JURISDICTION_PATTERN = /^(eu|[a-z]{2})$/
+
+// Instrument registry behind the regulation filter, shared with utils/legal.ts.
+const REGULATIONS_FILE = join(REPO_ROOT, 'utils', 'regulations.json')
+const INSTRUMENT_ID_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/
+const INSTRUMENT_GROUP_PATTERN = /^(eu|standard|[a-z]{2})$/
+
+// Keep in sync with instrumentsFor() in utils/legal.ts.
+const instrumentsFor = (registry, citation) =>
+  registry.filter((i) => i.match.some((m) => citation.includes(m))).map((i) => i.id)
 
 const sectionHeading = (p) => `${PLATFORM_LABELS[p]} specific`
 
@@ -126,7 +137,36 @@ function parseSections(body) {
   return sections
 }
 
-function validateFile(file) {
+// The registry is data the site renders, so a broken entry fails the build too.
+function loadRegistry() {
+  const rel = relative(REPO_ROOT, REGULATIONS_FILE)
+  let registry
+  try {
+    registry = JSON.parse(readFileSync(REGULATIONS_FILE, 'utf8'))
+  } catch (error) {
+    return { registry: [], failures: [{ file: rel, errors: [`cannot read registry: ${error.message}`] }] }
+  }
+  if (!Array.isArray(registry)) return { registry: [], failures: [{ file: rel, errors: ['registry must be a JSON array'] }] }
+
+  const errors = []
+  const seen = new Set()
+  registry.forEach((entry, index) => {
+    const at = `entry ${index + 1}${entry?.id ? ` ("${entry.id}")` : ''}`
+    if (!INSTRUMENT_ID_PATTERN.test(entry?.id ?? '')) errors.push(`${at}: \`id\` must be kebab-case`)
+    else if (seen.has(entry.id)) errors.push(`${at}: duplicate id`)
+    else seen.add(entry.id)
+    for (const field of ['label', 'reference']) {
+      if (typeof entry?.[field] !== 'string' || !entry[field].trim()) errors.push(`${at}: missing \`${field}\``)
+    }
+    if (!INSTRUMENT_GROUP_PATTERN.test(entry?.group ?? '')) errors.push(`${at}: \`group\` must be "eu", "standard" or a lowercase country code`)
+    if (!Array.isArray(entry?.match) || entry.match.length === 0 || entry.match.some((m) => typeof m !== 'string' || !m.trim())) {
+      errors.push(`${at}: \`match\` must be a non-empty list of non-empty strings`)
+    }
+  })
+  return { registry: errors.length ? [] : registry, failures: errors.length ? [{ file: rel, errors }] : [] }
+}
+
+function validateFile(file, registry) {
   const errors = []
   const rel = relative(REPO_ROOT, file)
   const text = readFileSync(file, 'utf8')
@@ -166,6 +206,13 @@ function validateFile(file) {
     const regulation = parseQuotedList(fm.regulation)
     if (!regulation) errors.push('`regulation` must be a list of double-quoted strings, e.g. ["Dir 2011/83/EU Art. 8(2)"]')
     else if (regulation.length === 0 || regulation.some((r) => !r.trim())) errors.push('`regulation` must not be empty or contain empty entries')
+    else if (registry.length) {
+      for (const citation of regulation) {
+        if (instrumentsFor(registry, citation).length === 0) {
+          errors.push(`citation "${citation}" belongs to no instrument in utils/regulations.json (add the instrument, or a \`match\` string to an existing one)`)
+        }
+      }
+    }
   }
   if (fm.jurisdiction !== undefined) {
     const jurisdiction = parseList(fm.jurisdiction)
@@ -246,7 +293,8 @@ function main() {
     process.exit(1)
   }
 
-  const failures = files.flatMap(validateFile)
+  const { registry, failures: registryFailures } = loadRegistry()
+  const failures = [...registryFailures, ...files.flatMap((file) => validateFile(file, registry))]
 
   if (failures.length === 0) {
     console.log(`✔ ${files.length} guidelines valid.`)

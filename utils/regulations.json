@@ -1,0 +1,93 @@
+[
+  {
+    "id": "consumer-rights",
+    "label": "Consumer Rights Directive",
+    "reference": "Dir 2011/83/EU",
+    "group": "eu",
+    "match": ["Dir 2011/83/EU"]
+  },
+  {
+    "id": "unfair-commercial-practices",
+    "label": "Unfair Commercial Practices Directive",
+    "reference": "Dir 2005/29/EC",
+    "group": "eu",
+    "match": ["Dir 2005/29/EC"]
+  },
+  {
+    "id": "green-transition",
+    "label": "Empowering Consumers for the Green Transition Directive",
+    "reference": "Dir (EU) 2024/825",
+    "group": "eu",
+    "match": ["Dir (EU) 2024/825"]
+  },
+  {
+    "id": "guarantee-notice",
+    "label": "Harmonised guarantee notice and label",
+    "reference": "Implementing Reg (EU) 2025/1960",
+    "group": "eu",
+    "match": ["Implementing Reg (EU) 2025/1960"]
+  },
+  {
+    "id": "price-indication",
+    "label": "Price Indication Directive",
+    "reference": "Dir 98/6/EC",
+    "group": "eu",
+    "match": ["Dir 98/6/EC", "CJEU C-330/23"]
+  },
+  {
+    "id": "e-commerce",
+    "label": "E-Commerce Directive",
+    "reference": "Dir 2000/31/EC",
+    "group": "eu",
+    "match": ["Dir 2000/31/EC"]
+  },
+  {
+    "id": "accessibility-act",
+    "label": "European Accessibility Act",
+    "reference": "Dir (EU) 2019/882",
+    "group": "eu",
+    "match": ["Dir (EU) 2019/882"]
+  },
+  {
+    "id": "gdpr",
+    "label": "General Data Protection Regulation",
+    "reference": "Reg (EU) 2016/679",
+    "group": "eu",
+    "match": ["Reg (EU) 2016/679"]
+  },
+  {
+    "id": "geo-blocking",
+    "label": "Geo-blocking Regulation",
+    "reference": "Reg (EU) 2018/302",
+    "group": "eu",
+    "match": ["Reg (EU) 2018/302"]
+  },
+  {
+    "id": "bgb",
+    "label": "Bürgerliches Gesetzbuch",
+    "reference": "BGB",
+    "group": "de",
+    "match": ["BGB §", "BGH I ZR 159/24"]
+  },
+  {
+    "id": "pangv",
+    "label": "Preisangabenverordnung",
+    "reference": "PAngV",
+    "group": "de",
+    "match": ["PAngV §"]
+  },
+  {
+    "id": "ddg",
+    "label": "Digitale-Dienste-Gesetz",
+    "reference": "DDG",
+    "group": "de",
+    "match": ["DDG §"]
+  },
+  {
+    "id": "en-301-549",
+    "label": "Accessibility requirements for ICT products and services",
+    "reference": "EN 301 549",
+    "group": "standard",
+    "match": ["EN 301 549"]
+  }
+]

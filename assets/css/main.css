@@ -82,6 +82,42 @@ a {
   outline-offset: 2px;
 }
 
+/* Filter dropdown (legal reference): the chip look, with a chevron. An active
+   selection gets the same bold outline as a selected chip. */
+.filter-select {
+  appearance: none;
+  min-width: 0;
+  max-width: 100%;
+  border: 1px solid #e5e5e5;
+  border-radius: 9999px;
+  padding: 0.25rem 2rem 0.25rem 0.85rem;
+  font: inherit;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #5c5c5c;
+  background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%235c5c5c' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 0.8rem center / 0.65rem;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.filter-select:hover {
+  border-color: #1a1a1a;
+  color: #1a1a1a;
+}
+
+.filter-select[data-active='true'] {
+  border-color: #1a1a1a;
+  color: #1a1a1a;
+  font-weight: 600;
+  box-shadow: inset 0 0 0 1px #1a1a1a;
+}
+
+.filter-select:focus-visible {
+  outline: 2px solid #1a1a1a;
+  outline-offset: 2px;
+}
+
 /* Guideline list rows: the title link covers the whole row, while the nested
    metadata links stay clickable on top of it. Keeps the large click target
    without putting an <a> inside an <a>. */
