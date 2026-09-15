@@ -5,7 +5,7 @@ category: plp
 dimension: machine-extractability
 severity: high
 targets: [agent, machine]
-status: draft
+status: published
 shopware_status: platform_specific
 shopify_status: platform_specific
 ---

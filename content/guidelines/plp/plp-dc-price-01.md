@@ -5,7 +5,7 @@ category: plp
 dimension: decision-clarity
 severity: high
 targets: [human, agent, machine]
-status: draft
+status: published
 audience: [b2c]
 shopware_status: platform_specific
 shopify_status: platform_specific
