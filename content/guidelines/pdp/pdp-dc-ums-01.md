@@ -35,6 +35,7 @@ Absence of momentum signals reduces purchase immediacy and increases postponemen
 4. Check for popularity indicators (e.g., bestseller label, review volume, demand signals).
 5. Evaluate whether urgency messaging is factual and not artificially inflated.
 6. Assess whether signals reinforce decision timing rather than distract.
+7. Apply the same failure signals to every other surface that shows urgency, such as listing tiles, the cart and the checkout: this guideline is scoped to the product page, the practice is not.
 
 ## Recommended fix
 
