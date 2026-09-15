@@ -22,6 +22,12 @@ export const DIMENSION_LABELS: Record<string, string> = {
   'trust-decision-enablement': 'Trust & Decision Enablement'
 }
 
+// Statuses listed on the site (lists, navigation, sitemap). Drafts are live and
+// carry a badge, so they can be tested and corrected in the open. Deprecated
+// guidelines keep their page but are not listed. Keep in sync with
+// listRoutes() in nuxt.config.ts.
+export const LISTED_STATUSES = ['published', 'draft']
+
 export const SEVERITY_ORDER: Record<string, number> = {
   critical: 0,
   high: 1,

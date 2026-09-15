@@ -1,10 +1,10 @@
 import { SITE_URL } from '~/utils/site'
-import { CATEGORY_LABELS, DIMENSION_LABELS } from '~/utils/labels'
+import { CATEGORY_LABELS, DIMENSION_LABELS, LISTED_STATUSES } from '~/utils/labels'
 
 // Static sitemap generated at prerender time from the guidelines collection.
 export default defineEventHandler(async (event) => {
   const docs = await queryCollection(event, 'guidelines')
-    .where('status', '=', 'published')
+    .where('status', 'IN', LISTED_STATUSES)
     .select('path', 'category', 'dimension')
     .all()
 
