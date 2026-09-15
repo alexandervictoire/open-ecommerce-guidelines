@@ -5,7 +5,7 @@ category: global
 dimension: trust-decision-enablement
 severity: high
 targets: [human, agent, machine]
-status: draft
+status: published
 shopware_status: platform_specific
 shopify_status: platform_specific
 regulation: ["Dir 2000/31/EC Art. 5", "Dir 2011/83/EU Art. 6(1)(b),(c)", "DDG §5 (DE)", "BGB §312k (DE)"]

@@ -5,7 +5,7 @@ category: global
 dimension: trust-decision-enablement
 severity: medium
 targets: [human, agent]
-status: draft
+status: published
 shopware_status: no_divergence
 shopify_status: no_divergence
 ---
