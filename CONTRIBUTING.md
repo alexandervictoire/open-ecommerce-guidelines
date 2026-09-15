@@ -18,6 +18,11 @@ submitted as pull requests and merged by the maintainer.
   published guideline's `id`. If your change alters what the guideline *means*,
   deprecate the old one (`status: deprecated`) and add a new guideline with a new
   ID instead.
+- **Status:** publish by default (`status: published`). The collection gets
+  better through revision after release, and a published guideline is one
+  others can find and correct. Use `status: draft` only when a guideline rests
+  on something genuinely unresolved; a draft appears on preview deployments,
+  never on the live site.
 
 ## Guideline template (copy-paste)
 
@@ -29,7 +34,7 @@ category: pdp                  # plp | pdp | cart | checkout | global
 dimension: decision-clarity    # see dimension list below
 severity: high                 # low | medium | high | critical
 targets: [human, agent]        # subset of [human, agent, machine]
-status: draft                  # draft | published | deprecated
+status: published              # draft | published | deprecated
 shopware_status: no_divergence # not_applicable | no_divergence | platform_specific
 shopify_status: no_divergence  # not_applicable | no_divergence | platform_specific
 # Optional, see "Legal references and audience" below:
