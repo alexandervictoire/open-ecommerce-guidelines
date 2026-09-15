@@ -5,7 +5,7 @@ category: cart
 dimension: decision-clarity
 severity: high
 targets: [human, agent, machine]
-status: draft
+status: published
 shopware_status: platform_specific
 shopify_status: platform_specific
 regulation: ["Dir 2011/83/EU Art. 6(1)(e)"]
