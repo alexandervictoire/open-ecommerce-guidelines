@@ -46,8 +46,10 @@ references and audience" below.
 > (`LISTED_STATUSES` in `utils/labels.ts`). A draft carries a "Draft" badge in
 > lists and on its page, a notice that it may still change with a link to edit
 > it, and `creativeWorkStatus: Draft` in its JSON-LD. `deprecated` guidelines
-> keep their page but are not listed. A guideline must only cross-reference
-> guidelines that exist under `content/`.
+> are not listed, and since detail pages are prerendered by following links,
+> their page is not generated either: the URL returns 404. The file stays so the
+> ID remains reserved. A guideline must only cross-reference guidelines that
+> exist under `content/` and are not deprecated.
 
 > **Reserved `id` gotcha:** Nuxt Content v3 reserves the `id` field internally
 > (it stores the file key there), so a guideline's own `id:` frontmatter is
