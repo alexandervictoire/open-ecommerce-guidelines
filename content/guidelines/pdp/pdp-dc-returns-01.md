@@ -35,4 +35,4 @@ Absent return information elevates commitment risk and reduces purchase confiden
 
 Provide clear and consistent return information on the PDP that is accessible before purchase commitment. State the statutory withdrawal right as such, and describe a voluntary policy as what it adds on top.
 
-The legal guarantee of conformity is a separate statutory right with its own prescribed notice, covered by `PDP-TDE-GUAR-01`.
+The legal guarantee of conformity is a separate statutory right with its own prescribed notice, covered by `GLOBAL-TDE-GUARANT-01`.
