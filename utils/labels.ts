@@ -24,8 +24,9 @@ export const DIMENSION_LABELS: Record<string, string> = {
 
 // Statuses listed on the site (lists, navigation, sitemap). Drafts are live and
 // carry a badge, so they can be tested and corrected in the open. Deprecated
-// guidelines keep their page but are not listed. Keep in sync with
-// listRoutes() in nuxt.config.ts.
+// guidelines are not listed, and because detail pages are prerendered by
+// following links, their page is not generated either (the URL returns 404).
+// Keep in sync with listRoutes() in nuxt.config.ts.
 export const LISTED_STATUSES = ['published', 'draft']
 
 export const SEVERITY_ORDER: Record<string, number> = {
