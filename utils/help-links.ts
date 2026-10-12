@@ -1,0 +1,42 @@
+// "Need help implementing this?" — the one commercial pointer on the site.
+//
+// The guidelines have to read as neutral documentation, so this is a single
+// quiet box per page, no call to action in the guideline text itself, and one
+// target page per category at most.
+//
+// `enabled` is a manual switch, and it exists for one reason: a link must never
+// point at a page that does not exist. Turn an entry on only after opening the
+// URL and seeing the page, and turn it off again if the target is retired. The
+// build does not check this — it would make builds depend on a third-party site.
+//
+// Targets verified live on 2026-10-12.
+
+import { MAINTAINER_BRAND } from '~/utils/site'
+
+export interface HelpLink {
+  enabled: boolean
+  url: string
+  // Shown as the link text. Says where the reader lands, not what to buy.
+  label: string
+}
+
+const REVENUE: HelpLink = {
+  enabled: true,
+  url: 'https://semanticperformance.com/revenue/',
+  label: `How ${MAINTAINER_BRAND} works on this`
+}
+
+// Per category, so a category can get its own target later without touching
+// the components.
+export const HELP_LINKS: Record<string, HelpLink> = {
+  plp: REVENUE,
+  pdp: REVENUE,
+  cart: REVENUE,
+  checkout: REVENUE,
+  global: REVENUE
+}
+
+export function helpLinkFor(category: string): HelpLink | null {
+  const link = HELP_LINKS[category]
+  return link?.enabled ? link : null
+}

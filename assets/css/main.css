@@ -311,3 +311,29 @@ a {
 .prose :not(pre) > code::after {
   content: none;
 }
+
+/* "Need help implementing this?" — the one commercial pointer on the site, so
+   it stays quiet: a thin rule, muted text, no button, no colour accent. */
+.help-box {
+  border-top: 1px solid #e5e5e5;
+  padding-top: 0.9rem;
+  font-size: 0.875rem;
+}
+
+.help-box-title {
+  margin: 0;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.help-box-text {
+  margin: 0.25rem 0 0;
+  color: #5c5c5c;
+  line-height: 1.6;
+}
+
+.help-box-link {
+  color: #1a1a1a;
+  white-space: nowrap;
+  text-underline-offset: 2px;
+}
