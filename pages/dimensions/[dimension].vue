@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DIMENSION_LABELS, dimensionLabel } from '~/utils/labels'
-import { SITE_NAME } from '~/utils/site'
+import { SITE_NAME, canonicalUrl } from '~/utils/site'
 
 const route = useRoute()
 const dimension = computed(() => String(route.params.dimension))
@@ -17,6 +17,10 @@ useSeoMeta({
   title: () => `${label.value} — ${SITE_NAME}`,
   description: () => `Guidelines in the ${label.value} dimension, across all e-commerce page types.`
 })
+
+useHead(() => ({
+  link: [{ rel: 'canonical', href: canonicalUrl(`/dimensions/${dimension.value}/`) }]
+}))
 </script>
 
 <template>

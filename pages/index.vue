@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { CATEGORY_ORDER, categoryLabel, dimensionLabel } from '~/utils/labels'
-import { SITE_NAME, SITE_DESCRIPTION, githubBlobUrl } from '~/utils/site'
+import { SITE_NAME, SITE_DESCRIPTION, canonicalUrl, githubBlobUrl } from '~/utils/site'
 
 const guidelines = await useAllGuidelines()
 
@@ -29,6 +29,8 @@ useSeoMeta({
   ogDescription: SITE_DESCRIPTION,
   ogType: 'website'
 })
+
+useHead({ link: [{ rel: 'canonical', href: canonicalUrl('/') }] })
 </script>
 
 <template>
