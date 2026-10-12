@@ -35,5 +35,7 @@ useHead(() => ({
     <h1 class="text-3xl font-semibold tracking-tight">{{ label }} guidelines</h1>
 
     <FilteredGuidelines :items="inCategory" scope="category" />
+
+    <HelpBox class="mt-12" :category="category" />
   </div>
 </template>

@@ -214,6 +214,8 @@ useHead(() => ({
       </div>
     </section>
 
+    <HelpBox class="mt-10" :category="category" />
+
     <div class="mt-10 pt-6 border-t border-line text-sm">
       <a :href="editUrl" class="no-underline text-muted hover:text-ink">Edit this page on GitHub →</a>
     </div>
