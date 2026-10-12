@@ -9,7 +9,15 @@ import {
 } from '~/utils/platforms'
 import type { Platform } from '~/utils/platforms'
 import { AUDIENCE_LABELS, LEGAL_DISCLAIMER, jurisdictionLabel } from '~/utils/legal'
-import { SITE_NAME, SITE_URL, canonicalUrl, githubEditUrl, withTrailingSlash } from '~/utils/site'
+import {
+  MAINTAINER_NAME,
+  MAINTAINER_URL,
+  SITE_NAME,
+  SITE_URL,
+  canonicalUrl,
+  githubEditUrl,
+  withTrailingSlash
+} from '~/utils/site'
 
 const route = useRoute()
 const category = String(route.params.category)
@@ -111,7 +119,13 @@ useHead(() => ({
         keywords: [dimensionLabel(doc.value?.dimension as string), ...(doc.value?.targets ?? [])].join(', '),
         url: canonical,
         creativeWorkStatus: doc.value?.status === 'draft' ? 'Draft' : doc.value?.status === 'deprecated' ? 'Deprecated' : 'Published',
-        isPartOf: { '@type': 'WebSite', name: SITE_NAME, url: SITE_URL },
+        publisher: { '@type': 'Person', name: MAINTAINER_NAME, url: MAINTAINER_URL },
+        isPartOf: {
+          '@type': 'WebSite',
+          name: SITE_NAME,
+          url: SITE_URL,
+          publisher: { '@type': 'Person', name: MAINTAINER_NAME, url: MAINTAINER_URL }
+        },
         license: 'https://creativecommons.org/licenses/by-sa/4.0/'
       })
     }
