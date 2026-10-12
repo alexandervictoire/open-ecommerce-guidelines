@@ -51,6 +51,15 @@ references and audience" below.
 > ID remains reserved. A guideline must only cross-reference guidelines that
 > exist under `content/` and are not deprecated.
 
+> **URL convention:** every page URL ends with a trailing slash, which
+> `vercel.json` enforces (`trailingSlash: true`): a request without it gets a
+> 308 to the slashed URL. Canonicals, the sitemap and internal links must use
+> that form, so links and sitemap entries never point at a redirect. Nuxt
+> Content stores document paths without the slash — query the collection with
+> the raw path and render URLs through `withTrailingSlash()` /
+> `canonicalUrl()` in `utils/site.ts`. Markdown links between guidelines carry
+> the slash too.
+
 > **Reserved `id` gotcha:** Nuxt Content v3 reserves the `id` field internally
 > (it stores the file key there), so a guideline's own `id:` frontmatter is
 > **not queryable** — `doc.id` returns the internal path. Keep `id:` in the
