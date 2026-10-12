@@ -16,6 +16,12 @@ export const GITHUB_BRANCH = 'main'
 // https://ecommerce-guidelines.org.
 export const SITE_URL = 'https://www.ecommerce-guidelines.org'
 
+// The person who maintains the collection. Used in the footer, on the about and
+// legal pages, and as the publisher in JSON-LD. Spell the name exactly like this.
+export const MAINTAINER_NAME = 'Alexander Julian Victor'
+export const MAINTAINER_URL = 'https://semanticperformance.com/'
+export const MAINTAINER_BRAND = 'Semantic Performance'
+
 export function githubBlobUrl(pathInRepo: string): string {
   return `https://github.com/${GITHUB_REPO}/blob/${GITHUB_BRANCH}/${pathInRepo}`
 }
