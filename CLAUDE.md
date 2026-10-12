@@ -179,6 +179,52 @@ The `id` is **immutable once published**. The filename is the lowercased id
 > `PDP-MI-ID-01`, `PDP-SR-VARIANT-01` and `PDP-SI-SURFACE-01` — and the converter
 > refuses it. Do not reuse the ID.
 
+## Machine-readable export (`/guidelines.json`)
+
+`server/routes/guidelines.json.ts` is prerendered into a static
+`/guidelines.json` so other sites can list and link guidelines without copying
+them. It carries metadata only, never the body.
+
+```jsonc
+{
+  "schemaVersion": 1,          // bump only on a breaking change
+  "name": "Open E-Commerce Guidelines",
+  "url": "https://www.ecommerce-guidelines.org/",
+  "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+  "generatedAt": "2026-10-12T...Z",
+  "count": 82,
+  "guidelines": [
+    {
+      "id": "CART-DC-CODE-01",
+      "title": "...",
+      "description": "...",   // first 1-2 sentences of "What is being checked"
+      "category": "cart",       // plp | pdp | cart | checkout | global
+      "dimension": "decision-clarity",
+      "severity": "medium",     // low | medium | high | critical
+      "status": "published",    // published | draft
+      "url": "https://www.ecommerce-guidelines.org/guidelines/cart/cart-dc-code-01/",
+      "updatedAt": "2026-09-15T20:43:09+02:00"
+    }
+  ]
+}
+```
+
+This is a public contract: fields may be **added**, never renamed or removed
+without bumping `schemaVersion`. Entries are sorted by `id`; deprecated
+guidelines are left out (`LISTED_STATUSES`); `url` is canonical, with the
+trailing slash. `updatedAt` is the last commit touching the guideline's file,
+read from git at build time, falling back to the file timestamp where the build
+has no history for it.
+
+## Linking to the maintainer's own site
+
+`utils/help-links.ts` maps a category to one page on semanticperformance.com for
+the "Need help implementing this?" box (`components/HelpBox.vue`), rendered once
+per category page and once per guideline page. Each entry carries `enabled`,
+which is a manual switch: turn it on only after opening the target and seeing
+the page, so the site never links to a 404. The guidelines themselves stay free
+of commercial wording — the box is the single pointer, and it stays quiet.
+
 ## Score policy (do not violate)
 
 "Max Score" belongs to the maintainer's private audit/scoring system and MUST
