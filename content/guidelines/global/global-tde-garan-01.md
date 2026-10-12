@@ -35,7 +35,7 @@ Most products in a typical shop have no such guarantee, so most products will ne
 - A shop selling products such as appliances, tools, electronics or furniture where producers already advertise multi-year guarantees: the label on exactly those products.
 - A shop offering its own warranty or a paid extended warranty: nothing under this guideline. Those warranties must never use the GARAN label.
 
-Independently of this guideline, every B2C shop must show the legal guarantee notice. That is covered in [GLOBAL-TDE-GUARANT-01](/guidelines/global/global-tde-guarant-01).
+Independently of this guideline, every B2C shop must show the legal guarantee notice. That is covered in [GLOBAL-TDE-GUARANT-01](/guidelines/global/global-tde-guarant-01/).
 
 ## Why it matters
 

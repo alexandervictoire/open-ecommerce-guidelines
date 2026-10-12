@@ -22,7 +22,7 @@ Every shop that sells goods to consumers must show one standard graphic, the sam
 
 This is a prescribed notice, not a free-text statement. A shop that writes its own sentence about statutory rights does not satisfy it.
 
-Whether individual products additionally need the GARAN label is a separate question with a separate answer. It applies only to products with a qualifying producer guarantee and is covered in [GLOBAL-TDE-GARAN-01](/guidelines/global/global-tde-garan-01).
+Whether individual products additionally need the GARAN label is a separate question with a separate answer. It applies only to products with a qualifying producer guarantee and is covered in [GLOBAL-TDE-GARAN-01](/guidelines/global/global-tde-garan-01/).
 
 ## Why it matters
 
@@ -60,4 +60,4 @@ Download the official notice in the shop's language from the European Commission
 
 Render the notice from a single shared component, so it can be changed in one place and never drifts between pages. Where the shop offers its own warranty, render it through a separate component that states plainly that it does not affect the legal guarantee.
 
-If products in the range carry a producer durability guarantee, continue with [GLOBAL-TDE-GARAN-01](/guidelines/global/global-tde-garan-01).
+If products in the range carry a producer durability guarantee, continue with [GLOBAL-TDE-GARAN-01](/guidelines/global/global-tde-garan-01/).
