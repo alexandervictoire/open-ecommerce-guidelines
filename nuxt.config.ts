@@ -81,7 +81,7 @@ export default defineNuxtConfig({
       // Never ship a silently skipped route again — a failing page must break
       // the build with its real error instead of becoming a 404 in production.
       failOnError: true,
-      routes: ['/', '/sitemap.xml', ...listRoutes()]
+      routes: ['/', '/sitemap.xml', '/guidelines.json', ...listRoutes()]
     }
   },
   app: {
