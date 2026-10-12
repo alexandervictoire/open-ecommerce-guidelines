@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { CATEGORY_LABELS, categoryLabel } from '~/utils/labels'
-import { SITE_NAME } from '~/utils/site'
+import { SITE_NAME, canonicalUrl } from '~/utils/site'
 
 const route = useRoute()
 const category = computed(() => String(route.params.category))
@@ -18,6 +18,10 @@ useSeoMeta({
   title: () => `${label.value} guidelines — ${SITE_NAME}`,
   description: () => `E-commerce guidelines for the ${label.value.toLowerCase()}: testable, platform-aware checks across UX and machine-readability.`
 })
+
+useHead(() => ({
+  link: [{ rel: 'canonical', href: canonicalUrl(`/guidelines/${category.value}/`) }]
+}))
 </script>
 
 <template>
