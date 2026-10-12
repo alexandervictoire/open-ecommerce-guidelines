@@ -213,8 +213,10 @@ This is a public contract: fields may be **added**, never renamed or removed
 without bumping `schemaVersion`. Entries are sorted by `id`; deprecated
 guidelines are left out (`LISTED_STATUSES`); `url` is canonical, with the
 trailing slash. `updatedAt` is the last commit touching the guideline's file,
-read from git at build time, falling back to the file timestamp where the build
-has no history for it.
+read from git at build time. Vercel clones shallowly, which leaves most files
+without history and collapses the dates onto the build day, so `buildCommand`
+in `vercel.json` runs `git fetch --unshallow` first. Where history is still
+missing, the file timestamp is used.
 
 ## Linking to the maintainer's own site
 
