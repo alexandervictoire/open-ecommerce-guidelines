@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { CATEGORY_ORDER, categoryLabel } from '~/utils/labels'
-import { githubBlobUrl } from '~/utils/site'
+import { MAINTAINER_BRAND, MAINTAINER_NAME, MAINTAINER_URL, githubBlobUrl } from '~/utils/site'
 
 // Only surface categories that actually have published guidelines, so the nav
 // never links to an empty category page (e.g. checkout before it has content).
@@ -81,12 +81,27 @@ useHead({
     </main>
 
     <footer class="border-t border-line mt-16">
-      <div class="container-wide py-8 text-sm text-faint flex flex-wrap gap-x-6 gap-y-2 justify-between">
-        <span>Content: CC BY-SA 4.0 · Code: MIT</span>
-        <a
-          class="no-underline hover:text-ink"
-          :href="githubBlobUrl('CONTRIBUTING.md')"
-        >Contribute a guideline</a>
+      <div class="container-wide py-8 text-sm text-faint flex flex-col gap-3">
+        <div class="flex flex-wrap gap-x-6 gap-y-2 justify-between">
+          <nav class="flex flex-wrap gap-x-6 gap-y-2" aria-label="Site information">
+            <NuxtLink to="/about/" class="no-underline hover:text-ink">About</NuxtLink>
+            <NuxtLink to="/legal-notice/" class="no-underline hover:text-ink">Legal notice</NuxtLink>
+            <NuxtLink to="/privacy/" class="no-underline hover:text-ink">Privacy</NuxtLink>
+          </nav>
+          <a
+            class="no-underline hover:text-ink"
+            :href="githubBlobUrl('CONTRIBUTING.md')"
+          >Contribute a guideline</a>
+        </div>
+        <div class="flex flex-wrap gap-x-6 gap-y-2 justify-between">
+          <span>
+            Maintained by
+            <a :href="MAINTAINER_URL" class="no-underline hover:text-ink">
+              {{ MAINTAINER_NAME }} · {{ MAINTAINER_BRAND }}
+            </a>
+          </span>
+          <span>Content: CC BY-SA 4.0 · Code: MIT</span>
+        </div>
       </div>
     </footer>
   </div>
