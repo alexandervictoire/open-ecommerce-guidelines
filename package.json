@@ -9,6 +9,7 @@
     "generate": "npm run validate && nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
+    "dates": "node scripts/guideline-dates.mjs",
     "validate": "node scripts/validate-guidelines.mjs",
     "convert": "node scripts/convert-notion.mjs"
   },

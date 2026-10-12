@@ -16,10 +16,13 @@
 //       platform_specific  => the matching section MUST exist
 //       otherwise          => the section MUST NOT exist
 //   - no score-like field anywhere (score policy, PLAN §4)
+//   - every guideline has an entry in guideline-dates.json (see
+//     scripts/guideline-dates.mjs); a stale entry is reported as a warning
 //
 // Usage: node scripts/validate-guidelines.mjs
 
 import { readdirSync, readFileSync, statSync } from 'node:fs'
+import { gitDate, readDates } from './guideline-dates.mjs'
 import { join, dirname, resolve, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -286,6 +289,37 @@ function validateFile(file, registry) {
   return errors.length ? [{ file: rel, errors }] : []
 }
 
+// guideline-dates.json feeds `updatedAt` in /guidelines.json. A missing entry
+// breaks the export, so it fails; a stale one only means the date is behind,
+// so it warns. Staleness can only be judged where git has the history.
+function validateDates(files) {
+  const dates = readDates()
+  const failures = []
+  const stale = []
+
+  for (const file of files) {
+    const rel = relative(REPO_ROOT, file)
+    const id = file.split('/').pop().replace(/\.md$/, '').toUpperCase()
+    if (!dates[id]) {
+      failures.push(`no entry for ${id} (${rel})`)
+      continue
+    }
+    const committed = gitDate(rel)
+    if (committed && committed !== dates[id]) stale.push(id)
+  }
+
+  if (stale.length) {
+    console.warn(
+      `! guideline-dates.json is behind for ${stale.length} guideline(s): ${stale.slice(0, 5).join(', ')}` +
+        `${stale.length > 5 ? ', …' : ''} — run \`npm run dates\`\n`
+    )
+  }
+
+  return failures.length
+    ? [{ file: 'guideline-dates.json', errors: [...failures, 'run `npm run dates`'] }]
+    : []
+}
+
 function main() {
   const files = walk(CONTENT_ROOT).sort()
   if (files.length === 0) {
@@ -294,7 +328,11 @@ function main() {
   }
 
   const { registry, failures: registryFailures } = loadRegistry()
-  const failures = [...registryFailures, ...files.flatMap((file) => validateFile(file, registry))]
+  const failures = [
+    ...registryFailures,
+    ...files.flatMap((file) => validateFile(file, registry)),
+    ...validateDates(files)
+  ]
 
   if (failures.length === 0) {
     console.log(`✔ ${files.length} guidelines valid.`)
