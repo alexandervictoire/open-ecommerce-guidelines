@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { CATEGORY_ORDER, categoryLabel, dimensionLabel } from '~/utils/labels'
-import { SITE_NAME, SITE_DESCRIPTION, canonicalUrl, githubBlobUrl } from '~/utils/site'
+import {
+  MAINTAINER_NAME,
+  MAINTAINER_URL,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  canonicalUrl,
+  githubBlobUrl
+} from '~/utils/site'
 
 const guidelines = await useAllGuidelines()
 
@@ -30,7 +37,24 @@ useSeoMeta({
   ogType: 'website'
 })
 
-useHead({ link: [{ rel: 'canonical', href: canonicalUrl('/') }] })
+useHead({
+  link: [{ rel: 'canonical', href: canonicalUrl('/') }],
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: SITE_NAME,
+        description: SITE_DESCRIPTION,
+        url: canonicalUrl('/'),
+        inLanguage: 'en',
+        publisher: { '@type': 'Person', name: MAINTAINER_NAME, url: MAINTAINER_URL },
+        license: 'https://creativecommons.org/licenses/by-sa/4.0/'
+      })
+    }
+  ]
+})
 </script>
 
 <template>
