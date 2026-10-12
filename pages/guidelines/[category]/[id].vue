@@ -9,7 +9,7 @@ import {
 } from '~/utils/platforms'
 import type { Platform } from '~/utils/platforms'
 import { AUDIENCE_LABELS, LEGAL_DISCLAIMER, jurisdictionLabel } from '~/utils/legal'
-import { SITE_NAME, SITE_URL, githubEditUrl } from '~/utils/site'
+import { SITE_NAME, SITE_URL, canonicalUrl, githubEditUrl, withTrailingSlash } from '~/utils/site'
 
 const route = useRoute()
 const category = String(route.params.category)
@@ -19,7 +19,9 @@ if (!CATEGORY_LABELS[category]) {
   throw createError({ statusCode: 404, statusMessage: 'Unknown category', fatal: true })
 }
 
+// Nuxt Content keys documents without a trailing slash; the page URL has one.
 const path = `/guidelines/${category}/${id}`
+const url = withTrailingSlash(path)
 
 const { data: doc } = await useAsyncData(`guideline-${category}-${id}`, () =>
   queryCollection('guidelines').path(path).first()
@@ -36,7 +38,7 @@ const siblings = computed(() =>
     .filter((g) => g.category === category)
     .sort((a, b) => a.id.localeCompare(b.id))
 )
-const index = computed(() => siblings.value.findIndex((g) => g.path === path))
+const index = computed(() => siblings.value.findIndex((g) => g.path === url))
 const prev = computed(() => (index.value > 0 ? siblings.value[index.value - 1] : null))
 const next = computed(() =>
   index.value >= 0 && index.value < siblings.value.length - 1 ? siblings.value[index.value + 1] : null
@@ -86,7 +88,7 @@ const regulation = computed<string[]>(() => (doc.value as any)?.regulation ?? []
 const jurisdiction = computed<string[]>(() => ((doc.value as any)?.jurisdiction ?? []).map(jurisdictionLabel))
 
 // ---- SEO + JSON-LD (PLAN §6) ----------------------------------------------
-const canonical = `${SITE_URL}${path}`
+const canonical = canonicalUrl(path)
 useSeoMeta({
   title: () => `${doc.value?.title} — ${SITE_NAME}`,
   description: () => `${gid.value}: ${doc.value?.title}`,

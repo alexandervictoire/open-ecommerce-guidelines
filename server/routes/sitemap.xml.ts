@@ -1,4 +1,4 @@
-import { SITE_URL } from '~/utils/site'
+import { canonicalUrl, withTrailingSlash } from '~/utils/site'
 import { CATEGORY_LABELS, DIMENSION_LABELS, LISTED_STATUSES } from '~/utils/labels'
 
 // Static sitemap generated at prerender time from the guidelines collection.
@@ -20,13 +20,13 @@ export default defineEventHandler(async (event) => {
   for (const dslug of Object.keys(DIMENSION_LABELS)) if (dims.has(dslug)) urls.add(`/dimensions/${dslug}/`)
 
   // Each guideline.
-  for (const d of docs) urls.add(d.path)
+  for (const d of docs) urls.add(withTrailingSlash(d.path))
 
   const body =
     `<?xml version="1.0" encoding="UTF-8"?>\n` +
     `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
     [...urls]
-      .map((u) => `  <url><loc>${SITE_URL}${u}</loc></url>`)
+      .map((u) => `  <url><loc>${canonicalUrl(u)}</loc></url>`)
       .join('\n') +
     `\n</urlset>\n`
 

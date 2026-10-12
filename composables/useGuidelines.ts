@@ -1,6 +1,7 @@
 import type { GuidelineMeta } from '~/utils/labels'
 import { LISTED_STATUSES, SEVERITY_ORDER, deriveGuidelineId } from '~/utils/labels'
 import { matchesPlatform, platformStatus } from '~/utils/platforms'
+import { withTrailingSlash } from '~/utils/site'
 import type { PlatformFilterValue } from '~/utils/platforms'
 import { instrumentsFor, matchesAudience, matchesRegulation } from '~/utils/legal'
 import type { AudienceFilterValue } from '~/utils/legal'
@@ -27,7 +28,9 @@ export async function useAllGuidelines() {
       severity: d.severity,
       targets: d.targets ?? [],
       status: d.status,
-      path: d.path,
+      // Nuxt Content stores paths without a trailing slash; the site links to
+      // the slashed form (see utils/site.ts).
+      path: withTrailingSlash(d.path),
       // Normalized here so every consumer sees a legal value, even if the
       // frontmatter field is absent (see utils/platforms.ts).
       shopware_status: platformStatus(d, 'shopware'),
