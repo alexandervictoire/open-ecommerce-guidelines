@@ -1,6 +1,4 @@
-import { execFileSync } from 'node:child_process'
-import { statSync } from 'node:fs'
-import { join } from 'node:path'
+import guidelineDates from '~/guideline-dates.json'
 import { LISTED_STATUSES, deriveGuidelineId } from '~/utils/labels'
 import { SITE_NAME, canonicalUrl } from '~/utils/site'
 
@@ -49,25 +47,14 @@ function summarise(doc: Record<string, any>): string {
     : summary
 }
 
-// Last change of the guideline's own file. The build machine has the repository,
-// so git is the honest source; a shallow clone without history for that file
-// falls back to its mtime.
-function lastModified(repoRelativePath: string): string {
-  try {
-    const iso = execFileSync('git', ['log', '-1', '--format=%cI', '--', repoRelativePath], {
-      cwd: process.cwd(),
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'ignore']
-    }).trim()
-    if (iso) return iso
-  } catch {
-    // git missing or not a repository — fall through to the file timestamp.
-  }
-  try {
-    return statSync(join(process.cwd(), repoRelativePath)).mtime.toISOString()
-  } catch {
-    return new Date().toISOString()
-  }
+// When each guideline last changed, from the committed guideline-dates.json.
+// Reading git here does not work: Vercel's checkout has no usable per-file
+// history, so every date collapsed onto the build day. scripts/guideline-dates.mjs
+// generates the file and `npm run validate` keeps it honest.
+const dates = guidelineDates as Record<string, string>
+
+function lastModified(id: string): string {
+  return dates[id] ?? new Date().toISOString()
 }
 
 export default defineEventHandler(async (event) => {
@@ -87,7 +74,7 @@ export default defineEventHandler(async (event) => {
         severity: doc.severity,
         status: doc.status,
         url: canonicalUrl(doc.path),
-        updatedAt: lastModified(`content/guidelines/${doc.category}/${id.toLowerCase()}.md`)
+        updatedAt: lastModified(id)
       }
     })
     .sort((a, b) => a.id.localeCompare(b.id))
