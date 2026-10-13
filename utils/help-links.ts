@@ -9,7 +9,11 @@
 // URL and seeing the page, and turn it off again if the target is retired. The
 // build does not check this — it would make builds depend on a third-party site.
 //
-// Targets verified live on 2026-10-12.
+// The targets are German pages on an otherwise English site, which is why each
+// label says so: the reader should know before clicking that the page they land
+// on is in another language.
+//
+// Targets verified live (200, no redirect) on 2026-10-13.
 
 import { MAINTAINER_BRAND } from '~/utils/site'
 
@@ -20,20 +24,28 @@ export interface HelpLink {
   label: string
 }
 
-const REVENUE: HelpLink = {
+// The three categories a conversion engagement works on directly.
+const CONVERSION: HelpLink = {
   enabled: true,
-  url: 'https://semanticperformance.com/revenue/',
-  label: `How ${MAINTAINER_BRAND} works on this`
+  url: 'https://semanticperformance.com/de/shopify-conversion-optimierung/',
+  label: `Shopify conversion work at ${MAINTAINER_BRAND} (German)`
+}
+
+// Everything else starts with a look at the whole shop rather than one surface.
+const ANALYSIS: HelpLink = {
+  enabled: true,
+  url: 'https://semanticperformance.com/de/shopify-shop-analyse/',
+  label: `Shopify shop analysis at ${MAINTAINER_BRAND} (German)`
 }
 
 // Per category, so a category can get its own target later without touching
 // the components.
 export const HELP_LINKS: Record<string, HelpLink> = {
-  plp: REVENUE,
-  pdp: REVENUE,
-  cart: REVENUE,
-  checkout: REVENUE,
-  global: REVENUE
+  pdp: CONVERSION,
+  cart: CONVERSION,
+  checkout: CONVERSION,
+  plp: ANALYSIS,
+  global: ANALYSIS
 }
 
 export function helpLinkFor(category: string): HelpLink | null {
