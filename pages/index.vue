@@ -75,6 +75,8 @@ useHead({
           Contribute a guideline →
         </a>
       </p>
+
+      <SeasonalNote />
     </section>
 
     <section class="mt-12">
