@@ -20,12 +20,12 @@ Unaddressed objections increase hesitation and external research behavior, reduc
 
 ## Failure signals
 
-- • No dedicated section addressing common customer concerns
-- • FAQs exist but are generic and not purchase-relevant
-- • Objection-reducing information scattered without structure
-- • Critical concerns (returns, sizing, compatibility, care) difficult to locate
-- • Objection content placed far below primary decision journey
-- • Answers focus on policy language rather than decision reassurance
+- No dedicated section addressing common customer concerns
+- FAQs exist but are generic and not purchase-relevant
+- Objection-reducing information scattered without structure
+- Critical concerns (returns, sizing, compatibility, care) difficult to locate
+- Objection content placed far below primary decision journey
+- Answers focus on policy language rather than decision reassurance
 
 ## How to verify
 

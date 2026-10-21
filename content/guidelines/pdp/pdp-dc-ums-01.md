@@ -20,12 +20,12 @@ Absence of momentum signals reduces purchase immediacy and increases postponemen
 
 ## Failure signals
 
-- • No visible stock availability information
-- • No delivery timing information near purchase area
-- • No indicators of demand or popularity (if applicable)
-- • Urgency signals placed far below primary decision area
-- • Use of artificial countdown timers without factual basis
-- • Generic urgency messaging not tied to real conditions
+- No visible stock availability information
+- No delivery timing information near purchase area
+- No indicators of demand or popularity (if applicable)
+- Urgency signals placed far below primary decision area
+- Use of artificial countdown timers without factual basis
+- Generic urgency messaging not tied to real conditions
 
 ## How to verify
 

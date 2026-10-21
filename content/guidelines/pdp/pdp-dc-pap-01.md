@@ -20,11 +20,11 @@ Isolated pricing reduces perceived value and increases price sensitivity. Effect
 
 ## Failure signals
 
-- • Single standalone price shown without contextual comparison
-- • No indication of savings, discount, or reference value (if applicable)
-- • No bundle, multi-buy, or tiered pricing visibility (where relevant)
-- • Pricing advantages hidden below primary decision area
-- • A reference price or savings figure fails `PDP-DC-REF-01`: its basis is not identified, or the stated saving does not follow from the stated reference
+- Single standalone price shown without contextual comparison
+- No indication of savings, discount, or reference value (if applicable)
+- No bundle, multi-buy, or tiered pricing visibility (where relevant)
+- Pricing advantages hidden below primary decision area
+- A reference price or savings figure fails `PDP-DC-REF-01`: its basis is not identified, or the stated saving does not follow from the stated reference
 
 ## How to verify
 

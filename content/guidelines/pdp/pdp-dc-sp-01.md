@@ -28,7 +28,11 @@ Insufficient or poorly placed social proof increases hesitation and reduces perc
 
 ## How to verify
 
-1. Open PDP in clean browser session.Check above-the-fold area for visible star rating and review count.Scroll through PDP and identify placement of review block.Evaluate whether social proof is positioned near decision points (price, CTA, variant selection).Confirm whether at least one qualitative reinforcement (short excerpt, testimonial, usage indicator) supports credibility.
+1. Open PDP in clean browser session.
+2. Check above-the-fold area for visible star rating and review count.
+3. Scroll through PDP and identify placement of review block.
+4. Evaluate whether social proof is positioned near decision points (price, CTA, variant selection).
+5. Confirm whether at least one qualitative reinforcement (short excerpt, testimonial, usage indicator) supports credibility.
 
 ## Recommended fix
 

@@ -32,13 +32,13 @@ Incomplete above-the-fold structures increase hesitation, reduce impulse purchas
 2. Test on standard desktop resolution (1440px width) and common mobile viewport (390px width).
 3. Do not scroll.
 4. Check whether the following elements are immediately visible:
-5. ◦ Product title
-6. ◦ Final price
-7. ◦ Selected variant
-8. ◦ Primary CTA
-9. ◦ Delivery information
-10. ◦ At least one trust element
-11. Document missing elements per device type.
+   - Product title
+   - Final price
+   - Selected variant
+   - Primary CTA
+   - Delivery information
+   - At least one trust element
+5. Document missing elements per device type.
 
 ## Recommended fix
 

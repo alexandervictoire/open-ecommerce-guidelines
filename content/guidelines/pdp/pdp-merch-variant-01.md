@@ -36,12 +36,12 @@ Improving variant visibility preserves demand, increases product exposure, and m
 
 1. Review the PDP and determine whether users can immediately recognize and access alternative variants without leaving the product context.
 2. Check for:
-3. • Color swatches
-4. • Variant selectors
-5. • “Available in other colors/materials”
-6. • Visual navigation modules
-7. • Grouped product families
-8. If discovering another variant requires returning to listing pages → fail.
+   - Color swatches
+   - Variant selectors
+   - “Available in other colors/materials”
+   - Visual navigation modules
+   - Grouped product families
+3. If discovering another variant requires returning to listing pages → fail.
 
 ## Recommended fix
 
