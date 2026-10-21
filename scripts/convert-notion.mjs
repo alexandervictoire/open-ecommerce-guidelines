@@ -123,19 +123,46 @@ function escapeTags(s) {
   return s.replace(/<\/?[a-zA-Z][a-zA-Z0-9]*[^>]*>/g, (m) => `\`${m}\``)
 }
 
+// Notion exports carry their own bullet characters inside the cell text. Left
+// in, they render on top of the Markdown list marker, so every item shows two
+// bullets (that is where the "- •" lines in the first conversion came from).
+const LEADING_BULLET = /^\s*[-*•◦‣▪·]\s*/
+
 function toBulletList(s) {
   const lines = s.split(/\r?\n/).map((l) => l.trim()).filter(Boolean)
-  return lines.map((l) => `- ${l.replace(/^[-*]\s*/, '')}`).join('\n')
+  return lines.map((l) => `- ${l.replace(LEADING_BULLET, '')}`).join('\n')
 }
 
 function toNumberedList(s) {
   let steps = s.split(/\r?\n/).map((l) => l.trim()).filter(Boolean)
   if (steps.length <= 1) {
-    // Single prose block: one step per sentence.
-    steps = (steps[0] ?? '').split(/(?<=[.!?])\s+(?=[A-Z0-9])/).map((x) => x.trim()).filter(Boolean)
+    // Single prose block: one step per sentence. The separating space is
+    // optional because the export sometimes drops it ("session.Check ..."),
+    // which otherwise glues every step into a single numbered item.
+    steps = (steps[0] ?? '').split(/(?<=[.!?])\s*(?=[A-Z0-9])/).map((x) => x.trim()).filter(Boolean)
   }
-  steps = steps.map((l) => l.replace(/^\d+[.)]\s*/, '').replace(/^[-*]\s*/, '')).filter(Boolean)
-  return steps.map((l, i) => `${i + 1}. ${l}`).join('\n')
+
+  // A step that ends in a colon introduces sub-points, and the export marks
+  // those with its own bullet character. Keep them as a nested list instead of
+  // promoting each one to a step of its own.
+  const out = []
+  for (const raw of steps) {
+    const line = raw.replace(/^\d+[.)]\s*/, '')
+    const bulleted = /^[•◦‣▪·]\s*/.test(line)
+    const previous = out[out.length - 1]
+    if (bulleted && previous && /:\s*$/.test(previous.text)) {
+      previous.children.push(line.replace(LEADING_BULLET, ''))
+      continue
+    }
+    const text = line.replace(LEADING_BULLET, '')
+    if (text) out.push({ text, children: [] })
+  }
+
+  return out
+    .map(({ text, children }, i) =>
+      [`${i + 1}. ${text}`, ...children.map((c) => `   - ${c}`)].join('\n')
+    )
+    .join('\n')
 }
 
 // ---- Build one guideline from a record --------------------------------------
