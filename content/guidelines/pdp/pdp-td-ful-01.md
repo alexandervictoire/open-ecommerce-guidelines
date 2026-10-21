@@ -33,13 +33,13 @@ Clear delivery messaging is consistently associated with increased purchase conf
 ## How to verify
 
 1. Check whether the PDP communicates at least one fulfillment expectation:
-2. • Delivery timeframe
-3. • Handling time
-4. • Shipping speed
-5. • Free shipping thresholds
-6. • Geographic limitations
-7. • Pickup conditions vs shipping clarity
-8. If users must enter checkout to understand when they will receive the product → flag.
+   - Delivery timeframe
+   - Handling time
+   - Shipping speed
+   - Free shipping thresholds
+   - Geographic limitations
+   - Pickup conditions vs shipping clarity
+2. If users must enter checkout to understand when they will receive the product → flag.
 
 ## Recommended fix
 

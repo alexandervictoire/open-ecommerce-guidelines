@@ -20,12 +20,12 @@ Lack of CTA reinforcement increases decision drop-off after content consumption.
 
 ## Failure signals
 
-- • Primary CTA only visible above-the-fold
-- • No sticky add-to-cart functionality on mobile
-- • Long scroll sections without CTA reinforcement
-- • Secondary CTAs visually compete with primary action
-- • CTA reappears but lacks price or variant context
-- • CTA placement inconsistent across devices
+- Primary CTA only visible above-the-fold
+- No sticky add-to-cart functionality on mobile
+- Long scroll sections without CTA reinforcement
+- Secondary CTAs visually compete with primary action
+- CTA reappears but lacks price or variant context
+- CTA placement inconsistent across devices
 
 ## How to verify
 

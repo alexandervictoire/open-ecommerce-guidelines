@@ -20,16 +20,21 @@ High variant friction increases abandonment before add-to-cart, especially in mu
 
 ## Failure signals
 
-- • User must interact (click/open dropdown) to understand available variants
-- • Selected variant state is visually unclear
-- • CTA remains disabled without clear explanation
-- • Error messages appear only after failed add-to-cart attempt
-- • Variant labels are ambiguous (e.g., unclear sizing, color names without visual support)
-- • Excessive number of clicks required before CTA becomes active
+- User must interact (click/open dropdown) to understand available variants
+- Selected variant state is visually unclear
+- CTA remains disabled without clear explanation
+- Error messages appear only after failed add-to-cart attempt
+- Variant labels are ambiguous (e.g., unclear sizing, color names without visual support)
+- Excessive number of clicks required before CTA becomes active
 
 ## How to verify
 
-1. Open PDP in clean session.Identify whether variant selection is required before purchase.Attempt to understand available options without interacting.Select variants and count required interaction steps before CTA activation.Attempt add-to-cart without selecting variant to test error clarity.Evaluate visual clarity of selected state and variant differentiation.
+1. Open PDP in clean session.
+2. Identify whether variant selection is required before purchase.
+3. Attempt to understand available options without interacting.
+4. Select variants and count required interaction steps before CTA activation.
+5. Attempt add-to-cart without selecting variant to test error clarity.
+6. Evaluate visual clarity of selected state and variant differentiation.
 
 ## Recommended fix
 
