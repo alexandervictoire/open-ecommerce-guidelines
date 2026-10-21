@@ -16,6 +16,8 @@
 //       platform_specific  => the matching section MUST exist
 //       otherwise          => the section MUST NOT exist
 //   - no score-like field anywhere (score policy, PLAN §4)
+//   - no leftover conversion artefacts: a bullet character inside a list item,
+//     or sentences run together without a space
 //   - every guideline has an entry in guideline-dates.json (see
 //     scripts/guideline-dates.mjs); a stale entry is reported as a warning
 //
@@ -280,6 +282,22 @@ function validateFile(file, registry) {
       errors.push(`platform sections out of order: ${ordered.join(' -> ')}`)
     }
   }
+
+  // ---- conversion artefacts ----------------------------------------------
+  // The Notion export carries its own bullet characters and sometimes loses the
+  // space between two sentences. Both survive a careless import and show up on
+  // the rendered page as a double bullet or as one endless step, so they fail
+  // the build rather than waiting to be spotted by eye.
+  split.body.split(/\r?\n/).forEach((line, index) => {
+    if (/^\s*(?:[-*]|\d+[.)])\s+[•◦‣▪·]/.test(line)) {
+      errors.push(
+        `line ${index + 1}: list item starts with a bullet character — the Markdown marker already draws one`
+      )
+    }
+    if (/^\s*(?:[-*]|\d+[.)])\s+.*[a-z]\.[A-Z]/.test(line)) {
+      errors.push(`line ${index + 1}: sentences run together without a space — one step per line`)
+    }
+  })
 
   // ---- score policy (PLAN §4) --------------------------------------------
   if (/(^|\n)\s*(max[_\s-]*)?score\s*:/i.test(text) || /max\s*score/i.test(text)) {
