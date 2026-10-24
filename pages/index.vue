@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { CATEGORY_ORDER, categoryLabel, dimensionLabel } from '~/utils/labels'
+import { SEASON_BADGE_LABEL, SEASON_COLLECTIONS } from '~/utils/seasons'
 import {
   MAINTAINER_NAME,
   MAINTAINER_URL,
@@ -20,6 +21,19 @@ const categories = computed(() =>
     }))
     .filter((c) => c.count > 0)
 )
+
+// The holiday section. It stays on the page all year: the guidelines remain
+// valid, only the moment they matter is seasonal. Every number is counted, so
+// the block cannot claim more than the collection holds.
+const holiday = computed(() => {
+  const items = guidelines.value.filter((g) => g.season === 'holiday')
+  return {
+    path: SEASON_COLLECTIONS.holiday,
+    count: items.length,
+    important: items.filter((g) => g.severity === 'high' || g.severity === 'critical').length,
+    categories: new Set(items.map((g) => g.category)).size
+  }
+})
 
 const dimensions = computed(() => {
   const set = new Map<string, number>()
@@ -77,6 +91,32 @@ useHead({
       </p>
 
       <SeasonalNote />
+    </section>
+
+    <section v-if="holiday.count" class="mt-12">
+      <div class="rounded-lg border border-line p-6">
+        <div class="flex items-center gap-3 flex-wrap">
+          <span
+            class="inline-flex items-center rounded-full bg-season-bg px-2 py-0.5 text-xs font-medium uppercase tracking-wide text-season-fg"
+          >{{ SEASON_BADGE_LABEL }}</span>
+          <span class="text-xs uppercase tracking-wide text-faint">Black Friday to Christmas</span>
+        </div>
+        <h2 class="mt-3 text-xl font-medium text-ink">Holiday readiness</h2>
+        <p class="mt-3 text-muted leading-relaxed max-w-2xl">
+          Guidelines for the busiest weeks of the year: delivery before the holidays, gifting,
+          honest sales and a shop that stays fast under load. They apply on top of the year-round
+          guidelines.
+        </p>
+        <p class="mt-3 text-sm text-faint">
+          {{ holiday.count }} guidelines · {{ holiday.important }} high or critical ·
+          {{ holiday.categories }} categories
+        </p>
+        <p class="mt-4 text-sm">
+          <NuxtLink class="text-ink underline underline-offset-2" :to="holiday.path">
+            Browse holiday readiness →
+          </NuxtLink>
+        </p>
+      </div>
     </section>
 
     <section class="mt-12">
