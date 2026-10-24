@@ -41,6 +41,8 @@ const ANALYSIS: HelpLink = {
 // Per category, so a category can get its own target later without touching
 // the components.
 export const HELP_LINKS: Record<string, HelpLink> = {
+  // Not a category: the seasonal collection page, which spans all of them.
+  collection: ANALYSIS,
   pdp: CONVERSION,
   cart: CONVERSION,
   checkout: CONVERSION,

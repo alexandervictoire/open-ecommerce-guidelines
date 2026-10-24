@@ -1,11 +1,12 @@
 import { canonicalUrl, withTrailingSlash } from '~/utils/site'
 import { CATEGORY_LABELS, DIMENSION_LABELS, LISTED_STATUSES } from '~/utils/labels'
+import { SEASON_COLLECTIONS } from '~/utils/seasons'
 
 // Static sitemap generated at prerender time from the guidelines collection.
 export default defineEventHandler(async (event) => {
   const docs = await queryCollection(event, 'guidelines')
     .where('status', 'IN', LISTED_STATUSES)
-    .select('path', 'category', 'dimension')
+    .select('path', 'category', 'dimension', 'season')
     .all()
 
   const urls = new Set<string>()
@@ -18,6 +19,12 @@ export default defineEventHandler(async (event) => {
   // Dimensions that actually have guidelines.
   const dims = new Set(docs.map((d) => d.dimension))
   for (const dslug of Object.keys(DIMENSION_LABELS)) if (dims.has(dslug)) urls.add(`/dimensions/${dslug}/`)
+
+  // A season's collection page, once it actually has guidelines.
+  const seasons = new Set(docs.map((d: any) => d.season).filter(Boolean))
+  for (const [season, path] of Object.entries(SEASON_COLLECTIONS)) {
+    if (seasons.has(season)) urls.add(path)
+  }
 
   // Each guideline.
   for (const d of docs) urls.add(withTrailingSlash(d.path))

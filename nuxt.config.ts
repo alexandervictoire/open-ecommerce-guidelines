@@ -38,6 +38,33 @@ function listRoutes(): string[] {
   return [...categories, ...[...dimensions].sort().map((d) => `/dimensions/${d}/`)]
 }
 
+// A season's collection page is a static route, but it is only worth
+// rendering once guidelines actually carry that season — the same rule the
+// sitemap applies. Reads the frontmatter rather than importing utils/seasons.ts,
+// which this file cannot do before Nuxt is up.
+function seasonRoutes(): string[] {
+  const root = fileURLToPath(new URL('./content/guidelines', import.meta.url))
+  const collections: Record<string, string> = JSON.parse(
+    readFileSync(fileURLToPath(new URL('./utils/seasons.json', import.meta.url)), 'utf8')
+  ).reduce((acc: Record<string, string>, season: string) => {
+    acc[season] = `/collections/${season}/`
+    return acc
+  }, {})
+  if (!existsSync(root)) return []
+
+  const seasons = new Set<string>()
+  for (const entry of readdirSync(root)) {
+    const dir = join(root, entry)
+    if (!statSync(dir).isDirectory()) continue
+    for (const file of readdirSync(dir).filter((f) => f.endsWith('.md'))) {
+      const season = /^season:[ \t]*(\S+)[ \t]*$/m.exec(readFileSync(join(dir, file), 'utf8'))?.[1]
+      if (season) seasons.add(season)
+    }
+  }
+
+  return [...seasons].sort().flatMap((s) => (collections[s] ? [collections[s]] : []))
+}
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-01',
@@ -81,7 +108,7 @@ export default defineNuxtConfig({
       // Never ship a silently skipped route again — a failing page must break
       // the build with its real error instead of becoming a 404 in production.
       failOnError: true,
-      routes: ['/', '/sitemap.xml', '/guidelines.json', ...listRoutes()]
+      routes: ['/', '/sitemap.xml', '/guidelines.json', ...listRoutes(), ...seasonRoutes()]
     }
   },
   app: {
