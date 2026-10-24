@@ -8,9 +8,16 @@ import { SITE_NAME, canonicalUrl } from '~/utils/site'
 // [category] route, so a collection can never collide with a category.
 const SEASON = 'holiday'
 const PATH = '/collections/holiday/'
-const TITLE = 'Holiday readiness'
-const INTRO =
-  'What to check before Black Friday, Cyber Week and Christmas. Each guideline is tied to this season and applies in addition to the year-round guidelines. Sorted by funnel step, most important first.'
+const TITLE = 'Holiday readiness checklist for online shops'
+// Short form for the breadcrumb and for anywhere the full headline would not
+// fit; the headline itself is the H1.
+const SHORT_TITLE = 'Holiday readiness'
+// The count is interpolated rather than written out, so the sentence cannot
+// drift from the collection as guidelines are added.
+const INTRO_LEAD = (count: number) =>
+  `What to check in an online shop before Black Friday, Cyber Week and Christmas. These ${count} guidelines cover the questions shoppers have in the busiest weeks of the year: will the order arrive in time, can it be sent as a gift, is the sale real, and does the shop stay fast under load.`
+const INTRO_DETAIL =
+  'Each guideline describes one thing to check, why it matters, how to test it and how to fix it. They apply to any shop system, including Shopify and Shopware, and come in addition to the year-round guidelines. Sorted by funnel step, most important first.'
 
 const all = await useAllGuidelines()
 const seasonal = computed(() => all.value.filter((g) => g.season === SEASON))
@@ -50,7 +57,7 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'CollectionPage',
         name: TITLE,
-        description: INTRO,
+        description: INTRO_LEAD(seasonal.value.length),
         url: canonicalUrl(PATH),
         isPartOf: { '@type': 'WebSite', name: SITE_NAME, url: canonicalUrl('/') },
         mainEntity: {
@@ -74,7 +81,7 @@ useHead(() => ({
     <nav class="text-sm text-faint mb-6">
       <NuxtLink to="/" class="no-underline hover:text-ink">Home</NuxtLink>
       <span class="mx-2">/</span>
-      <span>{{ TITLE }}</span>
+      <span>{{ SHORT_TITLE }}</span>
     </nav>
 
     <span
@@ -83,12 +90,14 @@ useHead(() => ({
 
     <h1 class="mt-3 text-3xl font-semibold tracking-tight">{{ TITLE }}</h1>
 
-    <p class="mt-4 text-muted leading-relaxed">{{ INTRO }}</p>
+    <p class="mt-4 text-muted leading-relaxed">{{ INTRO_LEAD(seasonal.length) }}</p>
+    <p class="mt-4 text-muted leading-relaxed">{{ INTRO_DETAIL }}</p>
 
-    <p class="mt-6 text-muted">
-      {{ filtered.length }} guideline{{ filtered.length === 1 ? '' : 's' }}<template
-        v-if="platform !== 'all'"
-      > match{{ filtered.length === 1 ? 'es' : '' }} the selected filter (of {{ seasonal.length }})</template>.
+    <!-- The intro already states how many there are, so the count only earns its
+         place once a filter changes it. -->
+    <p v-if="platform !== 'all'" class="mt-6 text-muted">
+      {{ filtered.length }} guideline{{ filtered.length === 1 ? '' : 's' }}
+      match{{ filtered.length === 1 ? 'es' : '' }} the selected filter (of {{ seasonal.length }}).
     </p>
 
     <div class="mt-6">
