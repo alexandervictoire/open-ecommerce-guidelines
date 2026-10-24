@@ -73,6 +73,8 @@ export default defineEventHandler(async (event) => {
         dimension: doc.dimension,
         severity: doc.severity,
         status: doc.status,
+        // Only on a seasonal guideline; absent means year-round.
+        ...(doc.season ? { season: doc.season } : {}),
         url: canonicalUrl(doc.path),
         updatedAt: lastModified(id)
       }

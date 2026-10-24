@@ -69,4 +69,6 @@ export interface GuidelineMeta {
   // Ids of the instruments (utils/regulations.json) the guideline's citations
   // belong to; empty when it carries no `regulation`.
   instruments: string[]
+  // Absent (null) means the guideline applies year-round.
+  season: string | null
 }

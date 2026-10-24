@@ -15,7 +15,7 @@ export async function useAllGuidelines() {
       .where('status', 'IN', LISTED_STATUSES)
       .select(
         'title', 'category', 'dimension', 'severity', 'targets', 'status', 'path', 'stem',
-        'shopware_status', 'shopify_status', 'audience', 'regulation'
+        'shopware_status', 'shopify_status', 'audience', 'regulation', 'season'
       )
       .all()
   )
@@ -36,7 +36,8 @@ export async function useAllGuidelines() {
       shopware_status: platformStatus(d, 'shopware'),
       shopify_status: platformStatus(d, 'shopify'),
       audience: Array.isArray(d.audience) ? d.audience : [],
-      instruments: instrumentsFor(Array.isArray(d.regulation) ? d.regulation : [])
+      instruments: instrumentsFor(Array.isArray(d.regulation) ? d.regulation : []),
+      season: d.season ?? null
     }))
   )
 }
