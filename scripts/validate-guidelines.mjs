@@ -7,6 +7,7 @@
 // Checks:
 //   - frontmatter enums are legal (incl. the two platform status fields)
 //   - optional legal fields are well-formed: regulation, jurisdiction, audience
+//   - `season`, when present, is one of the seasons in utils/seasons.json
 //   - every citation belongs to an instrument in utils/regulations.json, and the
 //     registry itself is well-formed
 //   - id matches the filename (filename = lowercased id, by contract), and the
@@ -56,6 +57,10 @@ const PLATFORMS = ['shopware', 'shopify']
 const PLATFORM_LABELS = { shopware: 'Shopware', shopify: 'Shopify' }
 const PLATFORM_STATUSES = ['not_applicable', 'no_divergence', 'platform_specific']
 const DEFAULT_PLATFORM_STATUS = 'no_divergence'
+
+// Seasonal guidelines. The list is shared with the site through JSON, because
+// utils/seasons.ts cannot be imported from plain Node (see that file).
+const SEASONS = JSON.parse(readFileSync(join(REPO_ROOT, 'utils', 'seasons.json'), 'utf8'))
 
 // Legal anchoring (all optional; see CLAUDE.md).
 const AUDIENCES = ['b2c', 'b2b']
@@ -225,6 +230,11 @@ function validateFile(file, registry) {
     for (const j of jurisdiction) {
       if (!JURISDICTION_PATTERN.test(j)) errors.push(`illegal jurisdiction "${j}" (expected "eu" or a lowercase two-letter country code)`)
     }
+  }
+  if (fm.season !== undefined && !SEASONS.includes(fm.season)) {
+    errors.push(
+      `illegal season "${fm.season}" (expected one of: ${SEASONS.join(', ')}, or omit the field for a year-round guideline)`
+    )
   }
   if (fm.audience !== undefined) {
     const audience = parseList(fm.audience)

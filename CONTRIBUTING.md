@@ -127,6 +127,7 @@ provision or applies to only one kind of shop:
 | `regulation` | list of double-quoted citations, e.g. `["Dir 98/6/EC Art. 3(1)", "PAngV §4 (DE)"]` | the guideline rests on testing, not on a provision |
 | `jurisdiction` | `eu` and/or lowercase country codes, e.g. `[eu, de]` | the guideline is not jurisdiction-bound |
 | `audience` | `[b2c]` or `[b2b]` | it applies to consumer and business shops alike (the usual case) |
+| `season` | `holiday` | the guideline applies year-round (the usual case) |
 
 Rules for citations:
 
@@ -146,6 +147,11 @@ Rules for citations:
   in a business-facing shop, typically because it rests on consumer law. It
   marks where the guideline applies as written, not where the idea stops being
   sensible.
+
+A guideline with a `season` applies **in addition to** the year-round ones, not
+instead of them. It is marked with a "Seasonal" pill wherever it is listed and
+appears on that season's collection page, for example `/collections/holiday/`.
+The allowed values live in `utils/seasons.json`.
 
 **Accessibility guidelines** are filed under the dimension that matches what
 they check, not under a separate one. Because a reader arriving from that
