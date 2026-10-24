@@ -26,6 +26,7 @@ shopify_status: no_divergence  # not_applicable | no_divergence | platform_speci
 regulation: ["Dir 2011/83/EU Art. 8(2)", "BGB §312j(3) (DE)"]  # optional
 jurisdiction: [eu, de]         # optional; eu and/or lowercase ISO country codes
 audience: [b2c]                # optional; subset of [b2c, b2b]
+season: holiday                # optional; absent means year-round
 ---
 ```
 
@@ -135,6 +136,21 @@ guideline get no page and no navigation entry.
   norm; restrict only where the guideline would be wrong or inapplicable for the
   other audience. Category and dimension pages offer an audience filter only
   when a guideline in the list is restricted.
+
+### Seasonal guidelines (optional)
+
+- `season` — one of the values in `utils/seasons.json` (`holiday` today).
+  Absent means the guideline applies year-round, which is the norm. A seasonal
+  guideline applies **in addition to** the year-round ones, never instead of
+  them, and the text has to read that way.
+- The site marks it: a filled "Seasonal" pill next to the severity wherever the
+  guideline is listed (`components/SeasonBadge.vue`), a line under the meta row
+  on its page, an entry in `/guidelines.json`, and a collection page at
+  `/collections/holiday/` that lists the season grouped by category.
+- Adding a season: one entry in `utils/seasons.json`, one line each in
+  `SEASON_COLLECTIONS` and `SEASON_NOTES` in `utils/seasons.ts`, and a page
+  under `pages/collections/`. Everything else — schema, validator, sitemap,
+  prerendering, badges — reads the list.
 
 > **Accessibility guidelines** are filed under the dimension matching what they
 > check, not a separate dimension. Each must say in its own text that it is an

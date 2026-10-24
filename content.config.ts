@@ -1,4 +1,5 @@
 import { defineContentConfig, defineCollection, z } from '@nuxt/content'
+import { SEASONS } from './utils/seasons'
 
 // Frontmatter schema for guidelines — mirrors PLAN §3.
 // Note: `targets` includes `machine` in addition to `human`/`agent` because the
@@ -29,7 +30,9 @@ export default defineContentConfig({
         // bound; `audience` is absent when the guideline applies to B2C and B2B.
         regulation: z.array(z.string().min(1)).optional(),
         jurisdiction: z.array(z.string().regex(/^(eu|[a-z]{2})$/)).optional(),
-        audience: z.array(z.enum(['b2c', 'b2b'])).optional()
+        audience: z.array(z.enum(['b2c', 'b2b'])).optional(),
+        // Seasonal guidelines — absent means year-round (see utils/seasons.ts).
+        season: z.enum(SEASONS).optional()
       })
     })
   }
