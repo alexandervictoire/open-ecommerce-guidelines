@@ -9,6 +9,7 @@ import {
 } from '~/utils/platforms'
 import type { Platform } from '~/utils/platforms'
 import { AUDIENCE_LABELS, LEGAL_DISCLAIMER, jurisdictionLabel } from '~/utils/legal'
+import { seasonCollection, seasonNote } from '~/utils/seasons'
 import {
   MAINTAINER_NAME,
   MAINTAINER_URL,
@@ -92,6 +93,13 @@ const hasPlatformBlock = computed(() =>
 const audienceLabels = computed(() =>
   ((doc.value as any)?.audience ?? []).map((a: string) => AUDIENCE_LABELS[a as keyof typeof AUDIENCE_LABELS] ?? a)
 )
+// Seasonal guidelines say so under the meta row and link to the season's own
+// page, so the reader knows the guideline is an addition rather than a
+// replacement for the year-round ones.
+const season = computed<string | null>(() => (doc.value as any)?.season ?? null)
+const seasonText = computed(() => (season.value ? seasonNote(season.value) : null))
+const seasonPath = computed(() => (season.value ? seasonCollection(season.value) : null))
+
 const regulation = computed<string[]>(() => (doc.value as any)?.regulation ?? [])
 const jurisdiction = computed<string[]>(() => ((doc.value as any)?.jurisdiction ?? []).map(jurisdictionLabel))
 
@@ -150,6 +158,7 @@ useHead(() => ({
         <span class="font-mono text-xs text-faint">{{ gid }}</span>
         <SeverityBadge :severity="doc.severity" />
         <StatusBadge :status="doc.status" />
+        <SeasonBadge :season="season" />
       </div>
       <h1 class="mt-3 text-3xl font-semibold tracking-tight leading-tight">{{ doc.title }}</h1>
       <div class="mt-3 flex gap-x-4 gap-y-1 flex-wrap text-sm">
@@ -165,6 +174,13 @@ useHead(() => ({
           Audience: {{ audienceLabels.join(' · ') }} only
         </span>
       </div>
+
+      <p v-if="seasonText" class="season-note">
+        {{ seasonText }}
+        <NuxtLink v-if="seasonPath" :to="seasonPath" class="season-note-link">
+          Holiday readiness →
+        </NuxtLink>
+      </p>
 
       <!-- Drafts are live so they can be tested and corrected in the open; say
            what that means for the reader, and where to correct it. -->

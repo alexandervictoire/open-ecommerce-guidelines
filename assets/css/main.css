@@ -337,3 +337,22 @@ a {
   white-space: nowrap;
   text-underline-offset: 2px;
 }
+
+/* The line under the meta row of a seasonal guideline. Same colors as the
+   pill, so the two read as one marking rather than two unrelated notes. */
+.season-note {
+  margin: 1.25rem 0 0;
+  border-radius: 6px;
+  background: #e9f0f4;
+  padding: 0.6rem 0.9rem;
+  color: #2c5468;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.season-note-link {
+  color: inherit;
+  font-weight: 600;
+  white-space: nowrap;
+  text-underline-offset: 2px;
+}

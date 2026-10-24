@@ -15,6 +15,15 @@ export default defineConfig({
       faint: '#8a8a8a',
       line: '#e5e5e5',
       paper: '#ffffff',
+      // The seasonal pill: filled, quiet, and deliberately not a severity.
+      // The dark pair is approved and waits for the site to offer a dark
+      // theme — today the page is light only (`color-scheme: light`).
+      season: {
+        bg: '#e9f0f4',
+        fg: '#2c5468',
+        bgDark: '#1d2b33',
+        fgDark: '#9cc3d6'
+      },
       // Severity accents — the only strong colors in the UI
       severity: {
         low: '#3a7d44',
